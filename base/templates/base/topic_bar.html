@@ -1,0 +1,18 @@
+{%block content%}
+<style>
+</style>
+<div class="topic-wraper">
+    <h3>Chủ Đề</h3>
+    <hr>
+    <div>
+        <a href="{%url 'home'%}">ALL</a>
+    </div>
+    <br>
+    {%for topic in topics%}
+    <div>
+        <a href="{%url 'home'%}?q={{topic.name}}">{{topic.name}}</a>   
+    </div>
+    <br>
+    {%endfor%}
+</div>
+{%endblock%}
