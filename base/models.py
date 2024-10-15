@@ -47,3 +47,8 @@ class Message(models.Model):
     def __str__(self):
         return self.body[:50] + "..." 
 
+class UserProfile(models.Model):
+    user_id=models.CharField(max_length=100, unique=True, primary_key=True)
+    user_name = models.CharField(max_length=100)
+    user_avata = models.ImageField(blank=True)
+    user_background = models.ImageField(blank=True)
