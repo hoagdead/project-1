@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        .block-wraper{
+            display: grid;
+            grid-template-columns:1fr 3fr 1fr;
+        }
+    </style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <!--<link rel="stylesheet" type ='text/css' media='screen' href="styles.css">-->
+        <title>{{request.user}} Profile</title>
+    </head>
+    <body>
+        {% include 'navbar.html' %} 
+
+        
+        <div class='block-wraper'>
+            <div class='invi-block'>
+                <p>nothing here</p>
+            </div>
+
+            <div>
+                <p>user background</p>
+                <p>avt user</p>
+                <h1>{{request.user}}</h1>
+                <h3>user decription</h3>
+
+            </div>
+            <div>
+                {%include 'base/notification_bar.html'%}
+            </div>
+        </div>
+       
+    </body>
+</html>

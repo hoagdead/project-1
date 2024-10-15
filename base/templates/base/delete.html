@@ -1,0 +1,11 @@
+{%extends 'main.html' %}
+
+{%block content%} 
+
+<form method="POST" action="">
+    {%csrf_token%}
+    <p>Bạn có muốn xóa "{{obj}}" không ?</p> 
+    <a href="{{request.META.HTTP_REFERER}}">Không</a>
+    <input type = "submit" value="Có"/>
+</form>
+{%endblock content%}
