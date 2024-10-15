@@ -9,7 +9,17 @@ from .models import Room, Topic, Message
 from .form import RoomForm
 from django.shortcuts import redirect
 
-
+'''
+    ở đây sẽ dùng để xử lý request của người dùng
+    một views mẫu:
+        @login_required(login_url=('login')) -(optional) yêu cầu người dùng phải đăng nhập mới dùng được-
+        def -tên của views đó (nên là tên của trang đó)- (request):
+            -các giá trị muốn xử lý-
+            context={"-các giá trị muốn sử dụng để in ra hay sử lý trong trang đó-" : -tên giá trị-}
+            return render(request, 'url của trang', context)
+            hoặc
+            return redirect('url của trang muốn chuyển về') sử dụng để chuyển người dùng về một trang khác sẵn có
+'''
 
 
 def Loginpage(request):

@@ -1,6 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+"""
+ đăng ký model để quản lý trong admin
+ admin.site.register(ten cua model)
+"""
 from .models import Room, Topic,  Message
 admin.site.register(Room)
 admin.site.register(Topic)
