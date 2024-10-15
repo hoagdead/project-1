@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'main.html' %}
 
 {% block content %}
@@ -46,4 +47,54 @@
     </div>
 </div>
 {%endif%}
+=======
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    .room-wraper{
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+    }
+</style>
+
+<div class="room-wraper">
+    <div>
+        {% include 'base/topic_bar.html' %}
+    </div>
+
+    <div>
+        <h1>{{room.name}}</h1>
+        <h3>{{room.description}}</h3>
+        <div>
+            <p>Comment</p>
+            {%for comment in room_comment%}
+            
+            {%if request.user == comment.user%}
+            <a href="{%url 'delete-message' comment.id%}">delete</a>
+            {%endif%}
+
+            <small>@{{comment.user}} {{comment.created|timesince}}</small>
+            <p>{{comment.body}}</p>
+            <br>
+            {%endfor%}
+        </div>
+
+        {%if request.user.is_authenticated %}
+        <div class ='comment-form'>
+            <form action="" method='POST'>
+                {%csrf_token%}
+                <input type="text" name="body" placeholder="Bình luận" >
+            </form> 
+        </div>
+
+    </div>
+
+    <div>
+        {% include 'base/notification_bar.html'%}
+    </div>
+</div>
+{%endif%}
+>>>>>>> origin/main
 {% endblock %}
