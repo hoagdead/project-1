@@ -60,9 +60,26 @@ class Message(models.Model):
 
 
 
-
+"""
+    testing
+"""
 class UserProfile(models.Model):
     user_id=models.CharField(max_length=100, unique=True, primary_key=True)
     user_name = models.CharField(max_length=100)
     user_avata = models.ImageField(blank=True)
     user_background = models.ImageField(blank=True)
+    
+
+class Question(models.Model):
+    name = models.TextField(max_length=1000,blank=True)
+    Ans_a = models.TextField(max_length=1000,blank=True)
+    Ans_b = models.TextField(max_length=1000,blank=True)
+    Ans_c = models.TextField(max_length=1000,blank=True)
+    Ans_d = models.TextField(max_length=1000,blank=True)
+    selection={'A':'A','B':'B','C':'C','D':'D'}
+    Corect_ans = models.CharField(max_length=1,choices=selection,blank=True)
+    q_id = models.IntegerField(default=1)
+    def __str__(self):
+        return self.name
+
+    

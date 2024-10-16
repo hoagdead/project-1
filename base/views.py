@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
-from .models import Room, Topic, Message
-from .form import RoomForm
+from .models import Room, Topic, Message,Question
+from .form import RoomForm,QuestionForm
 from django.shortcuts import redirect
 
 '''
@@ -74,7 +74,7 @@ def home(request):
     
     topics = Topic.objects.all()
     context = {'rooms': rooms , 'topics':topics }
-    return render(request, 'home.html', context)
+    return render(request, 'base/home.html', context)
 
 def room(request,pk):
     topics = Topic.objects.all()
@@ -101,6 +101,8 @@ def createroom(request):
             return redirect('home')
     context = {'form': form}
     return render(request, 'base/room_form.html', context)
+
+
 
 def updateroom(request,pk):
     room = Room.objects.get(id=pk)
@@ -132,3 +134,13 @@ def deleteMessage(request,pk):
 def userprofile(request):
     context={}
     return render(request,'profile.html',context)
+
+def createquestion(request):
+    form = QuestionForm()
+    if request.method=='POST':
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    context={'form':form}
+    return render(request,'base/question_form.html',context)        
