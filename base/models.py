@@ -50,11 +50,11 @@ class Message(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     #nội dung
     body = models.TextField()
-    #thời gian tạo, thời gian update
+    #thời gian tạo, thời gian update    
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     
-    #nếu như nó quá 50 ký tự thì những từ sau sẽ thành ...
+    #sẽ cho thấy nội dung tin nhắn trong admin...
     def __str__(self):
         return self.body[:50] + "..." 
 
@@ -76,9 +76,17 @@ class Question(models.Model):
     Ans_b = models.TextField(max_length=1000,blank=True)
     Ans_c = models.TextField(max_length=1000,blank=True)
     Ans_d = models.TextField(max_length=1000,blank=True)
-    selection={'A':'A','B':'B','C':'C','D':'D'}
-    Corect_ans = models.CharField(max_length=1,choices=selection,blank=True)
-    q_id = models.IntegerField(default=1)
+    
+    SELECTION_CHOICES = [
+        ('A', 'Answer A'),
+        ('B', 'Answer B'),
+        ('C', 'Answer C'),
+        ('D', 'Answer D'),
+    ]
+    
+
+    Corect_ans = models.CharField(max_length=1, choices=SELECTION_CHOICES, default=None)
+    type = models.IntegerField(default=1,editable=False)
     def __str__(self):
         return self.name
 

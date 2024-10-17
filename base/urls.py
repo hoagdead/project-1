@@ -21,6 +21,7 @@ urlpatterns = [
     #testing
     path('profile/', views.userprofile, name="profile"),
     path('create-question/', views.createquestion, name="create-question"),
+    path('questions/', views.question_list, name='question_list'),
     
     
 ]

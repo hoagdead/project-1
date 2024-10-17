@@ -8,6 +8,7 @@ from django.contrib.auth import login, logout, authenticate
 from .models import Room, Topic, Message,Question
 from .form import RoomForm,QuestionForm
 from django.shortcuts import redirect
+import random
 
 '''
     ở đây sẽ dùng để xử lý request của người dùng
@@ -142,5 +143,24 @@ def createquestion(request):
         if form.is_valid():
             form.save()
             return redirect('home')
+        else:
+            print(form.errors)
     context={'form':form}
     return render(request,'base/question_form.html',context)        
+
+def question_list(request):
+    question_limit = 10  # Số lượng câu hỏi muốn lấy
+    questions = get_questions(question_limit)  # Gọi hàm đã tạo trước đó
+
+    return render(request, 'question_list.html', {'questions': questions})
+
+def get_questions(total_limit):
+    type_1_limit = 3
+    type_1_questions = list(Question.objects.filter(type=1))
+    if len(type_1_questions) <= type_1_limit:
+        selected_type_1_questions = type_1_questions
+    else:
+        selected_type_1_questions = random.sample(type_1_questions, type_1_limit)
+    all_selected_questions = selected_type_1_questions
+    return all_selected_questions
+    
