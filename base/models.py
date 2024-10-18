@@ -90,4 +90,37 @@ class Question(models.Model):
     def __str__(self):
         return self.name
 
+class Question2(models.Model):
+    name = models.TextField(max_length=1000,blank=True)
+    Ans_a = models.TextField(max_length=1000,blank=True)
+    Ans_b = models.TextField(max_length=1000,blank=True)
+    Ans_c = models.TextField(max_length=1000,blank=True)
+    Ans_d = models.TextField(max_length=1000,blank=True)
+    
+    SELECTION_CHOICES = [
+        ("True","đúng"),
+        ("False","Sai")
+    ]
+    
+    Corect_ans_a = models.CharField(max_length=5, choices=SELECTION_CHOICES, default=None)
+    Corect_ans_b = models.CharField(max_length=5, choices=SELECTION_CHOICES, default=None)
+    Corect_ans_c = models.CharField(max_length=5, choices=SELECTION_CHOICES, default=None)
+    Corect_ans_d = models.CharField(max_length=5, choices=SELECTION_CHOICES, default=None)
+
+    type = models.IntegerField(default=2,editable=False)
+    def __str__(self):
+        return self.name
+
+class lop_hoc(models.Model):
+    name = models.CharField(max_length=10)
+    def __str__(self):
+        return self.name
+    
+class bai_hoc(models.Model):
+    lop = models.ForeignKey(lop_hoc, on_delete=models.CASCADE)
+    name = models.CharField(max_length=2000)
+    noi_dung = models.TextField()
+    file_di_kem = models.FileField(blank=True)
+    def __str__(self):
+        return self.name
     

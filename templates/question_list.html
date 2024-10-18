@@ -3,38 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách câu hỏi</title>
+    <title>Câu hỏi ngẫu nhiên</title>
 </head>
 <body>
-    <h1>Danh sách câu hỏi</h1>
-    <form method="POST" >
+    <h1>Danh sách câu hỏi ngẫu nhiên</h1>
+    <form method="POST" action="{% url 'submit_answer' %}">
         {% csrf_token %}
         <ul>
             {% for question in questions %}
                 <li>
                     <strong>{{ question.name }}</strong><br>
                     <ul>
-                        <li>
-                            <input type="radio" name="answer_{{ question.id }}" value="A" id="{{ question.id }}_A">
-                            <label for="{{ question.id }}_A">A: {{ question.Ans_a }}</label>
-                        </li>
-                        <li>
-                            <input type="radio" name="answer_{{ question.id }}" value="B" id="{{ question.id }}_B">
-                            <label for="{{ question.id }}_B">B: {{ question.Ans_b }}</label>
-                        </li>
-                        <li>
-                            <input type="radio" name="answer_{{ question.id }}" value="C" id="{{ question.id }}_C">
-                            <label for="{{ question.id }}_C">C: {{ question.Ans_c }}</label>
-                        </li>
-                        <li>
-                            <input type="radio" name="answer_{{ question.id }}" value="D" id="{{ question.id }}_D">
-                            <label for="{{ question.id }}_D">D: {{ question.Ans_d }}</label>
-                        </li>
+                        {% if question.type == 'multiple_choice' %}
+                            <!-- Câu hỏi loại chọn đáp án duy nhất -->
+                            {% for answer in question.answers %}
+                            <li>
+                                <input type="radio" name="answer_{{ question.id }}" value="{{ answer.0 }}" id="{{ question.id }}_{{ answer.0 }}">
+                                <label for="{{ question.id }}_{{ answer.0 }}">{{ answer.0 }}: {{ answer.1 }}</label>
+                            </li>
+                            {% endfor %}
+                        {% elif question.type == 'true_false' %}
+                            <!-- Câu hỏi loại đúng/sai -->
+                            {% for answer in question.answers %}
+                            <li>
+                                <label>{{ answer.1 }}</label><br>
+                                <input type="radio" name="answer_{{ answer.0 }}_{{ question.id }}" value="True" id="true_{{ answer.0 }}_{{ question.id }}">
+                                <label for="true_{{ answer.0 }}_{{ question.id }}">Đúng</label>
+                                <input type="radio" name="answer_{{ answer.0 }}_{{ question.id }}" value="False" id="false_{{ answer.0 }}_{{ question.id }}">
+                                <label for="false_{{ answer.0 }}_{{ question.id }}">Sai</label>
+                            </li>
+                            {% endfor %}
+                        {% endif %}
                     </ul>
                 </li>
             {% endfor %}
         </ul>
         <button type="submit">Gửi câu trả lời</button>
     </form>
+    {% block content %}
+    {% endblock %}
 </body>
 </html>

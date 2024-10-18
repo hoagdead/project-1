@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
-from .models import Room, Topic, Message,Question
+from .models import Room, Topic, Message,Question,Question2
 from .form import RoomForm,QuestionForm
 from django.shortcuts import redirect
 import random
@@ -149,18 +149,99 @@ def createquestion(request):
     return render(request,'base/question_form.html',context)        
 
 def question_list(request):
-    question_limit = 10  # Số lượng câu hỏi muốn lấy
-    questions = get_questions(question_limit)  # Gọi hàm đã tạo trước đó
+    tong_so_luong_cau_hoi = 10
+    so_luong_cau_hoi_1 = 3
+    so_luong_cau_hoi_2 = tong_so_luong_cau_hoi - so_luong_cau_hoi_1
 
-    return render(request, 'question_list.html', {'questions': questions})
+    # Lấy ngẫu nhiên một số câu hỏi từ model Question (loại chọn đáp án)
+    cau_hoi_nhieu_dap_an = list(Question.objects.filter(type=1))
+    if len(cau_hoi_nhieu_dap_an) > so_luong_cau_hoi_1:
+        cau_hoi_nhieu_dap_an = random.sample(cau_hoi_nhieu_dap_an, so_luong_cau_hoi_1)
 
-def get_questions(total_limit):
-    type_1_limit = 3
-    type_1_questions = list(Question.objects.filter(type=1))
-    if len(type_1_questions) <= type_1_limit:
-        selected_type_1_questions = type_1_questions
-    else:
-        selected_type_1_questions = random.sample(type_1_questions, type_1_limit)
-    all_selected_questions = selected_type_1_questions
-    return all_selected_questions
-    
+    # Lấy ngẫu nhiên một số câu hỏi từ model Question2 (loại đúng/sai)
+    cau_hoi_dung_sai = list(Question2.objects.filter(type=2))
+    if len(cau_hoi_dung_sai) > so_luong_cau_hoi_2:
+        cau_hoi_dung_sai = random.sample(cau_hoi_dung_sai, so_luong_cau_hoi_2)
+
+    trao_doi_cau_hoi = []
+
+    for question in cau_hoi_nhieu_dap_an:
+        answers = [
+            ('A', question.Ans_a),
+            ('B', question.Ans_b),
+            ('C', question.Ans_c),
+            ('D', question.Ans_d)
+        ]
+        random.shuffle(answers)  # Xáo trộn thứ tự các đáp án
+        trao_doi_cau_hoi.append({
+            'type': 'multiple_choice',  # Đánh dấu loại câu hỏi
+            'name': question.name,
+            'answers': answers,
+            'id': question.id,
+        })
+
+    # Xáo trộn đáp án cho câu hỏi loại đúng/sai
+    for question in cau_hoi_dung_sai:
+        answers = [
+            ('A', question.Ans_a, question.Corect_ans_a),
+            ('B', question.Ans_b, question.Corect_ans_b),
+            ('C', question.Ans_c, question.Corect_ans_c),
+            ('D', question.Ans_d, question.Corect_ans_d)
+        ]
+        random.shuffle(answers)  # Xáo trộn thứ tự các đáp án
+        trao_doi_cau_hoi.append({
+            'type': 'true_false',  # Đánh dấu loại câu hỏi
+            'name': question.name,
+            'answers': answers,
+            'id': question.id,
+        })
+    return render(request, 'question_list.html', {'questions': trao_doi_cau_hoi})
+
+def submit_answer(request):
+    if request.method == 'POST':
+        total_score = 0
+
+        # Tính điểm cho câu hỏi loại chọn 1 đáp án
+        for question in Question.objects.filter(type=1):
+            user_answer = request.POST.get(f'answer_{question.id}')
+            if user_answer and user_answer == question.Corect_ans:
+                total_score += 1  # Mỗi câu hỏi chọn đáp án đúng được 1 điểm
+
+        # Tính điểm cho câu hỏi loại đúng/sai
+        for question in Question2.objects.filter(type=2):
+            correct_count = 0
+
+            # Kiểm tra từng đáp án đúng/sai
+            user_answer_a = request.POST.get(f'answer_A_{question.id}')
+            if user_answer_a and user_answer_a == question.Corect_ans_a:
+                correct_count += 1
+
+            user_answer_b = request.POST.get(f'answer_B_{question.id}')
+            if user_answer_b and user_answer_b == question.Corect_ans_b:
+                correct_count += 1
+
+            user_answer_c = request.POST.get(f'answer_C_{question.id}')
+            if user_answer_c and user_answer_c == question.Corect_ans_c:
+                correct_count += 1
+
+            user_answer_d = request.POST.get(f'answer_D_{question.id}')
+            if user_answer_d and user_answer_d == question.Corect_ans_d:
+                correct_count += 1
+
+            # Tính điểm cho câu đúng/sai
+            if correct_count == 1:
+                total_score += 0.1
+            elif correct_count == 2:
+                total_score += 0.2
+            elif correct_count == 3:
+                total_score += 0.5
+            elif correct_count == 4:
+                total_score += 1
+
+        # Điểm sẽ được giới hạn trong khoảng từ 0 đến 10
+        if total_score > 10:
+            total_score = 10
+
+        # Sau khi tính điểm, chuyển hướng tới trang kết quả
+        return render(request, 'base/submit_answer.html', {'score': total_score})
+    return redirect('question_list')

@@ -1,0 +1,7 @@
+{%extends 'main.html' %}
+
+{%block content%}
+<h1>Kết quả bài làm</h1>
+<p>Bạn đã đạt được: {{ score }} / 10 điểm</p>
+<a href="{% url 'question_list' %}">Làm lại bài</a>
+{% endblock content %}
