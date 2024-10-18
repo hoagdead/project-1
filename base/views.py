@@ -237,8 +237,7 @@ def submit_answer(request):
                 total_score += 0.5
             elif correct_count == 4:
                 total_score += 1
-
-        # Điểm sẽ được giới hạn trong khoảng từ 0 đến 10
+                
         if total_score > 10:
             total_score = 10
 

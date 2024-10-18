@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 """
- khi tạo room nó sẽ gửi nhưng thông tin này về database
+ datatabase sẽ lưu những gì models có
  model mẫu
  class -tên model- (models.Model):
     -model đó sẽ có gì-
@@ -12,9 +12,10 @@ from django.contrib.auth.models import User
         + models.TextField: lấy ký tự (nhiều)
         + models.DateTimeField: lấy thời gian (ngày-tháng-năm)
         + models.ImageField: lấy hình ảnh
+        + models.FileField: lấy tệp
 """
 
-#khỏi tạo một topic mới
+# một topic sẽ có gì
 class Topic(models.Model):
     #tên của topic
     name = models.CharField(max_length=200)
@@ -22,6 +23,8 @@ class Topic(models.Model):
     description = models.TextField(null = True, blank = True)
     def __str__ (self):
         return self.name
+    
+# một room sẽ có gì   
 class Room(models.Model):
     #tên của người tạo ra room đó, khi xóa đi sẽ mất hết, và có thể để trống
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null = True)
@@ -58,17 +61,7 @@ class Message(models.Model):
     def __str__(self):
         return self.body[:50] + "..." 
 
-
-
-"""
-    testing
-"""
-class UserProfile(models.Model):
-    user_id=models.CharField(max_length=100, unique=True, primary_key=True)
-    user_name = models.CharField(max_length=100)
-    user_avata = models.ImageField(blank=True)
-    user_background = models.ImageField(blank=True)
-    
+ 
 
 class Question(models.Model):
     name = models.TextField(max_length=1000,blank=True)
@@ -124,3 +117,13 @@ class bai_hoc(models.Model):
     def __str__(self):
         return self.name
     
+
+"""
+    testing
+"""
+class UserProfile(models.Model):
+    user_id=models.CharField(max_length=100, unique=True, primary_key=True)
+    user_name = models.CharField(max_length=100)
+    user_avata = models.ImageField(blank=True)
+    user_background = models.ImageField(blank=True)
+   
