@@ -19,7 +19,7 @@ urlpatterns = [
     path('delete-message/<str:pk>/', views.deleteMessage, name="delete-message"),
     
     #testing
-    path('profile/', views.userprofile, name="profile"),
+    path('profile/<str:pk>', views.userprofile, name="profile"),
     path('create-question/', views.createquestion, name="create-question"),
     
     path('questions/', views.question_list, name='question_list'),

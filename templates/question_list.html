@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Câu hỏi ngẫu nhiên</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/main.css' %}?v={{ timestamp }}">
 </head>
 <body>
     <h1>Danh sách câu hỏi ngẫu nhiên</h1>
@@ -12,7 +14,7 @@
         <ul>
             {% for question in questions %}
                 <li>
-                    <strong>{{ question.name }}</strong><br>
+                    <strong>Câu {{ forloop.counter }}: {{ question.name }}</strong><br>
                     <ul>
                         {% if question.type == 'multiple_choice' %}
                             <!-- Câu hỏi loại chọn đáp án duy nhất -->

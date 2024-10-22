@@ -1,18 +1,24 @@
 {%block content%}
-<style>
-</style>
-<div class="topic-wraper">
+{% load static%}
+<link rel="stylesheet" href="{% static 'styles/main.css' %}?v={{ timestamp }}">
+
+<div class="topic_wraper">
     <h3>Chủ Đề</h3>
     <hr>
-    <div>
+    <div class="topic_all">
         <a href="{%url 'home'%}">ALL</a>
     </div>
-    <br>
-    {%for topic in topics%}
-    <div>
-        <a href="{%url 'home'%}?q={{topic.name}}">{{topic.name}}</a>   
+    <div class="topic_display">
+        {%for topic in topics%}
+            <div class="topic_name">
+                <a href="{%url 'home'%}?q={{topic.name}}">{{topic.name}}</a>   
+                <div class="topic_rc">
+                    <p>{{topic.room_count}}</p>
+                </div>
+            </div>
+            <br>
+        {%endfor%}
     </div>
-    <br>
-    {%endfor%}
 </div>
+
 {%endblock%}

@@ -3,7 +3,7 @@
     <style>
         .block-wraper{
             display: grid;
-            grid-template-columns:1fr 3fr 1fr;
+            grid-template-columns:3fr 1fr;
         }
     </style>
     <head>
@@ -12,22 +12,22 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <!--<link rel="stylesheet" type ='text/css' media='screen' href="styles.css">-->
         <title>{{request.user}} Profile</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'styles/main.css' %}?v={{ timestamp }}">
     </head>
     <body>
         {% include 'navbar.html' %} 
-
-        
         <div class='block-wraper'>
-            <div class='invi-block'>
-                <p>nothing here</p>
-            </div>
-
             <div>
-                <p>user background</p>
-                <p>avt user</p>
-                <h1>{{request.user}}</h1>
-                <h3>user decription</h3>
-
+                <div>
+                    <p>user background</p>
+                    <p>avt user</p>
+                    <h1>{{user.username}}</h1>
+                    <h3>user decription</h3>
+                </div>
+                <div>
+                    {%include 'base/feed_composnent.html'%}
+                </div>
             </div>
             <div>
                 {%include 'base/notification_bar.html'%}

@@ -1,24 +1,26 @@
 <!DOCTYPE html>
+{%load static%}
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <!--<link rel="stylesheet" type ='text/css' media='screen' href="styles.css">-->
+        <link rel="stylesheet" href="{% static 'styles/main.css' %}?v={{ timestamp }}">
         <title>Study</title>
     </head>
     <body>
         {% include 'navbar.html' %} 
-
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                    {{ message }}
-                </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+        <div class="room_messages">
+            {% if messages %} 
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
 
         {% block content %}
         {% endblock %}

@@ -24,6 +24,9 @@ class Topic(models.Model):
     def __str__ (self):
         return self.name
     
+    def room_count(self):
+        return self.room_set.count()
+    
 # một room sẽ có gì   
 class Room(models.Model):
     #tên của người tạo ra room đó, khi xóa đi sẽ mất hết, và có thể để trống
@@ -81,7 +84,7 @@ class Question(models.Model):
     Corect_ans = models.CharField(max_length=1, choices=SELECTION_CHOICES, default=None)
     type = models.IntegerField(default=1,editable=False)
     def __str__(self):
-        return self.name
+        return self.name[:50] + "..." 
 
 class Question2(models.Model):
     name = models.TextField(max_length=1000,blank=True)
@@ -102,7 +105,7 @@ class Question2(models.Model):
 
     type = models.IntegerField(default=2,editable=False)
     def __str__(self):
-        return self.name
+        return self.name[:50] + "..." 
 
 class lop_hoc(models.Model):
     name = models.CharField(max_length=10)

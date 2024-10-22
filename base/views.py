@@ -72,9 +72,8 @@ def home(request):
         Q(name__icontains=q) |
         Q(description__icontains=q)
         ) 
-    
     topics = Topic.objects.all()
-    context = {'rooms': rooms , 'topics':topics }
+    context = {'rooms': rooms , 'topics':topics,}
     return render(request, 'base/home.html', context)
 
 def room(request,pk):
@@ -89,7 +88,7 @@ def room(request,pk):
         )
         return redirect('room',pk = room.id)
     
-    context = {'room': room,'room_comment':room_comment, 'topics':topics}
+    context = {'room': room,'room_comment':room_comment, 'topics':topics,}
     return render(request, 'base/room.html', context)
 
 @login_required(login_url=('login'))
@@ -131,10 +130,15 @@ def deleteMessage(request,pk):
         return redirect('home')
     return render(request,'base/delete.html', {'obj':message})
 
-@login_required(login_url=('login'))
-def userprofile(request):
-    context={}
+def userprofile(request,pk):
+    user= User.objects.get(id=pk)
+    rooms = user.room_set.all()
+    context={'user':user,'rooms':rooms}
     return render(request,'profile.html',context)
+
+@login_required(login_url=('login'))
+def updateprofile(request):
+    return render(request)
 
 def createquestion(request):
     form = QuestionForm()
@@ -149,8 +153,8 @@ def createquestion(request):
     return render(request,'base/question_form.html',context)        
 
 def question_list(request):
-    tong_so_luong_cau_hoi = 10
-    so_luong_cau_hoi_1 = 3
+    tong_so_luong_cau_hoi = 5
+    so_luong_cau_hoi_1 = 4
     so_luong_cau_hoi_2 = tong_so_luong_cau_hoi - so_luong_cau_hoi_1
 
     # Lấy ngẫu nhiên một số câu hỏi từ model Question (loại chọn đáp án)
@@ -244,3 +248,4 @@ def submit_answer(request):
         # Sau khi tính điểm, chuyển hướng tới trang kết quả
         return render(request, 'base/submit_answer.html', {'score': total_score})
     return redirect('question_list')
+

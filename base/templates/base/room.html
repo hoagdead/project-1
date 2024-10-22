@@ -1,13 +1,8 @@
 {% extends 'main.html' %}
 
 {% block content %}
-
-<style>
-    .room-wraper{
-        display: grid;
-        grid-template-columns: 1fr 3fr 1fr;
-    }
-</style>
+{% load static%}
+<link rel="stylesheet" href="{% static 'styles/main.css' %}?v={{ timestamp }}">
 
 <div class="room-wraper">
     <div>
@@ -25,7 +20,7 @@
             <a href="{%url 'delete-message' comment.id%}">delete</a>
             {%endif%}
 
-            <small>@{{comment.user}} {{comment.created|timesince}}</small>
+            <small><a href="{%url 'profile' comment.user.id%}">@{{comment.user}}</a> {{comment.created|timesince}}</small>
             <p>{{comment.body}}</p>
             <br>
             {%endfor%}
