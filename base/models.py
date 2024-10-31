@@ -82,7 +82,9 @@ class Question(models.Model):
     
 
     Corect_ans = models.CharField(max_length=1, choices=SELECTION_CHOICES, default=None)
+
     type = models.IntegerField(default=1,editable=False)
+    
     def __str__(self):
         return self.name[:50] + "..." 
 
