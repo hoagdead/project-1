@@ -13,7 +13,11 @@
         <!--<link rel="stylesheet" type ='text/css' media='screen' href="styles.css">-->
         <title>{{request.user}} Profile</title>
         {% load static %}
-        <link rel="stylesheet" href="{% static 'styles/main.css' %}?v={{ timestamp }}">
+        {% if request.session.theme == 'dark' %}
+        <link rel="stylesheet" href="{% static 'styles/dark.css' %}">
+        {% else %}
+        <link rel="stylesheet" href="{% static 'styles/light.css' %}">
+        {% endif %}
     </head>
     <body>
         {% include 'navbar.html' %} 

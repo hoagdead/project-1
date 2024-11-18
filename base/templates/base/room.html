@@ -1,18 +1,30 @@
 {% extends 'main.html' %}
 
 {% block content %}
-{% load static%}
-<link rel="stylesheet" href="{% static 'styles/main.css' %}?v={{ timestamp }}">
+{% load custom_filter %}
+{% load static %}
+{% if request.session.theme == 'dark' %}
+<link rel="stylesheet" href="{% static 'styles/dark.css' %}">
+{% else %}
+<link rel="stylesheet" href="{% static 'styles/light.css' %}">
+{% endif %}
 
 <div class="room-wraper">
     <div>
         {% include 'base/topic_bar.html' %}
     </div>
 
-    <div>
-        <h1>{{room.name}}</h1>
-        <h3>{{room.description}}</h3>
-        <div>
+    <div class="inside_post">
+        <div class="top_section">
+        <a href="{%url 'profile' room.host.id %}">@{{room.host.username}} </a>
+        <p>{{room.topic.name}}</p>
+        <p>{{ room.created|days_since }}</p>
+        </div>
+        <div class="middle_section_i">
+            <h1>{{room.name}}</h1>
+            <h3>{{room.description}}</h3>
+        </div>
+        <div class="comment-section">
             <p>Comment</p>
             {%for comment in room_comment%}
             

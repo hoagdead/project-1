@@ -1,27 +1,19 @@
 <!DOCTYPE html>
-{%load static%}
+{% load static %}
+{% if request.session.theme == 'dark' %}
+<link rel="stylesheet" href="{% static 'styles/dark.css' %}">
+{% else %}
+<link rel="stylesheet" href="{% static 'styles/light.css' %}">
+{% endif %}
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="stylesheet" href="{% static 'styles/main.css' %}?v={{ timestamp }}">
         <title>Study</title>
     </head>
     <body>
         {% include 'navbar.html' %} 
-        <div class="room_messages">
-            {% if messages %} 
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                        {{ message }}
-                    </li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
-
         {% block content %}
         {% endblock %}
 

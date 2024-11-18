@@ -1,10 +1,14 @@
 {% extends 'main.html' %}
 
 {% block content %}
-{% load static%}
-<link rel="stylesheet" href="{% static 'styles/main.css' %}?v={{ timestamp }}">
+{% load static %}
+{% if request.session.theme == 'dark' %}
+<link rel="stylesheet" href="{% static 'styles/dark.css' %}">
+{% else %}
+<link rel="stylesheet" href="{% static 'styles/light.css' %}">
+{% endif %}
 <div class="home-container">
-    <div>
+    <div class ="left_bar" >
         {% include 'base/topic_bar.html' %}
     </div>
     <div class="room_display">
@@ -19,7 +23,7 @@
         </div>
         
     </div>
-    <div>
+    <div class="right_bar">
         {%include 'base/notification_bar.html'%}
     </div>
 </div>

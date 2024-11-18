@@ -6,10 +6,16 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from .models import Room, Topic, Message,Question,Question2
-from .form import RoomForm,QuestionForm
+from .form import RoomForm,QuestionForm,UploadFileForm
 from django.shortcuts import redirect
 import random
-
+import os
+from docx import Document 
+from django.core.files.storage import default_storage
+from django.conf import settings
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 '''
     ở đây sẽ dùng để xử lý request của người dùng
     một views mẫu:
@@ -80,6 +86,7 @@ def room(request,pk):
     topics = Topic.objects.all()
     room = Room.objects.get(id=pk)
     room_comment = room.message_set.all()
+    comment_count = room_comment.count()
     if request.method == 'POST':
         comment = Message.objects.create(
             user = request.user,
@@ -88,7 +95,8 @@ def room(request,pk):
         )
         return redirect('room',pk = room.id)
     
-    context = {'room': room,'room_comment':room_comment, 'topics':topics,}
+    context = {'room': room,'room_comment':room_comment, 'topics':topics,
+               'comment_count':comment_count,}
     return render(request, 'base/room.html', context)
 
 @login_required(login_url=('login'))
@@ -135,6 +143,18 @@ def userprofile(request,pk):
     rooms = user.room_set.all()
     context={'user':user,'rooms':rooms}
     return render(request,'profile.html',context)
+
+
+@csrf_exempt
+def change_mode(request):
+    if request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+        theme = data.get("theme", "light")
+        if theme in ["dark", "light"]:
+            request.session["theme"] = theme
+            return JsonResponse({"status": "success"})
+        return JsonResponse({"status": "invalid theme"}, status=400)
+    return JsonResponse({"status": "invalid request"}, status=405)
 
 @login_required(login_url=('login'))
 def updateprofile(request):
@@ -249,3 +269,49 @@ def submit_answer(request):
         return render(request, 'base/submit_answer.html', {'score': total_score})
     return redirect('question_list')
 
+
+def upload_bai_hoc(request):
+    content = ""
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Lưu file
+            uploaded_file = form.save()
+            file_path = uploaded_file.file.path
+            document = Document(file_path)
+            
+            # Xử lý nội dung và hình ảnh
+            content = ""
+            image_urls = []
+            for paragraph in document.paragraphs:
+                for run in paragraph.runs:
+                    if run.bold:
+                        content += f"<b>{run.text}</b>"
+                    elif run.italic:
+                        content += f"<i>{run.text}</i>"
+                    else:
+                        content += run.text
+                content += "<br>"
+            
+            # Xử lý hình ảnh trong file
+            for rel in document.part.rels.values():
+                if "image" in rel.target_ref:
+                    # Lưu ảnh vào thư mục media/uploads/images/
+                    image_blob = rel.target_part.blob
+                    image_name = f"image_{len(image_urls)}.png"
+                    image_path = os.path.join("uploads/images", image_name)
+                    default_storage.save(image_path, image_blob)
+                    image_urls.append(settings.MEDIA_URL + image_path)
+            
+            # Thêm ảnh vào nội dung
+            for image_url in image_urls:
+                content += f'<img src="{image_url}" style="max-width: 100%;"><br>'
+            
+            return render(request, 'base/preview.html', {'content': content})
+    else:
+        form = UploadFileForm()
+    return render(request, 'base/upload_file.html', {'form': form})
+
+def question_view(request):
+    context={}
+    return render(request, "question_list.html", context)

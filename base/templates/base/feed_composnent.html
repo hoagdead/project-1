@@ -1,22 +1,39 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'styles/main.css' %}?v={{ timestamp }}">
+{% load custom_filter %}
+{% if request.session.theme == 'dark' %}
+<link rel="stylesheet" href="{% static 'styles/dark.css' %}">
+{% else %}
+<link rel="stylesheet" href="{% static 'styles/light.css' %}">
+{% endif %}
 
 <div class="room">
     {%for room in rooms%}
-        <div> 
-            {%if request.user == room.host%}
-            <a href="{% url 'update-room' room.id %}">Edit</a>\
-            <a href="{% url 'delete-room' room.id %}">Delete</a>
-            {%endif%}
-            <a href="{%url 'profile' room.host.id %}">@{{room.host.username}} </a>
-            <p>{{room.created|timesince}}</p>
-            <div>
+        <div class = "post"> 
+            <div class = "top_section"> 
+                <div class = "post_edit">
+                    <a href="{%url 'profile' room.host.id %}">@{{room.host.username}} </a>
+                    {%if request.user == room.host%}
+                    <a href="{% url 'update-room' room.id %}">Edit</a>\
+                    <a href="{% url 'delete-room' room.id %}">Delete</a>
+                    {%endif%}
+                </div>
+                <p>{{ room.created|days_since }}</p>
+            </div>
+            <div class="middle_section">
                 <a href="{% url 'room' room.id %} ">
                     <h3> {{room.name}}</h3>
-                    <h4>{{room.description}}</h4>
-                    <small>{{room.topic.name}}</small>
-        
+                    {% if room.description|length > 280 %}
+                    <p id="short-description">{{ room.description|slice:":280" }}...</p>
+                    <p id="full-description" style="display: none;">{{ room.description }}</p>
+                    {% else %}
+                        <p>{{ room.description }}</p>
+                    {% endif %}
                 </a>
+            </div>
+            <div class="bottom_section">
+                <p>{{comment_count}}</p>
+                <p>{{room.topic.name}}</p>
+                
             </div>
         </div>
         <br>

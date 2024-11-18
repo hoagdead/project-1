@@ -1,47 +1,77 @@
 <!DOCTYPE html>
+{% load static %}
+{% if request.session.theme == 'dark' %}
+<link rel="stylesheet" href="{% static 'styles/q_dark.css' %}">
+{% else %}
+<link rel="stylesheet" href="{% static 'styles/q_light.css' %}">
+{% endif %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Câu hỏi ngẫu nhiên</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'styles/main.css' %}?v={{ timestamp }}">
+    <title>Thi thử</title>
 </head>
 <body>
-    <h1>Danh sách câu hỏi ngẫu nhiên</h1>
+    <div class="navbar">
+        <a href="{% url 'home' %}">Thoát</a>
+        <p>{{ request.user }}</p>
+        <button type="submit">Nộp bài</button>
+    </div>
+    <div class="midlle_section">
+    <div class="all_question">
     <form method="POST" action="{% url 'submit_answer' %}">
         {% csrf_token %}
         <ul>
             {% for question in questions %}
-                <li>
-                    <strong>Câu {{ forloop.counter }}: {{ question.name }}</strong><br>
+                <div class="question">
+                <li id="question_{{ forloop.counter }}">
+                    <strong id="cau_{{ forloop.counter }}">Câu {{ forloop.counter }}: {{ question.name }}</strong><br>
                     <ul>
                         {% if question.type == 'multiple_choice' %}
-                            <!-- Câu hỏi loại chọn đáp án duy nhất -->
                             {% for answer in question.answers %}
-                            <li>
-                                <input type="radio" name="answer_{{ question.id }}" value="{{ answer.0 }}" id="{{ question.id }}_{{ answer.0 }}">
-                                <label for="{{ question.id }}_{{ answer.0 }}">{{ answer.0 }}: {{ answer.1 }}</label>
+                            <li class="option-container">
+                                <input type="radio" name="answer_{{ question.id }}" value="{{ answer.0 }}" id="{{ question.id }}_{{ answer.0 }}" class="hidden-radio">
+                                <label for="{{ question.id }}_{{ answer.0 }}" class="radio-circle">{{ answer.0 }}</label>
+                                <span class="radio-label">{{ answer.1 }}</span>
                             </li>
                             {% endfor %}
                         {% elif question.type == 'true_false' %}
-                            <!-- Câu hỏi loại đúng/sai -->
                             {% for answer in question.answers %}
                             <li>
-                                <label>{{ answer.1 }}</label><br>
-                                <input type="radio" name="answer_{{ answer.0 }}_{{ question.id }}" value="True" id="true_{{ answer.0 }}_{{ question.id }}">
-                                <label for="true_{{ answer.0 }}_{{ question.id }}">Đúng</label>
-                                <input type="radio" name="answer_{{ answer.0 }}_{{ question.id }}" value="False" id="false_{{ answer.0 }}_{{ question.id }}">
-                                <label for="false_{{ answer.0 }}_{{ question.id }}">Sai</label>
+                                <label>{{ answer.1 }}</label>
+                                <li class="option-container_tf">
+                                    <input type="radio" name="answer_{{ question.id }}" value="True" id="true_{{ question.id }}" class="hidden-radio">
+                                    <label for="true_{{ question.id }}" class="radio-circletf">Đ</label>
+                                    <input type="radio" name="answer_{{ question.id }}" value="False" id="false_{{ question.id }}" class="hidden-radio">
+                                    <label for="false_{{ question.id }}" class="radio-circletf">S</label>
+                                </li>
                             </li>
                             {% endfor %}
                         {% endif %}
                     </ul>
+                
                 </li>
+                </div>
             {% endfor %}
         </ul>
-        <button type="submit">Gửi câu trả lời</button>
     </form>
+    </div>
+        <div class="side_bar">
+            {% for question in questions %}
+            <a href="#question_{{ forloop.counter }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter }}')">Câu {{ forloop.counter }}</a>
+            <br>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        function scrollToQuestion(event, questionId) {
+            event.preventDefault(); // Ngăn trang tải lại
+            const target = document.getElementById(questionId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' }); // Cuộn mượt đến phần tử
+            }
+        }
+    </script>
     {% block content %}
     {% endblock %}
 </body>

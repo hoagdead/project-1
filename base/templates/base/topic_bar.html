@@ -1,7 +1,10 @@
 {%block content%}
-{% load static%}
-<link rel="stylesheet" href="{% static 'styles/main.css' %}?v={{ timestamp }}">
-
+{% load static %}
+{% if request.session.theme == 'dark' %}
+<link rel="stylesheet" href="{% static 'styles/dark.css' %}">
+{% else %}
+<link rel="stylesheet" href="{% static 'styles/light.css' %}">
+{% endif %}
 <div class="topic_wraper">
     <h3>Chủ Đề</h3>
     <hr>

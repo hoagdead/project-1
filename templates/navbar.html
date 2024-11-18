@@ -1,23 +1,95 @@
-{% load static %}
-<div class="nav_bar_container">
-    <div class="nav_bar_logo">
-        <a href='/'>
-            <h1>LOGO</h1>
-        </a>
-    </div>
-    <div class="nav_bar_searching">
-        <form method="GET" action="{%url 'home' %}">
-            <input type="text" name="q" placeholder="Tìm kiếm.....">
-        </form>
-    </div>
-    <div class="nav_bar_login">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Navigation Bar</title>
+    {% load static %}
+    {% if request.session.theme == 'dark' %}
+    <link rel="stylesheet" href="{% static 'styles/dark.css' %}">
+    {% else %}
+    <link rel="stylesheet" href="{% static 'styles/light.css' %}">
+    {% endif %}
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <!-- Logo -->
+        <div class="nav-left">
+            <a href="{%url 'home'%}"><h2>logo</h2></a>
+            <a href="#">Trang chủ</a>
+            <a href="#">Ôn Tập</a>
+            <a href="#">Luyện tập</a>
+            <a href="{%url 'question_list'%}">Thi thử</a>
+        </div>
+        <!-- Search Box -->
+        <div class="search-box">
+            <form method="GET" action="{%url 'home' %}">
+            <input type="text" placeholder="Tìm kiếm"  name="q">
+            <button><i class="fa fa-search"></i></button> 
+            </form>
+        </div>
         {%if request.user.is_authenticated%}
-        <a href="{%url 'profile' request.user.id%}">Profile</a>
-        <a href="{%url 'logout'%}">Logout</a>
+        <div class="user-info">
+            <img src="{% static 'images/profile.jpg' %}" alt="Profile Picture" class="profile-pic" id="dropdown-trigger">
+            <div class="dropdown-content" id="dropdown-menu">
+                <p><strong>Yoshino Hoang</strong></p>
+                <p>@Yoshinohoang</p>
+                <a href="#">Trang cá nhân</a>
+                <div>
+                    <label class="theme-toggle">
+                        <span>Chế độ tối</span>
+                        <input type="checkbox" id="theme-toggle" {% if request.session.theme == 'dark' %}checked{% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <a href="#">Cài đặt</a>
+                <a href="{% url 'logout' %}">Đăng xuất</a>
+            </div>
+        </div>        
         {%else%}
         <a href="{%url 'login'%}">Login</a>
         {%endif%}
-    </div>
-</div>
-<link rel="stylesheet" href="{% static 'styles/main.css' %}?v={{ timestamp }}">
+    </nav>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggle = document.getElementById("theme-toggle");
+    
+            toggle.addEventListener("change", function () {
+                // Gửi yêu cầu lưu chế độ sáng/tối
+                fetch("{% url 'change-mode' %}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}", // Đảm bảo CSRF token được thêm
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ theme: this.checked ? "dark" : "light" })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload(); // Reload trang sau khi lưu thành công
+                    } else {
+                        console.error("Error saving theme preference");
+                    }
+                })
+                .catch(error => console.error("Request failed:", error));
+            });
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+        const dropdownTrigger = document.getElementById("dropdown-trigger");
+        const dropdownMenu = document.getElementById("dropdown-menu");
 
+        // Toggle dropdown menu when user clicks on the profile picture
+        dropdownTrigger.addEventListener("click", function () {
+            dropdownMenu.classList.toggle("active");
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!dropdownTrigger.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.remove("active");
+            }
+        });
+    });
+    </script>    
+</body>
+
+</html>

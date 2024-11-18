@@ -1,0 +1,357 @@
+
+/* setup for all */
+body{
+    background-color: #f4f4f4;
+    padding-top: 75px;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+hr {
+    display: none;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+
+
+/* home page */
+
+.home-container{
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+}
+
+.home_head_page{
+    display: grid;
+    height: 100%;
+    grid-template-columns: 5fr 3fr;
+    align-items: center;
+}
+.room_display{
+    display: grid;
+    grid-template-rows: 0.8fr 5fr;
+    padding-left: 10px;
+    overflow-y: auto;
+}
+.right_bar, .left_bar {
+    overflow: hidden; 
+    top: 0;
+    bottom: 0;
+}
+.right_bar{
+    right: 0;
+}
+.left_bar{
+    left: 0;
+}
+.room-wraper{
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 1fr 3fr 1fr;
+}
+.room_create{
+    display: flex;             
+    justify-content: center;      
+    align-items: center;                  
+
+}
+.room_create button{
+    height: 30px;
+    width: 141px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    border: #ffff;
+}
+/* topic bar*/
+  
+.topic_wraper{
+    display: block;
+    padding: 20px;
+    padding-top: 100px;
+}
+
+.topic_display{
+    padding-top: 12px;
+}
+.topic_name{
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    margin-top: 15px;
+}
+.topic_name a{
+    outline: none; 
+    color: black;
+    text-decoration: none;
+    font-family:'Sansation';
+    font-size: 20px;
+}
+.topic_rc{
+    display: flex;
+    background-color: #ffff;
+    height: 110%;
+    align-items: center;
+}
+.topic_rc p{
+    padding-left: 45%;
+    font-family:'Sansation';
+    font-weight: bold;
+
+}
+.topic_all{
+    color: black;
+    text-decoration: none;
+    font-family:'Sansation';
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+
+/* General Navbar Style */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #ffffff; 
+    color: rgb(0, 0, 0);
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.nav-left a {
+    color: white;
+    text-decoration: none;
+    margin-left: 5px;
+    font-size: 17px;
+}
+
+.nav-left a:hover {
+    color: #000000;
+}
+
+/* Logo Style */
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+/* Search Box */
+.search-box {
+    position: right;
+    display: flex;
+    align-items: right;
+    margin-left: 50rem;
+}
+
+.search-box input[type="text"] {
+    padding: 8px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    background-color: #E9E9FB;
+    color: rgb(0, 0, 0);
+    padding-left: 16px;
+}
+
+.search-box button {
+    position: right;
+    right: 5px;
+    background: none;
+    border: none;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+/* Dropdown container styling */
+.user-info {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    padding: 10px;
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    width: 200px;
+    border-radius: 5px;
+}
+
+/* Dropdown visible when active */
+.dropdown-content.active {
+    display: block;
+}
+
+/* Profile picture styling */
+.profile-pic {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.dropdown-content a {
+    color: #000000;
+    text-decoration: none;
+    display: block;
+    margin: 0.5rem 0;
+}
+
+
+/* Toggle Switch */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.theme-toggle span {
+    margin-right: 8px;
+}
+
+.theme-toggle input {
+    display: none;
+}
+
+.theme-toggle .slider {
+    position: relative;
+    width: 40px;
+    height: 20px;
+    border-radius: 34px;
+    background-color: #ccc;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.theme-toggle .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background-color: white;
+    transition: 0.4s;
+    left: 4px;
+    bottom: 2px;
+}
+
+.theme-toggle input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.theme-toggle input:checked + .slider {
+    background-color: #4caf50;
+}
+
+
+/* Định dạng chung cho navbar */
+body.light .navbar {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.navbar {
+    display: flex;
+    padding: 1rem 2rem;
+    align-items: center;
+}
+
+.nav-left a {
+    color: inherit;
+    margin-left: 1rem;
+    text-decoration: none;
+}
+
+/*   post  */
+.post {
+    background-color: #ffffff;
+    margin-right: 100px;
+    padding-left: 20px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    border-radius: 16px;
+}
+.top_section{
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.top_section a{
+    color: #14B0C5;
+}
+.top_section p{
+    justify-self: center;
+}
+.middle_section{
+    padding-left:10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    
+}
+.middle_section h3{
+    color: #3E3880;
+    font-size: 26px;
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+.middle_section p{
+    color: #3E3880;
+    font-size: 18px;
+    padding-left: 3px;
+}
+
+.bottom_section{
+    padding-top:5px;
+    font-size: 17px;
+}
+
+/*      inside post    */
+.inside_post{
+    min-height: 100vh - 75px;
+    display: grid;
+    grid-template-rows: 0.6fr auto 3fr;
+    margin-top:40px;
+    margin-right: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 16px;
+    background-color: #ffffff;
+}
+.inside_post .top_section{
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr ;
+    padding-top: 20px;
+    font-size: 18px;
+}
+.comment-form{
+    display: flex;
+    position:fixed;
+    bottom: 0;
+    z-index: 999;
+    width: 5fr;
+    padding: 10px;
+}
+.comment-form input[type="text"] {
+    width: calc();
+    padding: 8px;
+    margin: 5px 0;
+}
+
