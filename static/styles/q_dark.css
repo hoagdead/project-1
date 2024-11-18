@@ -1,0 +1,103 @@
+body{
+    background-color: #F7F9F9;
+}
+li {
+    list-style-type: none;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+hr {
+    display: none;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+.navbar{
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr;
+    height: 40px;
+    justify-items:center ;
+    background: #ffff;
+}
+.navbar a{
+    justify-self: left;
+    padding-left: 20px;
+    font-size: 20px;
+    padding-top:7px;
+}
+.navbar p{
+    font-size: 20px;
+    padding-top:7px;
+}
+.navbar button{
+    height: 30px;
+    margin-top: 4px;
+    justify-self: flex-end;
+    margin-right: 20px;
+    width: 88px;
+    font-size: 17px;
+}
+.midlle_section{
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 10fr 2fr;
+}
+.all_question {
+    margin-right: 10px;
+    padding-left: 10px;
+}
+.question{
+    border-radius: 16px ;
+    background-color: #ffff;
+    margin-top:20px ;
+    padding:20px ;
+    font-size: 20px;
+}
+.question ul{
+    padding-top: 20px;
+}
+.option-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Ẩn radio button mặc định */
+.hidden-radio {
+    display: none;
+}
+
+/* Tạo vòng tròn cho radio button */
+.radio-circle {
+    width: 30px;
+    height: 30px;
+    border: 2px solid black;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 10px;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* Hiển thị vòng tròn được chọn */
+.hidden-radio:checked + .radio-circle {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Định dạng label */
+.radio-label {
+    cursor: pointer;
+}
+.option-container_tf {
+    display: flex;
+    align-items: center;
+}

@@ -20,6 +20,7 @@
             <a href="#">Luyện tập</a>
             <a href="{%url 'question_list'%}">Thi thử</a>
         </div>
+
         <!-- Search Box -->
         <div class="search-box">
             <form method="GET" action="{%url 'home' %}">
@@ -34,6 +35,7 @@
                 <p><strong>Yoshino Hoang</strong></p>
                 <p>@Yoshinohoang</p>
                 <a href="#">Trang cá nhân</a>
+                <p>Current Theme: {{ request.session.theme }}</p>
                 <div>
                     <label class="theme-toggle">
                         <span>Chế độ tối</span>
