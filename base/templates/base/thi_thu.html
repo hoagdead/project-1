@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thi thử</title>
+    <!-- Load dynamic theme -->
+    {% load static %}
+    {% if request.session.theme == 'dark' %}
+    <link rel="stylesheet" href="{% static 'styles/dark.css' %}">
+    {% else %}
+    <link rel="stylesheet" href="{% static 'styles/light.css' %}">
+    {% endif %}
+</head>
+<body>
+    <!-- Navbar -->
+    {% include 'navbar.html' %}
+
+    <!-- Main content -->
+    <div class="exam-container">
+        <h1>Làm bài thi thử</h1>
+        <h2>Thời gian làm bài: 45 phút</h2>
+        <button class="start-button">
+            <a href="{% url 'question_list' %}">Bắt đầu làm bài</a>
+        </button>
+    </div>
+</body>
+</html>

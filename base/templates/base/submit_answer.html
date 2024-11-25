@@ -1,7 +1,25 @@
-{%extends 'main.html' %}
 
-{%block content%}
-<h1>Kết quả bài làm</h1>
-<p>Bạn đã đạt được: {{ score }} / 10 điểm</p>
-<button href="{% url 'question_list' %}">Làm lại bài</button>
-{% endblock content %}
+<!DOCTYPE html>
+{% load static %}
+{% if request.session.theme == 'dark' %}
+<link rel="stylesheet" href="{% static 'styles/dark.css' %}">
+{% else %}
+<link rel="stylesheet" href="{% static 'styles/light.css' %}">
+{% endif %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thi thử</title>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="submit_ans">
+        <h1>Kết quả thi của bạn</h1>
+        <p>Điểm của bạn là: {{ score }}</p>
+        <button class="remake">
+            <a href="{% url 'thi_thu' %}">Làm Lại bài</a>
+        </button>
+    </div>
+</body>
+</html>

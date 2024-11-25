@@ -48,7 +48,13 @@ class Message(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.body[:50] + "..." 
-
+    
+class bai_hoc(models.Model):
+    name = models.CharField(max_length=2000)
+    noi_dung = models.TextField()
+    file_di_kem = models.FileField(blank=True)
+    def __str__(self):
+        return self.name
  
 
 class Question(models.Model):
@@ -57,7 +63,8 @@ class Question(models.Model):
     Ans_b = models.TextField(max_length=1000,blank=True)
     Ans_c = models.TextField(max_length=1000,blank=True)
     Ans_d = models.TextField(max_length=1000,blank=True)
-    
+    bai = models.ForeignKey(bai_hoc,on_delete=models.SET_NULL, null = True)
+
     SELECTION_CHOICES = [
         ('A', 'Answer A'),
         ('B', 'Answer B'),
@@ -96,12 +103,7 @@ class Question2(models.Model):
 
 
     
-class bai_hoc(models.Model):
-    name = models.CharField(max_length=2000)
-    noi_dung = models.TextField()
-    file_di_kem = models.FileField(blank=True)
-    def __str__(self):
-        return self.name
+
 
 
 """

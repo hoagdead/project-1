@@ -73,6 +73,13 @@ p{
     background-color: #3F4054;
     border: #3F4054;
 }
+.room_create button:hover {
+    background-color: #191e56;
+    color: white;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    transform: scale(1.1);
+}
+
 /* topic bar*/
   
 .topic_wraper{
@@ -164,6 +171,11 @@ p{
     display: flex;
     align-items: right;
     margin-left: 50rem;
+}
+.search-box input[type="text"]:focus {
+    box-shadow: 0 0 10px #2f2fb682;
+    background-color: #7e77c279;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .search-box input[type="text"] {
@@ -298,6 +310,12 @@ body.light .navbar {
     padding-bottom: 14px;
     border-radius: 16px;
 }
+.post:hover {
+    box-shadow: 0 4px 15px rgba(32, 49, 95, 0.582);
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+}
+
 .top_section{
     display: grid;
     grid-template-columns: 5fr 1fr;
@@ -366,3 +384,88 @@ body.light .navbar {
     margin: 5px 0;
 }
 
+/* Container styling */
+.exam-container {
+    justify-self: center;
+    margin-top: 14%;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #2E2E40;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #2E2E40;
+    max-width: 500px;
+    width: 100%;
+}
+
+/* Heading styling */
+.exam-container h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.exam-container h2 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #ffffffef;
+}
+
+/* Button styling */
+.start-button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.start-button a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+
+.start-button:hover {
+    background-color: #0056b3;
+}
+
+.submit_ans{
+    justify-self: center;
+    margin-top: 14%;
+    text-align: center;
+    padding: 30px;
+    border: 1px solid #2E2E40;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #2E2E40;
+    max-width: 500px;
+    width: 100%;
+    color: #fff;
+}
+.submit_ans p {
+    font-size: 26px;
+    padding-top: 10px;
+}
+.remake{
+    color: #ffff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.remake a{
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+.remake a:hover{
+    background-color: #0056b3;
+}

@@ -19,3 +19,10 @@ def days_since(value):
         return "1 ngày trước"
     else:
         return f"{days} ngày trước"
+    
+@register.filter(name='to_char')
+def to_char(value):
+    try:
+        return str(value)
+    except Exception:
+        return value

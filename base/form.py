@@ -3,11 +3,21 @@ from django import forms
 from django.forms import ModelForm
 from .models import Room, Question,UploadedFile
 
-class UploadFileForm(forms.ModelForm):
-    class Meta:
-        model = UploadedFile
-        fields = ('file',)
-        
+class UploadFileForm(forms.Form):
+    file = forms.FileField(label="Upload Word File")
+
+class UploadQuestionForm(forms.Form):
+    file = forms.FileField(label="Chọn file Word")
+    QUESTION_TYPE_CHOICES = [
+        (1, "Chọn 1 đáp án đúng"),
+        (2, "Đúng/Sai"),
+    ]
+    question_type = forms.ChoiceField(
+        choices=QUESTION_TYPE_CHOICES,
+        label="Loại câu hỏi",
+        widget=forms.RadioSelect
+    )
+
 class RoomForm(ModelForm): 
     class Meta:
         model = Room

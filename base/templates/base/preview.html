@@ -1,10 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Upload Result</title>
+    <title>Preview Lesson</title>
+    <style>
+        /* Thêm CSS để định dạng nội dung */
+        p {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+    </style>
 </head>
 <body>
-    <h1>Nội dung file:</h1>
-    <pre>{{ content|safe }}</pre>
+    <h1>Preview: {{ lesson.name }}</h1>
+    <div>
+    <div>
+        {% autoescape off %}
+        {{ lesson.noi_dung }}
+        {% endautoescape %}
+    </div>
+    </div>
+    <a href="/">Upload another file</a>
+
+    <br>
+    <br>
+    <h1>Preview:</h1>
+    <a href="{% url 'upload_questions' %}">Upload another file</a>
+    <h2>Xem trước câu hỏi</h2>
+    <form method="post">
+        {% csrf_token %}
+        <h3>Chọn bài học:</h3>
+        <select name="bai">
+            {% for bai in all_bai %}
+                <option value="{{ bai.id }}">{{ bai.name }}</option>
+            {% endfor %}
+        </select>
+
+        <h3>Các câu hỏi:</h3>
+        {% for question in questions %}
+            <div>
+                <p><b>{{ question.name }}</b></p>
+                <p>A: {{ question.Ans_a }}</p>
+                <p>B: {{ question.Ans_b }}</p>
+                <p>C: {{ question.Ans_c }}</p>
+                <p>D: {{ question.Ans_d }}</p>
+                <label for="correct_{{ forloop.counter }}">Chọn đáp án đúng:</label>
+                <select name="correct_{{ forloop.counter }}">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                </select>
+            </div>
+        {% endfor %}
+        <button type="submit" name="save_questions">Lưu vào cơ sở dữ liệu</button>
+    </form>
+    
 </body>
 </html>

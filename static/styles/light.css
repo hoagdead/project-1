@@ -16,6 +16,24 @@ a{
     text-decoration: none;
     color: black;
 }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.post {
+    animation: fadeIn 0.5s ease;
+}
+
+.dropdown-content.active {
+    animation: fadeIn 0.3s ease;
+}
 
 
 /* home page */
@@ -36,6 +54,7 @@ a{
     grid-template-rows: 0.8fr 5fr;
     padding-left: 10px;
     overflow-y: auto;
+    scroll-behavior: smooth;
 }
 .right_bar, .left_bar {
     overflow: hidden; 
@@ -65,6 +84,12 @@ a{
     border-radius: 8px;
     background-color: #ffffff;
     border: #ffff;
+}
+.room_create button:hover {
+    background-color: #5e86e3;
+    color: white;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    transform: scale(1.1);
 }
 /* topic bar*/
   
@@ -166,6 +191,12 @@ a{
     color: rgb(0, 0, 0);
     padding-left: 16px;
 }
+.search-box input[type="text"]:focus {
+    box-shadow: 0 0 10px #14B0C5;
+    background-color: #ffffff;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
 
 .search-box button {
     position: right;
@@ -193,6 +224,17 @@ a{
     width: 200px;
     border-radius: 5px;
 }
+.dropdown-content {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dropdown-content.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 
 /* Dropdown visible when active */
 .dropdown-content.active {
@@ -288,6 +330,12 @@ body.light .navbar {
     padding-bottom: 14px;
     border-radius: 16px;
 }
+.post:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+}
+
 .top_section{
     display: grid;
     grid-template-columns: 5fr 1fr;
@@ -355,3 +403,86 @@ body.light .navbar {
     margin: 5px 0;
 }
 
+/* Container styling */
+.exam-container {
+    justify-self: center;
+    margin-top: 14%;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    max-width: 500px;
+    width: 100%;
+}
+
+/* Heading styling */
+.exam-container h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.exam-container h2 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* Button styling */
+.start-button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.start-button a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+
+.start-button:hover {
+    background-color: #0056b3;
+}
+
+.submit_ans{
+    justify-self: center;
+    margin-top: 14%;
+    text-align: center;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    max-width: 500px;
+    width: 100%;
+}
+.submit_ans p {
+    font-size: 26px;
+    padding-top: 10px;
+}
+.remake{
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.remake a{
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+.remake a:hover{
+    background-color: #0056b3;
+}

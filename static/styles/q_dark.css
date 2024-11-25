@@ -1,81 +1,137 @@
-body{
-    background-color: #F7F9F9;
+/* Global Styles */
+body {
+    background-color: #2C2C37; /* Màu nền */
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #fff; /* Chữ màu trắng */
 }
-li {
-    list-style-type: none;
-}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
+li {
+    list-style: none;
+}
+
 hr {
     display: none;
 }
-a{
+
+a {
     text-decoration: none;
-    color: black;
+    color: #fff; /* Chữ màu trắng */
+    transition: color 0.3s ease;
 }
-.navbar{
+
+a:hover {
+    color: #007bff; /* Màu xanh nổi bật khi hover */
+}
+
+/* Navbar Styles */
+.navbar {
     display: grid;
-    grid-template-columns: 1fr 5fr 1fr;
-    height: 40px;
-    justify-items:center ;
-    background: #ffff;
+    grid-template-columns: 1fr 5fr 1fr 1fr;
+    height: 47px;
+    align-items: center;
+    background-color: #2E2E40; /* Màu nền */
+    border-bottom: 1px solid #444; /* Viền màu tối hơn */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
-.navbar a{
-    justify-self: left;
+
+.navbar a {
+    justify-self: start;
     padding-left: 20px;
-    font-size: 20px;
-    padding-top:7px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff; /* Chữ màu trắng */
 }
-.navbar p{
-    font-size: 20px;
-    padding-top:7px;
+
+.navbar p {
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff; /* Chữ màu trắng */
 }
-.navbar button{
-    height: 30px;
-    margin-top: 4px;
-    justify-self: flex-end;
-    margin-right: 20px;
-    width: 88px;
-    font-size: 17px;
+
+/* Submit Button */
+.submit-button button {
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 15px;
+    padding: 8px 17px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease;
 }
-.midlle_section{
-    margin-top: 20px;
+
+.submit-button button:hover {
+    background-color: #0056b3;
+}
+
+.submit-button button:active {
+    background-color: #003f7f;
+    box-shadow: none;
+}
+
+/* Middle Section */
+.middle_section {
     display: grid;
-    grid-template-columns: 10fr 2fr;
+    grid-template-columns: 5fr 1fr;
+    gap: 20px;
+    max-width: 1200px;
 }
-.all_question {
+
+/* All Questions */
+.question_all_in {
+    padding-top: 10px;
+    margin-left: 10px;
     margin-right: 10px;
     padding-left: 10px;
+    background-color: #2C2C37; /* Màu nền */
+    color: #fff; /* Chữ màu trắng */
 }
-.question{
-    border-radius: 16px ;
-    background-color: #ffff;
-    margin-top:20px ;
-    padding:20px ;
-    font-size: 20px;
+.question_all_in h2 {
+    padding-left: 10px;
+    padding-top: 20px;
+    margin-top: 10px;
 }
-.question ul{
+
+/* Question Card */
+.question {
+    border-radius: 16px;
+    background-color: #2E2E40; /* Màu nền */
+    margin-top: 20px;
+    padding: 20px;
+    font-size: 22px;
+    border: 1px solid #444;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    width: 1150px;
+    color: #fff; /* Chữ màu trắng */
+}
+
+.question ul {
     padding-top: 20px;
 }
+
+/* Radio Button Styles */
 .option-container {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
 }
 
-/* Ẩn radio button mặc định */
 .hidden-radio {
     display: none;
 }
 
-/* Tạo vòng tròn cho radio button */
 .radio-circle {
     width: 30px;
     height: 30px;
-    border: 2px solid black;
+    border: 2px solid #fff; /* Viền màu trắng */
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -84,20 +140,77 @@ a{
     margin-right: 10px;
     cursor: pointer;
     text-align: center;
+    transition: all 0.3s ease;
+    color: #fff; /* Chữ màu trắng */
 }
 
-/* Hiển thị vòng tròn được chọn */
+.option-container label {
+    font-size: 20px;
+    color: #fff; /* Chữ màu trắng */
+}
+
+.option-container span {
+    font-size: 22px;
+    color: #fff; /* Chữ màu trắng */
+}
+
 .hidden-radio:checked + .radio-circle {
     background-color: #007bff;
-    color: white;
+    color: #fff;
     border-color: #007bff;
 }
 
-/* Định dạng label */
-.radio-label {
-    cursor: pointer;
-}
+/* True/False Option */
 .option-container_tf {
     display: flex;
     align-items: center;
+}
+
+/* Sidebar Styles */
+.side_bar {
+    display: block;
+    border-radius: 10px;
+    position: fixed;
+    top: 143px;
+    right: 0;
+    width: 250px;
+    background-color: #2E2E40; /* Màu nền */
+    box-shadow: -1px 0 5px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-right: 10px;
+    color: #fff; /* Chữ màu trắng */
+}
+
+.side_bar a {
+    color: #fff; /* Màu trắng */
+}
+
+.side_bar a:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.side_bar a.completed {
+    color: green;
+}
+
+.midlle_section {
+    margin-right: 280px;
+}
+
+/* Modal Styles */
+.modal {
+    background-color: rgba(44, 44, 55, 0.8); /* Nền tối mờ */
+}
+
+.modal-content {
+    background-color: #2E2E40; /* Màu nền */
+    color: #fff; /* Chữ màu trắng */
+}
+
+.modal-actions button {
+    background-color: #007bff;
+    color: #fff;
 }

@@ -1,0 +1,90 @@
+.midlle_section_1{
+    padding-left: 20px;
+    padding-top: 40px;
+    display: grid;
+    grid-template-columns: 1.2fr 5fr;
+    column-gap: 35px;
+}
+
+
+.lesson_choice{
+    display: inline-block;
+    background-color: #2E2E40;
+    border-radius: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    height: 700px;
+}
+
+.lesson_choice h3{
+    padding-top: 5px;
+    font-size: 30px;
+    padding-left: 25%;
+    color: #ffff;
+}
+.lc{
+    padding: 10px;
+    padding-top: 10px;
+    font-size: 18px;
+}
+.noi_dung{
+    background-color: #2E2E40;
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 20px;
+    gap: 10px;
+}
+.noi_dung h3{
+    color: #ffff;
+    padding-top: 10px;
+    padding-bottom: 12px;
+    font-size: 33px;
+}
+.noi_dung p{
+    padding-left: 10px;
+    font-size: 23px;
+}
+.midlle_section{
+    color: #ffff;
+    display: flexbox;
+    margin-top: 20px;
+    background-color: #2E2E40;
+    height: 700px;
+    width:auto;
+    font-size: 25px;
+    margin-left: 60px;
+    margin-right: 60px;
+    border-radius: 10px;
+    padding: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    gap: 20px;
+}
+.midlle_section h3{
+    display: flex;
+    width: auto;
+    justify-content: center
+}
+
+.midlle_section a:hover{
+    background-color: rgba(44, 214, 237, 0.484);
+    border-radius: 6px;
+    padding: 4px;
+}
+.bai{
+    margin-top: 20px;
+}
+.nd h3 {
+    margin-bottom: 10px;  
+}
+
+.nd p {
+    margin-bottom: 1px;  
+    line-height: 1.4; 
+}
+
+.nd {
+    padding: 10px;  
+    color: #ffff;
+}
+

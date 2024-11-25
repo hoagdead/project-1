@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Câu hỏi</title>
+</head>
+<body>
+    <h1>Upload câu hỏi</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>{{ form.file.label }}</p>
+        {{ form.file }}
+        <p>{{ form.question_type.label }}</p>
+        {{ form.question_type }}
+        <button type="submit">Upload</button>
+    </form>   
+</body>
+</html>

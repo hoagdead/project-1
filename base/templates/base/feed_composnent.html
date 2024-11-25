@@ -31,9 +31,12 @@
                 </a>
             </div>
             <div class="bottom_section">
+                {%if comment_count != 0%}
+                <p>0</p>
+                {%else%}
                 <p>{{comment_count}}</p>
+                {%endif%}
                 <p>{{room.topic.name}}</p>
-                
             </div>
         </div>
         <br>

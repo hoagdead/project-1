@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
-from .models import Room, Topic, Message,Question,Question2
+from .models import Room, Topic, Message,Question,Question2,bai_hoc
 from .form import RoomForm,QuestionForm,UploadFileForm
 from django.shortcuts import redirect
 import random
@@ -16,6 +16,11 @@ from django.conf import settings
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from .form import UploadQuestionForm
+from .utils import process_question_file, save_questions_to_db
+from django.utils.html import escape
+from docx.oxml.ns import qn
 '''
     ở đây sẽ dùng để xử lý request của người dùng
     một views mẫu:
@@ -172,23 +177,16 @@ def createquestion(request):
     context={'form':form}
     return render(request,'base/question_form.html',context)        
 
-def question_list(request):
-    tong_so_luong_cau_hoi = 5
-    so_luong_cau_hoi_1 = 4
-    so_luong_cau_hoi_2 = tong_so_luong_cau_hoi - so_luong_cau_hoi_1
 
-    # Lấy ngẫu nhiên một số câu hỏi từ model Question (loại chọn đáp án)
+def question_type1(sl):
+    so_luong_cau_hoi_1 = sl
     cau_hoi_nhieu_dap_an = list(Question.objects.filter(type=1))
     if len(cau_hoi_nhieu_dap_an) > so_luong_cau_hoi_1:
         cau_hoi_nhieu_dap_an = random.sample(cau_hoi_nhieu_dap_an, so_luong_cau_hoi_1)
-
-    # Lấy ngẫu nhiên một số câu hỏi từ model Question2 (loại đúng/sai)
-    cau_hoi_dung_sai = list(Question2.objects.filter(type=2))
-    if len(cau_hoi_dung_sai) > so_luong_cau_hoi_2:
-        cau_hoi_dung_sai = random.sample(cau_hoi_dung_sai, so_luong_cau_hoi_2)
-
+    cau_hoi_nhieu_dap_an = list(Question.objects.filter(type=1))
+    if len(cau_hoi_nhieu_dap_an) > so_luong_cau_hoi_1:
+        cau_hoi_nhieu_dap_an = random.sample(cau_hoi_nhieu_dap_an, so_luong_cau_hoi_1)
     trao_doi_cau_hoi = []
-
     for question in cau_hoi_nhieu_dap_an:
         answers = [
             ('A', question.Ans_a),
@@ -203,7 +201,22 @@ def question_list(request):
             'answers': answers,
             'id': question.id,
         })
+    return trao_doi_cau_hoi
 
+def question_type2(sl):
+    so_luong_cau_hoi_2 = sl
+
+    # Lấy ngẫu nhiên một số câu hỏi từ model Question (loại chọn đáp án)
+    
+
+    # Lấy ngẫu nhiên một số câu hỏi từ model Question2 (loại đúng/sai)
+    cau_hoi_dung_sai = list(Question2.objects.filter(type=2))
+    if len(cau_hoi_dung_sai) > so_luong_cau_hoi_2:
+        cau_hoi_dung_sai = random.sample(cau_hoi_dung_sai, so_luong_cau_hoi_2)
+
+    trao_doi_cau_hoi = []
+
+    
     # Xáo trộn đáp án cho câu hỏi loại đúng/sai
     for question in cau_hoi_dung_sai:
         answers = [
@@ -219,7 +232,15 @@ def question_list(request):
             'answers': answers,
             'id': question.id,
         })
-    return render(request, 'question_list.html', {'questions': trao_doi_cau_hoi})
+    return trao_doi_cau_hoi
+
+def question_list(request):
+    tong_cau_hoi = 10
+    cau_hoi_loai_1 = 8
+    cau_hoi_loai_2 = tong_cau_hoi - cau_hoi_loai_1
+    type1 = question_type1(cau_hoi_loai_1)
+    type2 = question_type2(cau_hoi_loai_2)
+    return render(request, 'question_list.html', {'type1':type1 , 'type2': type2})
 
 def submit_answer(request):
     if request.method == 'POST':
@@ -270,48 +291,174 @@ def submit_answer(request):
     return redirect('question_list')
 
 
-def upload_bai_hoc(request):
-    content = ""
+
+
+def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            # Lưu file
-            uploaded_file = form.save()
-            file_path = uploaded_file.file.path
-            document = Document(file_path)
-            
-            # Xử lý nội dung và hình ảnh
+            uploaded_file = request.FILES['file']
+            doc = Document(uploaded_file)
+
+            # Nội dung HTML sẽ được tạo ra
             content = ""
-            image_urls = []
-            for paragraph in document.paragraphs:
-                for run in paragraph.runs:
-                    if run.bold:
-                        content += f"<b>{run.text}</b>"
-                    elif run.italic:
-                        content += f"<i>{run.text}</i>"
-                    else:
-                        content += run.text
-                content += "<br>"
-            
-            # Xử lý hình ảnh trong file
-            for rel in document.part.rels.values():
-                if "image" in rel.target_ref:
-                    # Lưu ảnh vào thư mục media/uploads/images/
-                    image_blob = rel.target_part.blob
-                    image_name = f"image_{len(image_urls)}.png"
-                    image_path = os.path.join("uploads/images", image_name)
-                    default_storage.save(image_path, image_blob)
-                    image_urls.append(settings.MEDIA_URL + image_path)
-            
-            # Thêm ảnh vào nội dung
-            for image_url in image_urls:
-                content += f'<img src="{image_url}" style="max-width: 100%;"><br>'
-            
-            return render(request, 'base/preview.html', {'content': content})
+
+            # Duyệt qua các phần tử của tài liệu
+            for element in doc.element.body:
+                # Nếu là đoạn văn (paragraph)
+                if element.tag == qn('w:p'):  # Kiểm tra đoạn văn
+                    paragraph = next(p for p in doc.paragraphs if p._element == element)
+                    paragraph_html = "<p style='text-indent: 2em;'>"
+
+                    # Xử lý các đoạn văn (runs)
+                    for run in paragraph.runs:
+                        text = escape(run.text)
+
+                        # Định dạng văn bản
+                        if run.bold:
+                            text = f"<strong>{text}</strong>"
+                        if run.italic:
+                            text = f"<em>{text}</em>"
+                        if run.underline:
+                            text = f"<u>{text}</u>"
+                        if run.font.color and run.font.color.rgb:
+                            color = run.font.color.rgb
+                            text = f"<span style='color: #{color};'>{text}</span>"
+
+                        paragraph_html += text
+
+                    paragraph_html += "</p>"
+                    content += paragraph_html
+
+                # Nếu là bảng (table)
+                elif element.tag == qn('w:tbl'):  # Kiểm tra bảng
+                    table = next(t for t in doc.tables if t._element == element)
+                    table_html = "<table border='1' style='border-collapse: collapse; width: 100%;'>"
+
+                    for row in table.rows:
+                        table_html += "<tr>"
+                        for cell in row.cells:
+                            cell_content = ""
+                            for paragraph in cell.paragraphs:
+                                for run in paragraph.runs:
+                                    text = escape(run.text)
+                                    if run.bold:
+                                        text = f"<strong>{text}</strong>"
+                                    if run.italic:
+                                        text = f"<em>{text}</em>"
+                                    if run.underline:
+                                        text = f"<u>{text}</u>"
+                                    if run.font.color and run.font.color.rgb:
+                                        color = run.font.color.rgb
+                                        text = f"<span style='color: #{color};'>{text}</span>"
+                                    cell_content += text
+                                cell_content += "<br>"
+                            table_html += f"<td>{cell_content}</td>"
+                        table_html += "</tr>"
+                    table_html += "</table>"
+                    content += table_html
+
+            # Lưu vào cơ sở dữ liệu
+            lesson = bai_hoc.objects.create(
+                name=uploaded_file.name,
+                noi_dung=content,
+                file_di_kem=uploaded_file
+            )
+
+            # Chuyển hướng đến trang preview
+            return redirect('preview_lesson', lesson_id=lesson.id)
     else:
         form = UploadFileForm()
     return render(request, 'base/upload_file.html', {'form': form})
 
-def question_view(request):
+
+def preview_lesson(request, lesson_id):
+    try:
+        lesson = bai_hoc.objects.get(id=lesson_id)
+    except bai_hoc.DoesNotExist:
+        return HttpResponse("Lesson not found", status=404)
+
+    return render(request, 'base/preview.html', {'lesson': lesson})
+
+@csrf_exempt
+def set_theme(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        theme = data.get('theme', 'light')  # Mặc định là 'light'
+        request.session['theme'] = theme  # Lưu vào session
+        return JsonResponse({'status': 'success'})
+
+def thi_thu(request):
     context={}
-    return render(request, "question_list.html", context)
+    return render(request, "base/thi_thu.html", context)
+
+
+def bai_hoc_all(request):
+    all_lesson  = bai_hoc.objects.all()
+    context={'all_lesson': all_lesson}
+    return render(request, "base/bai_hoc_all.html",context)
+
+def bai_hoc_i(request):
+    all_lesson  = bai_hoc.objects.all()
+    context={'all_lesson': all_lesson}
+    return render(request, "base/bai_hoc.html",context)
+
+def bai(request,lesson_id):
+    all_lesson  = bai_hoc.objects.all()
+    lesson = bai_hoc.objects.get(id=lesson_id)
+    ten = lesson.name
+    noi_dung = lesson.noi_dung
+    file_dinh_kem = lesson.file_di_kem
+    context = {
+        'ten':ten,
+        'noi_dung':noi_dung,
+        'file':file_dinh_kem,
+        'all_lesson': all_lesson,
+    }
+    return render(request, 'base/bai_hoc_nd.html',context)
+
+def upload_questions(request):
+    if request.method == "POST":
+        # Nếu là POST từ preview.html (Lưu câu hỏi vào DB)
+        if "save_questions" in request.POST:
+            questions = request.session.get("questions", [])  # Lấy danh sách câu hỏi từ session
+            selected_bai = request.POST.get("bai")  # Lấy bài học từ form
+
+            # Kiểm tra dữ liệu hợp lệ
+            if not selected_bai or not questions:
+                return render(request, "base/preview.html", {
+                    "questions": questions,
+                    "all_bai": bai_hoc.objects.all(),
+                    "error": "Chưa chọn bài học hoặc không có câu hỏi để lưu."
+                })
+
+            for i, question_data in enumerate(questions):
+                correct_answer = request.POST.get(f"correct_{i+1}")  # Đáp án đúng
+                Question.objects.create(
+                    name=question_data["name"],
+                    Ans_a=question_data["Ans_a"],
+                    Ans_b=question_data["Ans_b"],
+                    Ans_c=question_data["Ans_c"],
+                    Ans_d=question_data["Ans_d"],
+                    Corect_ans=correct_answer,
+                    bai_id=selected_bai,  # Gán bài học vào câu hỏi
+                )
+            return redirect("upload_questions")  # Redirect về trang upload
+
+        # Nếu là POST từ upload_question.html
+        else:
+            form = UploadQuestionForm(request.POST, request.FILES)
+            if form.is_valid():
+                file = request.FILES["file"]  # Lấy file được upload
+                questions = process_question_file(file)  # Xử lý file để lấy câu hỏi
+                request.session["questions"] = questions  # Lưu câu hỏi vào session
+                all_bai = bai_hoc.objects.all()  # Lấy danh sách bài học
+                return render(request, "base/preview.html", {"questions": questions, "all_bai": all_bai})
+
+    # Nếu là GET (tải trang upload câu hỏi)
+    else:
+        print("có cc")
+        form = UploadQuestionForm()
+
+    return render(request, "base/upload_question.html", {"form": form})
+

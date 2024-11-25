@@ -1,68 +1,116 @@
 <!DOCTYPE html>
-{% load static %}
-{% if request.session.theme == 'dark' %}
-<link rel="stylesheet" href="{% static 'styles/q_dark.css' %}">
-{% else %}
-<link rel="stylesheet" href="{% static 'styles/q_light.css' %}">
-{% endif %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thi thử</title>
+    {% load static %}
+    {% if request.session.theme == 'dark' %}
+    <link rel="stylesheet" href="{% static 'styles/q_dark.css' %}">
+    {% else %}
+    <link rel="stylesheet" href="{% static 'styles/q_light.css' %}">
+    {% endif %}
 </head>
 <body>
+    <!-- Thanh điều hướng -->
     <div class="navbar">
-        <a href="{% url 'home' %}">Thoát</a>
+        <a href="{% url 'thi_thu' %}">Thoát</a>
         <p>{{ request.user }}</p>
-        <button type="submit">Nộp bài</button>
+        
     </div>
-    <div class="midlle_section">
-    <div class="all_question">
-    <form method="POST" action="{% url 'submit_answer' %}">
-        {% csrf_token %}
-        <ul>
-            {% for question in questions %}
-                <div class="question">
-                <li id="question_{{ forloop.counter }}">
-                    <strong id="cau_{{ forloop.counter }}">Câu {{ forloop.counter }}: {{ question.name }}</strong><br>
-                    <ul>
-                        {% if question.type == 'multiple_choice' %}
-                            {% for answer in question.answers %}
-                            <li class="option-container">
-                                <input type="radio" name="answer_{{ question.id }}" value="{{ answer.0 }}" id="{{ question.id }}_{{ answer.0 }}" class="hidden-radio">
-                                <label for="{{ question.id }}_{{ answer.0 }}" class="radio-circle">{{ answer.0 }}</label>
-                                <span class="radio-label">{{ answer.1 }}</span>
-                            </li>
-                            {% endfor %}
-                        {% elif question.type == 'true_false' %}
-                            {% for answer in question.answers %}
-                            <li>
-                                <label>{{ answer.1 }}</label>
-                                <li class="option-container_tf">
-                                    <input type="radio" name="answer_{{ question.id }}" value="True" id="true_{{ question.id }}" class="hidden-radio">
-                                    <label for="true_{{ question.id }}" class="radio-circletf">Đ</label>
-                                    <input type="radio" name="answer_{{ question.id }}" value="False" id="false_{{ question.id }}" class="hidden-radio">
-                                    <label for="false_{{ question.id }}" class="radio-circletf">S</label>
+
+    <!-- Phần chính -->
+    <div class="middle_section">
+        <div class="all_questions">
+            <form  id="questionForm" method="POST" action="{% url 'submit_answer' %}">
+                {% csrf_token %}
+
+                <!-- Câu hỏi loại 1 -->
+                <h2>Câu hỏi loại 1: Chọn đáp án</h2>
+                <ul>
+                    {% for question in type1 %}
+                    <div class="question" id="question_{{ forloop.counter }}">
+                        <li>
+                            <strong>Câu {{ forloop.counter }}: {{ question.name }}</strong><br>
+                            <ul>
+                                {% for answer in question.answers %}
+                                <li class="option-container">
+                                    <input type="radio" name="answer_{{ question.id }}" value="{{ answer.0 }}" id="option_{{ question.id }}_{{ answer.0 }}" class="hidden-radio">
+                                    <label for="option_{{ question.id }}_{{ answer.0 }}" class="radio-circle">{{ answer.0 }}</label>
+                                    <span class="radio-label">{{ answer.1 }}</span>
                                 </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </div>
+                    {% endfor %}
+                </ul>
+
+                <!-- Câu hỏi loại 2 -->
+                <h2>Câu hỏi loại 2: Đúng/Sai</h2>
+                    <ul>
+                        {% for question in type2 %}
+                        <div class="question" id="question_{{ forloop.counter|add:8 }}">
+                            <li>
+                                <strong>Câu {{ forloop.counter }}: {{ question.name }}</strong><br>
+                                <ul class="answers-container">
+                                    {% for answer in question.answers %}
+                                    <li class="option-container-tf">
+                                        <span class="radio-label"><strong>{{ answer.0 }}.</strong>  {{ answer.1 }}</span>
+                                        <div class="radio-group">
+                                            <label class="radio-option">
+                                                <input type="radio" name="answer_{{ question.id }}_{{ forloop.counter }}" value="True" class="hidden-radio">
+                                                <span class="radio-circle">Đ</span>
+                                            </label>
+                                            <label class="radio-option">
+                                                <input type="radio" name="answer_{{ question.id }}_{{ forloop.counter }}" value="False" class="hidden-radio">
+                                                <span class="radio-circle">S</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
                             </li>
-                            {% endfor %}
-                        {% endif %}
+                        </div>
+                        {% endfor %}
                     </ul>
-                
-                </li>
-                </div>
-            {% endfor %}
-        </ul>
-    </form>
-    </div>
+                </ul>
+
+                <button type="submit">Nộp bài</button>
+            </form>
+        </div>
+
+        <!-- Thanh bên -->
         <div class="side_bar">
-            {% for question in questions %}
-            <a href="#question_{{ forloop.counter }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter }}')">Câu {{ forloop.counter }}</a>
-            <br>
+            <h2>thời gian còn Lại</h2>
+            <span id="timer">45:00</span>
+            <h3>Danh sách câu hỏi</h3>
+            <h4>Loại 1</h4>
+            {% for question in type1 %}
+            <a href="#question_{{ forloop.counter|add:8 }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter }}')">{{ forloop.counter }}</a>
             {% endfor %}
+            <h4>Loại 2</h4>
+            {% for question in type2 %}
+            <a href="#question_{{ forloop.counter|add:8 }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter|add:8 }}')">{{ forloop.counter }}</a>
+            {% endfor %}
+            <div class="smb">
+            <button id="submitButton">Nộp bài</button>
+            </div>
         </div>
     </div>
+    <div id="warningModal" class="hiden">
+        <div class="modal-content">
+            <h3>Bạn chưa trả lời hết các câu hỏi!</h3>
+            <p>Các câu chưa làm:</p>
+            <ul id="unansweredList"></ul>
+            <div class="modal-actions">
+                <button id="backToQuestionsButton">Quay lại làm bài</button> <!-- Đúng ID -->
+                <button id="confirmSubmitButton">Nộp bài</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
     <script>
         function scrollToQuestion(event, questionId) {
             event.preventDefault(); // Ngăn trang tải lại
@@ -71,8 +119,88 @@
                 target.scrollIntoView({ behavior: 'smooth' }); // Cuộn mượt đến phần tử
             }
         }
+        // Bộ đếm thời gian
+        let totalSeconds = 45 * 60; // 45 phút
+        const timerElement = document.getElementById('timer');
+
+        function updateTimer() {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            if (totalSeconds > 0) {
+                totalSeconds--;
+            } else {
+                alert("Hết thời gian! Bài thi của bạn sẽ được nộp tự động.");
+                document.getElementById('questionForm').submit();
+            }
+        }
+
+        setInterval(updateTimer, 1000);
+
+        // Đổi màu câu hỏi trên sidebar khi đã chọn đáp án
+        const inputs = document.querySelectorAll('input[type="radio"]');
+        inputs.forEach(input => {
+            input.addEventListener('change', () => {
+                const questionId = input.name.split('_')[1]; // Lấy ID câu hỏi
+                const sidebarLink = document.querySelector(`a[href="#question_${questionId}"]`);
+                if (sidebarLink) {
+                    sidebarLink.style.color = 'green'; // Đổi màu thành xanh lá
+                }
+            });
+        });
+
+        document.getElementById('submitButton').addEventListener('click', function () {
+            // Kiểm tra nếu còn câu hỏi chưa trả lời
+            const unanswered = []; // Danh sách câu hỏi chưa được trả lời
+
+    // Kiểm tra từng câu hỏi
+    document.querySelectorAll('.question').forEach(question => {
+            const questionId = question.id.split('_')[1]; // Lấy ID của câu hỏi
+            const answered = document.querySelector(`input[name="answer_${questionId}"]:checked`);
+            if (!answered) {
+                    unanswered.push(questionId); // Thêm ID vào danh sách chưa trả lời
+                }
+            });
+            const modal = document.getElementById('warningModal');
+            const unansweredList = document.getElementById('unansweredList');
+            if (unanswered.length > 0) {
+                // Nếu có câu hỏi chưa trả lời, hiển thị modal và thay đổi class
+                // Xóa danh sách cũ trong modal
+                unansweredList.innerHTML = '';
+
+                // Thêm các câu hỏi chưa trả lời vào modal
+                unanswered.forEach(id => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `Câu ${id}`;
+                    unansweredList.appendChild(listItem);
+                });
+
+                // Thay đổi class của modal từ 'hidden' thành 'model'
+                modal.classList.replace('hiden','modal');
+            } else {
+                const form = document.getElementById('questionForm');
+                form.submit();
+            }
+        });
+        // Xử lý nút "Quay lại làm bài" trong modal
+    document.getElementById('backToQuestionsButton').addEventListener('click', () => {
+        const modal = document.getElementById('warningModal');
+        modal.classList.replace('modal', 'hiden'); // Ẩn modal
+
+        // Đảm bảo nút "Nộp bài" hoạt động lại
+        const submitButton = document.getElementById('submitButton');
+        submitButton.disabled = false; // Nếu đã bị vô hiệu hóa trước đó
+        submitButton.addEventListener('click', handleSubmit); // Đảm bảo sự kiện được gắn lại
+        });
+
+        // Xử lý nút "Nộp bài" trong modal
+    document.getElementById('confirmSubmitButton').addEventListener('click', () => {
+        const modal = document.getElementById('warningModal');
+        modal.classList.replace('modal','hidden'); // Ẩn modal
+        document.getElementById('questionForm').submit(); // Nộp bài
+    });
+
+
     </script>
-    {% block content %}
-    {% endblock %}
 </body>
 </html>

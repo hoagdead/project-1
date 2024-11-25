@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ôn tập</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thi thử</title>
+    <!-- Load dynamic theme -->
+    {% load static %}
+    {% if request.session.theme == 'dark' %}
+    <link rel="stylesheet" href="{% static 'styles/dark.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/b_dark.css' %}">
+    {% else %}
+    <link rel="stylesheet" href="{% static 'styles/light.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/b_light.css' %}">
+    {% endif %}
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="midlle_section_1">
+        <div class="lesson_choice">
+            <h3>Chủ đề</h3>
+            <br>
+            
+                {%for bai in all_lesson%}
+                <div class="lc">
+                    <a href="{%url 'bai' bai.id %}">{{bai.name}}</a>
+                </div>
+                {%endfor%}
+        </div>
+        <div class="noi_dung">
+            {%block content%}
+            {%endblock content%}
+        </div>
+    </div>
+</body>
+</html>
