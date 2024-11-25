@@ -2,36 +2,44 @@ from docx import Document
 from .models import Question, Question2
 from docx import Document
 
-def process_question_file(file):
-    document = Document(file)
+
+def process_question_file(file_path):
+    document = Document(file_path)
     questions = []
-    
-    # Duyệt qua từng đoạn văn trong file Word
+    question = None
+
     for paragraph in document.paragraphs:
         text = paragraph.text.strip()
-        if text.startswith("Câu hỏi:"):
+        
+        # Phát hiện câu hỏi
+        if text.startswith("Câu"):
+            if question:  # Lưu câu hỏi trước đó
+                questions.append(question)
             question = {
-                "name": text.replace("Câu hỏi:", "").strip(),
+                "name": text.split(". ", 1)[1].strip(),
                 "Ans_a": "",
                 "Ans_b": "",
                 "Ans_c": "",
                 "Ans_d": "",
                 "correct": None,
             }
-        elif text.startswith("Đáp án A:"):
-            question["Ans_a"] = text.replace("Đáp án A:", "").strip()
-        elif text.startswith("Đáp án B:"):
-            question["Ans_b"] = text.replace("Đáp án B:", "").strip()
-        elif text.startswith("Đáp án C:"):
-            question["Ans_c"] = text.replace("Đáp án C:", "").strip()
-        elif text.startswith("Đáp án D:"):
-            question["Ans_d"] = text.replace("Đáp án D:", "").strip()
-        elif text.startswith("Đáp án đúng:"):
-            question["correct"] = text.replace("Đáp án đúng:", "").strip()
-            questions.append(question)  # Thêm câu hỏi sau khi đủ thông tin
+        
+        # Phát hiện các đáp án
+        elif text.startswith("A.") or text.startswith("B.") or text.startswith("C.") or text.startswith("D."):
+            key = f"Ans_{text[0].lower()}"  # "A." -> "Ans_a"
+            answer_text = text[2:].strip()
+            
+            # Kiểm tra định dạng (in đậm, tô màu, v.v.)
+            is_correct = any(run.bold or run.font.color for run in paragraph.runs)
+            question[key] = answer_text
+            if is_correct:
+                question["correct"] = key
+    
+    # Lưu câu hỏi cuối cùng
+    if question:
+        questions.append(question)
     
     return questions
-
 
 def save_questions_to_db(questions, question_type):
     if question_type == 1:  # Lưu vào Question

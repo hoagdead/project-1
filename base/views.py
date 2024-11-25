@@ -457,7 +457,6 @@ def upload_questions(request):
 
     # Nếu là GET (tải trang upload câu hỏi)
     else:
-        print("có cc")
         form = UploadQuestionForm()
 
     return render(request, "base/upload_question.html", {"form": form})
