@@ -25,35 +25,57 @@
     <br>
     <h1>Preview:</h1>
     <a href="{% url 'upload_questions' %}">Upload another file</a>
-    <h2>Xem trước câu hỏi</h2>
-    <form method="post">
-        {% csrf_token %}
-        <h3>Chọn bài học:</h3>
-        <select name="bai">
-            {% for bai in all_bai %}
-                <option value="{{ bai.id }}">{{ bai.name }}</option>
-            {% endfor %}
-        </select>
 
-        <h3>Các câu hỏi:</h3>
-        {% for question in questions %}
-            <div>
-                <p><b>{{ question.name }}</b></p>
-                <p>A: {{ question.Ans_a }}</p>
-                <p>B: {{ question.Ans_b }}</p>
-                <p>C: {{ question.Ans_c }}</p>
-                <p>D: {{ question.Ans_d }}</p>
-                <label for="correct_{{ forloop.counter }}">Chọn đáp án đúng:</label>
-                <select name="correct_{{ forloop.counter }}">
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                </select>
-            </div>
-        {% endfor %}
-        <button type="submit" name="save_questions">Lưu vào cơ sở dữ liệu</button>
-    </form>
+
+    <form method="POST">
+        {% csrf_token %}
+        <h3>Xem trước các câu hỏi đã tải lên:</h3>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Câu hỏi</th>
+              <th>Đáp án A</th>
+              <th>Đáp án B</th>
+              <th>Đáp án C</th>
+              <th>Đáp án D</th>
+              <th>Đáp án đúng</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for question in questions %}
+              <tr>
+                <td>{{ question.name }}</td>
+                <td>{{ question.Ans_a }}</td>
+                <td>{{ question.Ans_b }}</td>
+                <td>{{ question.Ans_c }}</td>
+                <td>{{ question.Ans_d }}</td>
+                <td>
+                  {% if question.correct == "Ans_a" %}
+                    <p>A</p>
+                  {% elif question.correct == "Ans_b" %}
+                    <p>B</p>
+                  {% elif question.correct == "Ans_c" %}
+                    <p>C</p>
+                  {% elif question.correct == "Ans_d" %}
+                    <p>D</p>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <hr>
+        <h3>Chọn bài học để lưu:</h3>
+        <select name="bai" required>
+          <option value="" disabled selected>Chọn bài học</option>
+          {% for bai in all_bai %}
+            <option value="{{ bai.id }}">{{ bai.name }}</option>
+          {% endfor %}
+        </select>
+        <br><br>
+        <button type="submit" name="save_questions">Lưu câu hỏi</button>
+      </form>
+      
     
 </body>
 </html>

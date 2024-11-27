@@ -3,6 +3,7 @@ from .models import Question, Question2
 from docx import Document
 
 
+
 def process_question_file(file_path):
     document = Document(file_path)
     questions = []
@@ -10,7 +11,7 @@ def process_question_file(file_path):
 
     for paragraph in document.paragraphs:
         text = paragraph.text.strip()
-        
+
         # Phát hiện câu hỏi
         if text.startswith("Câu"):
             if question:  # Lưu câu hỏi trước đó
@@ -25,22 +26,23 @@ def process_question_file(file_path):
             }
         
         # Phát hiện các đáp án
-        elif text.startswith("A.") or text.startswith("B.") or text.startswith("C.") or text.startswith("D."):
+        elif text.startswith(("A.", "B.", "C.", "D.")):
             key = f"Ans_{text[0].lower()}"  # "A." -> "Ans_a"
             answer_text = text[2:].strip()
             
-            # Kiểm tra định dạng (in đậm, tô màu, v.v.)
-            is_correct = any(run.bold or run.font.color for run in paragraph.runs)
+            # Kiểm tra xem câu trả lời có được tô đậm không
+            is_correct = any(run.bold for run in paragraph.runs)
             question[key] = answer_text
             if is_correct:
                 question["correct"] = key
-    
+
     # Lưu câu hỏi cuối cùng
     if question:
         questions.append(question)
     
     return questions
-
+    
+    return questions
 def save_questions_to_db(questions, question_type):
     if question_type == 1:  # Lưu vào Question
         for q in questions:

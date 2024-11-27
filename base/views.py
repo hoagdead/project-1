@@ -419,7 +419,7 @@ def bai(request,lesson_id):
 
 def upload_questions(request):
     if request.method == "POST":
-        # Nếu là POST từ preview.html (Lưu câu hỏi vào DB)
+        # Xử lý yêu cầu POST từ preview.html (Lưu câu hỏi vào DB)
         if "save_questions" in request.POST:
             questions = request.session.get("questions", [])  # Lấy danh sách câu hỏi từ session
             selected_bai = request.POST.get("bai")  # Lấy bài học từ form
@@ -432,20 +432,20 @@ def upload_questions(request):
                     "error": "Chưa chọn bài học hoặc không có câu hỏi để lưu."
                 })
 
-            for i, question_data in enumerate(questions):
-                correct_answer = request.POST.get(f"correct_{i+1}")  # Đáp án đúng
+            for question_data in questions:
                 Question.objects.create(
                     name=question_data["name"],
                     Ans_a=question_data["Ans_a"],
                     Ans_b=question_data["Ans_b"],
                     Ans_c=question_data["Ans_c"],
                     Ans_d=question_data["Ans_d"],
-                    Corect_ans=correct_answer,
+                    Corect_ans=question_data["correct"],  # Lưu đáp án đúng
                     bai_id=selected_bai,  # Gán bài học vào câu hỏi
                 )
+            request.session.pop("questions", None)  # Xóa session sau khi lưu
             return redirect("upload_questions")  # Redirect về trang upload
 
-        # Nếu là POST từ upload_question.html
+        # Xử lý POST từ upload_question.html
         else:
             form = UploadQuestionForm(request.POST, request.FILES)
             if form.is_valid():
@@ -453,11 +453,15 @@ def upload_questions(request):
                 questions = process_question_file(file)  # Xử lý file để lấy câu hỏi
                 request.session["questions"] = questions  # Lưu câu hỏi vào session
                 all_bai = bai_hoc.objects.all()  # Lấy danh sách bài học
-                return render(request, "base/preview.html", {"questions": questions, "all_bai": all_bai})
+                return render(request, "base/preview.html", {
+                    "questions": questions, 
+                    "all_bai": all_bai
+                })
+            else:
+                return render(request, "base/upload_question.html", {"form": form, "error": "Form không hợp lệ."})
 
     # Nếu là GET (tải trang upload câu hỏi)
     else:
         form = UploadQuestionForm()
 
     return render(request, "base/upload_question.html", {"form": form})
-
