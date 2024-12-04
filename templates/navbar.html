@@ -17,7 +17,7 @@
             <a href="{%url 'home'%}"><h2>logo</h2></a>
             <a href="#">Trang chủ</a>
             <a href="{%url 'on_tap_pv'%}">Ôn Tập</a>
-            <a href="#">Luyện tập</a>
+            <a href="{%url 'luyen_tap_all'%}">Luyện tập</a>
             <a href="{%url 'thi_thu'%}">Thi thử</a>
         </div>
 
@@ -30,10 +30,12 @@
         </div>
         {%if request.user.is_authenticated%}
         <div class="user-info">
-            <img src="{% static 'images/profile.jpg' %}" alt="Profile Picture" class="profile-pic" id="dropdown-trigger">
+            <img src="{% static 'images/useravt/profile.jpg' %}" alt="Profile Picture" class="profile-pic" id="dropdown-trigger">
+            <div class="username">
+            <p><strong>Yoshino Hoang</strong></p>
+            <p>@Yoshinohoang</p>
+            </div>
             <div class="dropdown-content" id="dropdown-menu">
-                <p><strong>Yoshino Hoang</strong></p>
-                <p>@Yoshinohoang</p>
                 <a href="#">Trang cá nhân</a>
                 <p>Current Theme: {{ request.session.theme }}</p>
                 <div>

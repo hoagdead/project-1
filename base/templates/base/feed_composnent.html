@@ -31,12 +31,7 @@
                 </a>
             </div>
             <div class="bottom_section">
-                {%if comment_count != 0%}
-                <p>0</p>
-                {%else%}
-                <p>{{comment_count}}</p>
-                {%endif%}
-                <p>{{room.topic.name}}</p>
+                <button><a href="{%url 'home'%}?q={{room.topic}}">{{room.topic}}</a></button>
             </div>
         </div>
         <br>

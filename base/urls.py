@@ -34,6 +34,8 @@ urlpatterns = [
     path('0n_tap', views.bai_hoc_all, name='on_tap_pv'),
     path('on_tap', views.bai_hoc_i, name='on_tap'),
     path('on_tap/bai/<int:lesson_id>/', views.bai, name='bai'),
-
+    path('luyen_tap', views.luyen_tap_all, name='luyen_tap_all'),
+    path('luyen_tap/<int:bai_id>', views.luyen_tap, name='luyen_tap'),
+     path('answer/', views.answer_view, name='answer_view'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

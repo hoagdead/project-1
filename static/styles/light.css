@@ -32,6 +32,7 @@ a{
 }
 
 .dropdown-content.active {
+    margin-top: 50px;
     animation: fadeIn 0.3s ease;
 }
 
@@ -62,7 +63,11 @@ a{
     bottom: 0;
 }
 .right_bar{
+    margin-top: 78px;
     right: 0;
+    margin-right: 30px;
+    max-width: 400px;
+    width:auto ;
 }
 .left_bar{
     left: 0;
@@ -174,11 +179,12 @@ a{
 }
 
 /* Search Box */
-.search-box {
+.search-box {   
+    margin-left: 30%;
     position: right;
-    display: flex;
+    display: inline-block;
     align-items: right;
-    margin-left: 50rem;
+    align-self: right;
 }
 
 .search-box input[type="text"] {
@@ -189,7 +195,6 @@ a{
     outline: none;
     background-color: #E9E9FB;
     color: rgb(0, 0, 0);
-    padding-left: 16px;
 }
 .search-box input[type="text"]:focus {
     box-shadow: 0 0 10px #14B0C5;
@@ -210,7 +215,7 @@ a{
 /* Dropdown container styling */
 .user-info {
     position: relative;
-    display: inline-block;
+    display: flex;
 }
 
 .dropdown-content {
@@ -247,6 +252,7 @@ a{
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    margin-right: 10px;
 }
 
 .dropdown-content a {
@@ -367,10 +373,23 @@ body.light .navbar {
 }
 
 .bottom_section{
-    padding-top:5px;
+    padding-top:10px;
     font-size: 17px;
-}
+    padding-left: 10px;
 
+}
+.bottom_section button{
+    cursor: pointer;
+    width:8%;
+    height: 30px;
+    border: none;
+    border-radius: 20px;
+    
+}
+.bottom_section button:hover{
+    background-color: #579fec;
+    border-color: #ffffff40;
+}
 /*      inside post    */
 .inside_post{
     min-height: 100vh - 75px;
@@ -485,4 +504,33 @@ body.light .navbar {
 }
 .remake a:hover{
     background-color: #0056b3;
+}
+.admin_test {
+    background-color: #ffff;
+
+}
+.fake_noti{
+    background-color: #FFFF;
+    padding: 20px;
+    margin: 10px;
+    border: 3px solid #14b0c5a4;
+    border-radius: 20px;
+
+}
+.fake_noti .useravt{
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border-color:#14B0C5 ;
+}
+.fake_noti .head_section{
+    display: flex;
+}
+.notification{
+    margin-top: 20px;
+    background-color: #FFF;
+}
+.fake_noti .username{
+    padding-left: 3px;
+    padding-top: 2px;
 }

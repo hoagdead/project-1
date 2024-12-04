@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from .models import Room, Topic, Message,Question,Question2,bai_hoc
 from .form import RoomForm,QuestionForm,UploadFileForm
-from django.shortcuts import redirect
 import random
 import os
 from docx import Document 
@@ -183,9 +182,6 @@ def question_type1(sl):
     cau_hoi_nhieu_dap_an = list(Question.objects.filter(type=1))
     if len(cau_hoi_nhieu_dap_an) > so_luong_cau_hoi_1:
         cau_hoi_nhieu_dap_an = random.sample(cau_hoi_nhieu_dap_an, so_luong_cau_hoi_1)
-    cau_hoi_nhieu_dap_an = list(Question.objects.filter(type=1))
-    if len(cau_hoi_nhieu_dap_an) > so_luong_cau_hoi_1:
-        cau_hoi_nhieu_dap_an = random.sample(cau_hoi_nhieu_dap_an, so_luong_cau_hoi_1)
     trao_doi_cau_hoi = []
     for question in cau_hoi_nhieu_dap_an:
         answers = [
@@ -194,7 +190,7 @@ def question_type1(sl):
             ('C', question.Ans_c),
             ('D', question.Ans_d)
         ]
-        random.shuffle(answers)  # Xáo trộn thứ tự các đáp án
+        #random.shuffle(answers)  # Xáo trộn thứ tự các đáp án
         trao_doi_cau_hoi.append({
             'type': 'multiple_choice',  # Đánh dấu loại câu hỏi
             'name': question.name,
@@ -206,16 +202,12 @@ def question_type1(sl):
 def question_type2(sl):
     so_luong_cau_hoi_2 = sl
 
-    # Lấy ngẫu nhiên một số câu hỏi từ model Question (loại chọn đáp án)
-    
-
     # Lấy ngẫu nhiên một số câu hỏi từ model Question2 (loại đúng/sai)
     cau_hoi_dung_sai = list(Question2.objects.filter(type=2))
     if len(cau_hoi_dung_sai) > so_luong_cau_hoi_2:
         cau_hoi_dung_sai = random.sample(cau_hoi_dung_sai, so_luong_cau_hoi_2)
 
     trao_doi_cau_hoi = []
-
     
     # Xáo trộn đáp án cho câu hỏi loại đúng/sai
     for question in cau_hoi_dung_sai:
@@ -465,3 +457,76 @@ def upload_questions(request):
         form = UploadQuestionForm()
 
     return render(request, "base/upload_question.html", {"form": form})
+
+def luyen_tap_all(request):
+    all_lesson  = bai_hoc.objects.all()
+    context ={'al':all_lesson,}
+    return render(request, 'base/luyen_tap_all.html', context)
+
+
+def luyen_tap(request, bai_id):
+    if request.method == "GET":
+        # Xác định bài học từ `bai_id`
+        bai = get_object_or_404(bai_hoc, id=bai_id)
+
+        # Lấy danh sách câu hỏi thuộc bài học này
+        questions = list(Question.objects.filter(bai=bai))
+
+        if len(questions) < 5:
+            return JsonResponse({"error": "Không đủ câu hỏi trong bài này."}, status=400)
+
+        # Chọn ngẫu nhiên 5 câu hỏi và lưu vào session
+        selected_questions = random.sample(questions, 5)
+        request.session["questions"] = [q.id for q in selected_questions]
+        request.session["current_index"] = 0
+        request.session["score"] = 0
+        return render(request, "base/luyen_tap.html", {"question": selected_questions[0], "bai": bai})
+
+    elif request.method == "POST":
+        # Xử lý câu trả lời
+        question_id = int(request.POST.get("question_id"))
+        user_answer = request.POST.get("answer")
+        question = Question.objects.get(id=question_id)
+
+        is_correct = user_answer == question.Corect_ans
+        if is_correct:
+            request.session["score"] += 1
+
+        # Cập nhật câu hỏi hiện tại
+        current_index = request.session["current_index"] + 1
+        request.session["current_index"] = current_index
+
+        if current_index < len(request.session["questions"]):
+            next_question_id = request.session["questions"][current_index]
+            next_question = Question.objects.get(id=next_question_id)
+            return JsonResponse({
+                "type": "question",
+                "question": {
+                    "id": next_question.id,
+                    "name": next_question.name,
+                    "answers": {
+                        "A": next_question.Ans_a,
+                        "B": next_question.Ans_b,
+                        "C": next_question.Ans_c,
+                        "D": next_question.Ans_d,
+                    },
+                },
+            })
+        else:
+            return JsonResponse({
+                "type": "result",
+                "score": request.session["score"],
+                "total": len(request.session["questions"]),
+            })
+        
+def answer_view(request):
+    if request.method == "POST":
+        question_id = request.POST.get('question_id')
+        answer = request.POST.get('answer')
+        # Xử lý logic kiểm tra và lấy câu hỏi tiếp theo
+        # Ví dụ trả về kết quả:
+        return JsonResponse({
+            "type": "result",
+            "score": 5,
+            "total": 10
+        })

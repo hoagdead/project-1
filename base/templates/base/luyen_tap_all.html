@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Navigation Bar</title>
+    {% load static %}
+    {% if request.session.theme == 'dark' %}
+    <link rel="stylesheet" href="{% static 'styles/dark.css' %}">
+    {% else %}
+    <link rel="stylesheet" href="{% static 'styles/light.css' %}">
+    {% endif %}
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div>
+        <h2>Ôn tập theo chương</h2>
+        {%for bai in al%}
+        <div>
+        <a href="{%url 'luyen_tap' bai.id%}">{{bai.name}}</a>
+        </div>
+        {%endfor%}
+    </div>
+
+</body>
+
+</html>

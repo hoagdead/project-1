@@ -173,7 +173,7 @@ a:hover {
     position: fixed; /* Cố định vị trí */
     top: 143px; /* Gắn vào đầu trang */
     right: 0; /* Căn phải màn hình */
-    width: 250px; /* Chiều rộng sidebar */
+    width: 270px; /* Chiều rộng sidebar */
     background-color: #fff; /* Nền trắng */
     box-shadow: -1px 0 5px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
     padding: 20px; /* Khoảng cách bên trong */
@@ -184,11 +184,10 @@ a:hover {
 
 /* Link Styles */
 
-
-.side_bar a:hover {
-    background-color: #007bff; /* Nền xanh khi hover */
-    color: #fff; /* Chữ trắng khi hover */
+.side_bar span{
+    font-size: 30px;
 }
+
 
 /* Adjust content to not overlap the sidebar */
 .midlle_section {
@@ -205,13 +204,7 @@ a:hover {
     width: auto;
     margin-top: 36px;
 }
-.side_bar a {
-    color: black; /* Mặc định */
-    text-decoration: none;
-}
-.side_bar a:hover {
-    color: blue; /* Màu khi hover */
-}
+
 .side_bar a.completed {
     color: green; /* Màu khi câu hỏi đã làm */
 }
@@ -281,4 +274,32 @@ a:hover {
     max-width:960px ;
     width: auto;
     padding-top: 2px;
+}
+.smb{
+    margin-top: 20px;
+}
+.smb button{
+    height: 30px;
+    width: 100px;
+    background-color: #4F4FBC;
+    color: #FFFF;
+    border: none;
+}
+
+.dhrb{
+    display: flex;
+    width: fit-content;
+    overflow-x: hidden;
+
+}
+
+.dhrb button{
+    margin-right:6px;
+    background-color: #FFF;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+}
+.dhrb button:hover{
+    background-color: #0057b342;
 }

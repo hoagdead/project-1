@@ -29,8 +29,11 @@
                 {%endfor%}
         </div>
         <div class="noi_dung">
-            {%block content%}
-            {%endblock content%}
+            <div class="nd">
+                <h3>{{ten}}</h3>
+                <p>{{noi_dung|safe}}</p>
+                <p>{{file}}</p>
+            </div>
         </div>
     </div>
 </body>

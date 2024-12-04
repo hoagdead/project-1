@@ -26,7 +26,7 @@
                 {% csrf_token %}
 
                 <!-- Câu hỏi loại 1 -->
-                <h2>Câu hỏi loại 1: Chọn đáp án</h2>
+                <h2>Hãy chọn đáp án đúng</h2>
                 <ul>
                     {% for question in type1 %}
                     <div class="question" id="question_{{ forloop.counter }}">
@@ -47,7 +47,7 @@
                 </ul>
 
                 <!-- Câu hỏi loại 2 -->
-                <h2>Câu hỏi loại 2: Đúng/Sai</h2>
+                <h2>hãy chọn đúng sai cho mỗi đáp án</h2>
                     <ul>
                         {% for question in type2 %}
                         <div class="question" id="question_{{ forloop.counter|add:8 }}">
@@ -85,14 +85,18 @@
             <h2>thời gian còn Lại</h2>
             <span id="timer">45:00</span>
             <h3>Danh sách câu hỏi</h3>
-            <h4>Loại 1</h4>
+            <h4>Phần 1</h4>
+            <div class="dhrb">
             {% for question in type1 %}
-            <a href="#question_{{ forloop.counter|add:8 }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter }}')">{{ forloop.counter }}</a>
+            <button><a href="#question_{{ forloop.counter|add:8 }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter }}')">{{ forloop.counter }}</a></button>
             {% endfor %}
-            <h4>Loại 2</h4>
+            </div>
+            <h4>Phần 2</h4>
+            <div class="dhrb">
             {% for question in type2 %}
-            <a href="#question_{{ forloop.counter|add:8 }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter|add:8 }}')">{{ forloop.counter }}</a>
+            <button><a href="#question_{{ forloop.counter|add:8 }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter|add:8 }}')">{{ forloop.counter }}</a></button>
             {% endfor %}
+            </div>
             <div class="smb">
             <button id="submitButton">Nộp bài</button>
             </div>

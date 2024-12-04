@@ -362,7 +362,8 @@ body.light .navbar {
     padding-left: 20px;
     padding-right: 20px;
     border-radius: 16px;
-    background-color: #ffffff;
+    background-color: #3F4054;
+    color: white;
 }
 .inside_post .top_section{
     display: grid;
