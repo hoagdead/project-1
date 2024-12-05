@@ -8,6 +8,7 @@
     {% else %}
     <link rel="stylesheet" href="{% static 'styles/light.css' %}">
     {% endif %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -15,10 +16,11 @@
         <!-- Logo -->
         <div class="nav-left">
             <a href="{%url 'home'%}"><h2>logo</h2></a>
-            <a href="#">Trang chủ</a>
             <a href="{%url 'on_tap_pv'%}">Ôn Tập</a>
             <a href="{%url 'luyen_tap_all'%}">Luyện tập</a>
             <a href="{%url 'thi_thu'%}">Thi thử</a>
+            <a href="{%url 'home'%}">Diễn Đàn</a>
+            <a href="#">Giới Thiệu</a>
         </div>
 
         <!-- Search Box -->

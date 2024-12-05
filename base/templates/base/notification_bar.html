@@ -6,18 +6,7 @@
 <link rel="stylesheet" href="{% static 'styles/light.css' %}">
 {% endif %}
 <div >
-    {% if request.user.is_superuser %}
-    <div class="admin_test">
-        <h3>Những trang của admin</h3>
-        <a href="{%url 'create-question'%}">Create Question</a>
-        <br>
-        <a href="{%url 'question_list'%}">Question List</a>
-        <br>
-        <a href="{%url 'upload_bai_hoc'%}">Upload bài học</a>
-        <br>
-        <a href="{%url 'upload_questions'%}">upload cau hoi</a>
-    </div>
-    {%endif%}
+    
     <div class="notification">
         <h3>Thông Báo</h3>
         <div class="fake_noti">
@@ -51,5 +40,17 @@
         </div>
         <br>
     </div>
+    {% if request.user.is_superuser %}
+    <div class="admin_test">
+        <h3>Những trang của admin</h3>
+        <a href="{%url 'create-question'%}">Create Question</a>
+        <br>
+        <a href="{%url 'question_list'%}">Question List</a>
+        <br>
+        <a href="{%url 'upload_bai_hoc'%}">Upload bài học</a>
+        <br>
+        <a href="{%url 'upload_questions'%}">upload cau hoi</a>
+    </div>
+    {%endif%}
 </div>
 {%endblock%}

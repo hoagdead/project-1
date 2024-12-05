@@ -38,6 +38,8 @@ class Room(models.Model):
         return self.name   
     class Meta:
         ordering = ["-updated", "-created"]
+    def message_count(self):
+        return self.message_set.count()
 
 #tạo model bình luận
 class Message(models.Model):
@@ -71,10 +73,7 @@ class Question(models.Model):
         ('C', 'Answer C'),
         ('D', 'Answer D'),
     ]
-    
-
     Corect_ans = models.CharField(max_length=1, choices=SELECTION_CHOICES, default=None)
-
     type = models.IntegerField(default=1,editable=False)
     
     def __str__(self):

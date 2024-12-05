@@ -31,6 +31,9 @@
                 </a>
             </div>
             <div class="bottom_section">
+                <div>
+                    <i class="fa-regular fa-comment"> </i> {{ room.message_count }}
+                </div>
                 <button><a href="{%url 'home'%}?q={{room.topic}}">{{room.topic}}</a></button>
             </div>
         </div>

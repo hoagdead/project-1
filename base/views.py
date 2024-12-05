@@ -90,7 +90,7 @@ def room(request,pk):
     topics = Topic.objects.all()
     room = Room.objects.get(id=pk)
     room_comment = room.message_set.all()
-    comment_count = room_comment.count()
+    comment_count =room.message_count()
     if request.method == 'POST':
         comment = Message.objects.create(
             user = request.user,

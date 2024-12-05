@@ -83,7 +83,7 @@
         <!-- Thanh bên -->
         <div class="side_bar">
             <h2>thời gian còn Lại</h2>
-            <span id="timer">45:00</span>
+            <span id="timer">50:00</span>
             <h3>Danh sách câu hỏi</h3>
             <h4>Phần 1</h4>
             <div class="dhrb">
@@ -91,7 +91,7 @@
             <button><a href="#question_{{ forloop.counter|add:8 }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter }}')">{{ forloop.counter }}</a></button>
             {% endfor %}
             </div>
-            <h4>Phần 2</h4>
+            <h4>Phần 2</h4> 
             <div class="dhrb">
             {% for question in type2 %}
             <button><a href="#question_{{ forloop.counter|add:8 }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter|add:8 }}')">{{ forloop.counter }}</a></button>
@@ -124,7 +124,7 @@
             }
         }
         // Bộ đếm thời gian
-        let totalSeconds = 45 * 60; // 45 phút
+        let totalSeconds = 50 * 60; // 45 phút
         const timerElement = document.getElementById('timer');
 
         function updateTimer() {
