@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thi thử</title>
+    <title>Thi thử đề {{de}}</title>
     {% load static %}
     {% if request.session.theme == 'dark' %}
     <link rel="stylesheet" href="{% static 'styles/q_dark.css' %}">
@@ -76,7 +76,7 @@
                     </ul>
                 </ul>
 
-                <button type="submit">Nộp bài</button>
+                <button type="submit" class="hiden">Nộp bài</button>
             </form>
         </div>
 

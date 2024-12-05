@@ -209,8 +209,10 @@ a:hover {
     color: green; /* Màu khi câu hỏi đã làm */
 }
 /* Modal ẩn mặc định */
-.hidden {
+.hiden {
     display: none;
+    width: 0;
+    height: 0;
 }
 .modal {
     position: fixed;

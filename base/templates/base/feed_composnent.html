@@ -26,7 +26,7 @@
                     <p id="short-description">{{ room.description|slice:":280" }}...</p>
                     <p id="full-description" style="display: none;">{{ room.description }}</p>
                     {% else %}
-                        <p>{{ room.description }}</p>
+                        <p>{{ room.description|safe }}</p>
                     {% endif %}
                 </a>
             </div>

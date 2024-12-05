@@ -226,13 +226,14 @@ def question_type2(sl):
         })
     return trao_doi_cau_hoi
 
-def question_list(request):
+def question_list(request,de_id):
+    de = de_id
     tong_cau_hoi = 10
     cau_hoi_loai_1 = 8
     cau_hoi_loai_2 = tong_cau_hoi - cau_hoi_loai_1
     type1 = question_type1(cau_hoi_loai_1)
     type2 = question_type2(cau_hoi_loai_2)
-    return render(request, 'question_list.html', {'type1':type1 , 'type2': type2})
+    return render(request, 'question_list.html', {'type1':type1 , 'type2': type2, 'de':de})
 
 def submit_answer(request):
     if request.method == 'POST':
@@ -523,10 +524,12 @@ def answer_view(request):
     if request.method == "POST":
         question_id = request.POST.get('question_id')
         answer = request.POST.get('answer')
-        # Xử lý logic kiểm tra và lấy câu hỏi tiếp theo
-        # Ví dụ trả về kết quả:
+
         return JsonResponse({
             "type": "result",
             "score": 5,
             "total": 10
         })
+    
+
+

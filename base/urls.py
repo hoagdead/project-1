@@ -24,11 +24,12 @@ urlpatterns = [
     path('create-question/', views.createquestion, name="create-question"),
     path('change-mode', views.change_mode, name="change-mode"),
     
-    path('questions/', views.question_list, name='question_list'),
+
     path('uploadbaihoc', views.upload_file, name='upload_bai_hoc'),
     path('upload_cau_hoi', views.upload_questions, name='upload_questions'),
     path('set-theme/', views.set_theme, name='set_theme'),
     path('thi_thu/', views.thi_thu, name='thi_thu'),
+    path('thi_thu/de/<int:de_id>/', views.question_list, name='de_thi'),
     path('thi_thu/submit', views.submit_answer, name='submit_answer'),
     path('preview/<int:lesson_id>/', views.preview_lesson, name='preview_lesson'),  
     path('0n_tap', views.bai_hoc_all, name='on_tap_pv'),
@@ -36,6 +37,6 @@ urlpatterns = [
     path('on_tap/bai/<int:lesson_id>/', views.bai, name='bai'),
     path('luyen_tap', views.luyen_tap_all, name='luyen_tap_all'),
     path('luyen_tap/<int:bai_id>', views.luyen_tap, name='luyen_tap'),
-     path('answer/', views.answer_view, name='answer_view'),
+    path('answer/', views.answer_view, name='answer_view'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
