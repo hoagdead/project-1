@@ -515,5 +515,5 @@ def submit_ontap(request):
 
         # Sau khi tính điểm, chuyển hướng tới trang kết quả
         return render(request, 'base/submit_answer.html', {'score': total_score})
-    return redirect('')
+    return redirect("luyen_tap")
 
