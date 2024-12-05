@@ -464,62 +464,32 @@ def luyen_tap_all(request):
     context ={'al':all_lesson,}
     return render(request, 'base/luyen_tap_all.html', context)
 
-
+def question_type1s(sl,bai_id):
+    so_luong_cau_hoi_1 = sl
+    bai = bai_hoc.objects.get(id=bai_id)
+    cau_hoi_nhieu_dap_an = list(Question.objects.filter(bai=bai))
+    if len(cau_hoi_nhieu_dap_an) > so_luong_cau_hoi_1:
+        cau_hoi_nhieu_dap_an = random.sample(cau_hoi_nhieu_dap_an, so_luong_cau_hoi_1)
+    trao_doi_cau_hoi = []
+    for question in cau_hoi_nhieu_dap_an:
+        answers = [
+            ('A', question.Ans_a),
+            ('B', question.Ans_b),
+            ('C', question.Ans_c),
+            ('D', question.Ans_d)
+        ]
+        #random.shuffle(answers)  # Xáo trộn thứ tự các đáp án
+        trao_doi_cau_hoi.append({
+            'type': 'multiple_choice',  # Đánh dấu loại câu hỏi
+            'name': question.name,
+            'answers': answers,
+            'id': question.id,
+        })
+    return trao_doi_cau_hoi
 def luyen_tap(request, bai_id):
-    if request.method == "GET":
-        # Xác định bài học từ `bai_id`
-        bai = get_object_or_404(bai_hoc, id=bai_id)
-
-        # Lấy danh sách câu hỏi thuộc bài học này
-        questions = list(Question.objects.filter(bai=bai))
-
-        if len(questions) < 5:
-            return JsonResponse({"error": "Không đủ câu hỏi trong bài này."}, status=400)
-
-        # Chọn ngẫu nhiên 5 câu hỏi và lưu vào session
-        selected_questions = random.sample(questions, 5)
-        request.session["questions"] = [q.id for q in selected_questions]
-        request.session["current_index"] = 0
-        request.session["score"] = 0
-        return render(request, "base/luyen_tap.html", {"question": selected_questions[0], "bai": bai})
-
-    elif request.method == "POST":
-        # Xử lý câu trả lời
-        question_id = int(request.POST.get("question_id"))
-        user_answer = request.POST.get("answer")
-        question = Question.objects.get(id=question_id)
-
-        is_correct = user_answer == question.Corect_ans
-        if is_correct:
-            request.session["score"] += 1
-
-        # Cập nhật câu hỏi hiện tại
-        current_index = request.session["current_index"] + 1
-        request.session["current_index"] = current_index
-
-        if current_index < len(request.session["questions"]):
-            next_question_id = request.session["questions"][current_index]
-            next_question = Question.objects.get(id=next_question_id)
-            return JsonResponse({
-                "type": "question",
-                "question": {
-                    "id": next_question.id,
-                    "name": next_question.name,
-                    "answers": {
-                        "A": next_question.Ans_a,
-                        "B": next_question.Ans_b,
-                        "C": next_question.Ans_c,
-                        "D": next_question.Ans_d,
-                    },
-                },
-            })
-        else:
-            return JsonResponse({
-                "type": "result",
-                "score": request.session["score"],
-                "total": len(request.session["questions"]),
-            })
-        
+    cau_hoi = question_type1s(8,bai_id)
+    return render(request, 'base/luyen_tap.html', {'type1':cau_hoi})
+   
 def answer_view(request):
     if request.method == "POST":
         question_id = request.POST.get('question_id')
@@ -531,5 +501,19 @@ def answer_view(request):
             "total": 10
         })
     
+def submit_ontap(request):
+    if request.method == 'POST':
+        total_score = 0
 
+        # Tính điểm cho câu hỏi loại chọn 1 đáp án
+        for question in Question.objects.filter(type=1):
+            user_answer = request.POST.get(f'answer_{question.id}')
+            if user_answer and user_answer == question.Corect_ans:
+                total_score += 1.25  # Mỗi câu hỏi chọn đáp án đúng được 1 điểm
+        if total_score > 10:
+            total_score = 10
+
+        # Sau khi tính điểm, chuyển hướng tới trang kết quả
+        return render(request, 'base/submit_answer.html', {'score': total_score})
+    return redirect('')
 
