@@ -228,8 +228,8 @@ def question_type2(sl):
 
 def question_list(request,de_id):
     de = de_id
-    tong_cau_hoi = 10
-    cau_hoi_loai_1 = 8
+    tong_cau_hoi = 30
+    cau_hoi_loai_1 = 28
     cau_hoi_loai_2 = tong_cau_hoi - cau_hoi_loai_1
     type1 = question_type1(cau_hoi_loai_1)
     type2 = question_type2(cau_hoi_loai_2)
