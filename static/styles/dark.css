@@ -1,7 +1,7 @@
-
 /* setup for all */
 body{
-    background-color: #2C2C37;
+    background-color: #2C2C37; /* Màu nền */
+    color: white; /* Màu chữ */
     padding-top: 75px;
 }
 * {
@@ -14,14 +14,29 @@ hr {
 }
 a{
     text-decoration: none;
-    color: #ffff;
+    color: white; /* Màu chữ link */
 }
-p{
-    color: #ffff;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.post {
+    animation: fadeIn 0.5s ease;
+}
+
+.dropdown-content.active {
+    margin-top: 50px;
+    animation: fadeIn 0.3s ease;
 }
 
 /* home page */
-
 .home-container{
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
@@ -32,17 +47,13 @@ p{
     height: 100%;
     grid-template-columns: 5fr 3fr;
     align-items: center;
-    color: #a199e4;
-}
-
-.home_head_page a{
-    color: #ffff;
 }
 .room_display{
     display: grid;
     grid-template-rows: 0.8fr 5fr;
     padding-left: 10px;
     overflow-y: auto;
+    scroll-behavior: smooth;
 }
 .right_bar, .left_bar {
     overflow: hidden; 
@@ -50,7 +61,11 @@ p{
     bottom: 0;
 }
 .right_bar{
+    margin-top: 78px;
     right: 0;
+    margin-right: 30px;
+    max-width: 400px;
+    width:auto ;
 }
 .left_bar{
     left: 0;
@@ -64,32 +79,29 @@ p{
     display: flex;             
     justify-content: center;      
     align-items: center;                  
-
 }
 .room_create button{
     height: 30px;
     width: 141px;
     border-radius: 8px;
-    background-color: #3F4054;
-    border: #3F4054;
+    background-color: #585193;
+    border: #ffff;
+    color: #ffff;
 }
 .room_create button:hover {
-    background-color: #191e56;
+    background-color: #5e86e3;
     color: white;
     transition: background-color 0.3s ease, transform 0.2s ease;
     transform: scale(1.1);
 }
 
 /* topic bar*/
-  
 .topic_wraper{
     display: block;
     padding: 20px;
     padding-top: 100px;
 }
-.topic_wraper h3{
-    color: #9184D7;
-}
+
 .topic_display{
     padding-top: 12px;
 }
@@ -100,90 +112,120 @@ p{
 }
 .topic_name a{
     outline: none; 
-    color: #ffff;
+    color: white; /* Màu chữ link */
     text-decoration: none;
     font-family:'Sansation';
     font-size: 20px;
 }
-.topic_name p{
-    color: #ffff;
-}
 .topic_rc{
     display: flex;
-    background-color: #645F9F;
+    background-color: #2E2E40; /* Màu nền nổi bật */
     height: 110%;
     align-items: center;
-    border-radius: 6px;
 }
 .topic_rc p{
     padding-left: 45%;
     font-family:'Sansation';
     font-weight: bold;
-
 }
 .topic_all{
-    color: black;
+    color: white; /* Màu chữ */
     text-decoration: none;
     font-family:'Sansation';
     font-size: 20px;
     margin-top: 20px;
 }
 
-
-
-
-/*   post  */
+/* post */
 .post {
-    background-color: #3F4054;
+    background-color: #2E2E40; /* Màu nền nổi bật */
     margin-right: 100px;
     padding-left: 20px;
+    padding-right: 20px;
     padding-top: 14px;
     padding-bottom: 14px;
     border-radius: 16px;
 }
 .post:hover {
-    box-shadow: 0 4px 15px rgba(32, 49, 95, 0.582);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transform: translateY(-5px);
     transition: all 0.3s ease;
 }
 
 .top_section{
     display: grid;
-    grid-template-columns: 5fr 1fr;
+    grid-template-columns: 2fr 1fr;
     padding-bottom: 10px;
     padding-top: 10px;
 }
 .top_section a{
-    color: #0BE2FF;
+    color: #14B0C5;
+    width: fit-content;
+    height: fit-content;
+    justify-self: start;
 }
 .top_section p{
-    justify-self: center;
-    color: #645F9F;
+    justify-self: end;
+    padding-right:20px ;
+}
+.top_section button{
+    width: fit-content;
+    height: 26px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: -2px;
+    margin-left: -50px;
+    border-radius: 20px;
+    border: none;
+    background-color:#E9E9FB ;
+}
+.top_section button a{
+    font-weight: bold;
+    color: #000000;
 }
 .middle_section{
     padding-left:10px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     padding-right: 10px;
-    
+    border-bottom: 2px solid #645F9F;
 }
 .middle_section h3{
-    color: #FFFFFF;
+    color: #ffffff;
     font-size: 26px;
     font-weight: bold;
     padding-bottom: 5px;
 }
 .middle_section p{
-    color: #ffffff72;
+    color: #ffffff;
     font-size: 18px;
     padding-left: 3px;
 }
 
 .bottom_section{
-    padding-top:5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top:10px;
     font-size: 17px;
+    padding-left: 10px;
+    padding-right: 30px;
+}
+.bottom_section button{
+    cursor: pointer;
+    width:fit-content;
+    height: 30px;
+    border: none;
+    border-radius: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    justify-self: end;
+    background-color: #585193;
+}
+.bottom_section button:hover{
+    background-color: #585193;
+    border-color: #585193;
 }
 
-/*      inside post    */
+/* inside post */
 .inside_post{
     min-height: 100vh - 75px;
     display: grid;
@@ -193,8 +235,7 @@ p{
     padding-left: 20px;
     padding-right: 20px;
     border-radius: 16px;
-    background-color: #3F4054;
-    color: white;
+    background-color: #2E2E40; /* Màu nền nổi bật */
 }
 .inside_post .top_section{
     display: grid;
@@ -214,33 +255,6 @@ p{
     width: calc();
     padding: 8px;
     margin: 5px 0;
-}
-
-/* Container styling */
-.exam-container {
-    justify-self: center;
-    margin-top: 14%;
-    text-align: center;
-    padding: 20px;
-    border: 1px solid #2E2E40;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #2E2E40;
-    max-width: 500px;
-    width: 100%;
-}
-
-/* Heading styling */
-.exam-container h1 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    color: #ffffff;
-}
-
-.exam-container h2 {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    color: #ffffffef;
 }
 
 /* Button styling */
@@ -269,20 +283,18 @@ p{
     margin-top: 14%;
     text-align: center;
     padding: 30px;
-    border: 1px solid #2E2E40;
+    border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #2E2E40;
+    background-color: #fff;
     max-width: 500px;
     width: 100%;
-    color: #fff;
 }
 .submit_ans p {
     font-size: 26px;
     padding-top: 10px;
 }
 .remake{
-    color: #ffff;
     background-color: #007bff;
     border: none;
     border-radius: 4px;
@@ -301,3 +313,38 @@ p{
 .remake a:hover{
     background-color: #0056b3;
 }
+.admin_test {
+    background-color: #2E2E40;
+}
+
+.fake_noti{
+    background-color: #2E2E40;
+    padding: 20px;
+    margin: 10px;
+    border: 3px solid #14b0c5a4;
+    border-radius: 20px;
+}
+
+.fake_noti .useravt{
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border-color:#14B0C5 ;
+}
+.fake_noti .head_section{
+    display: flex;
+}
+.notification{
+    margin-top: 20px;
+    background-color: #2E2E40;
+    border-radius: 10px;
+}
+.hl {
+    background-color: #585193;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 8px;
+}
+
