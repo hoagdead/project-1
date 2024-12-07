@@ -1,0 +1,170 @@
+/* General Navbar Style */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color:#3F4054; 
+    color: #ffff;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.nav-left a {
+    color: white;
+    text-decoration: none;
+    margin-left: 5px;
+    font-size: 17px;
+}
+
+
+/* Logo Style */
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+/* Search Box */
+.search-box {
+    position: right;
+    display: flex;
+    align-items: right;
+    margin-left: 50rem;
+}
+.search-box input[type="text"]:focus {
+    box-shadow: 0 0 10px #2f2fb682;
+    background-color: #7e77c279;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-box input[type="text"] {
+    padding: 8px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    background-color: #5e55b379;
+    color: #ffffff;
+    padding-left: 16px;
+}
+
+.search-box button {
+    position: right;
+    right: 5px;
+    background: none;
+    border: none;
+    color: #ffffffab;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+/* Dropdown container styling */
+.user-info {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    padding: 10px;
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #2E2E40;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    width: 200px;
+    border-radius: 5px;
+}
+
+/* Dropdown visible when active */
+.dropdown-content.active {
+    display: block;
+}
+
+/* Profile picture styling */
+.profile-pic {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.dropdown-content a {
+    color: #ffffff;
+    text-decoration: none;
+    display: block;
+    margin: 0.5rem 0;
+}
+
+
+/* Toggle Switch */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.theme-toggle span {
+    margin-right: 8px;
+}
+
+.theme-toggle input {
+    display: none;
+}
+
+.theme-toggle .slider {
+    position: relative;
+    width: 40px;
+    height: 20px;
+    border-radius: 34px;
+    background-color: #ccc;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.theme-toggle .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background-color: white;
+    transition: 0.4s;
+    left: 4px;
+    bottom: 2px;
+}
+
+.theme-toggle input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.theme-toggle input:checked + .slider {
+    background-color: #4caf50;
+}
+
+
+/* Định dạng chung cho navbar */
+body.light .navbar {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.navbar {
+    display: flex;
+    padding: 1rem 2rem;
+    align-items: center;
+}
+
+.nav-left a {
+    color: inherit;
+    margin-left: 1rem;
+    text-decoration: none;
+}

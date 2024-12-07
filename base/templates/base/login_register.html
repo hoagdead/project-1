@@ -1,5 +1,11 @@
 {%extends 'main.html'%}
 {%block content%}
+{% load static %}
+{% if request.session.theme == 'dark' %}
+<link rel="stylesheet" href="{% static 'styles/login_d.css' %}">
+{% else %}
+<link rel="stylesheet" href="{% static 'styles/login_l.css' %}">
+{% endif %}
 <div>
     {% if messages %}
     <ul class="messages">
@@ -11,20 +17,36 @@
 
 </div>
 {% if page == 'login'%}
-<div>
+<div class="login">
     <form method="POST">
         {% csrf_token %}
-        <label>username:</label>
-        <input type="text" name="username" placeholder="username"><br><br>
-        <label>Password:</label>
-        <input type="password" name="password" placeholder="password"><br><br>
-        <button type="submit" value="Login">Login</button>
+        <div class="hl">
+        <p>Đăng nhập</p>
+        </div>
+        <div class="md">
+        <label>Tên đăng nhập</label>
+        <br>
+        <div class="ip">
+            <i class="fa-solid fa-user"></i><input type="text" name="username" placeholder="username">
+        </div>
+        <br><br>
+        <label>Mật khẩu</label>
+        <br>
+        <div class="ip">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" name="password" placeholder="password">
+        </div>
+        </div>
+        <button type="submit" value="Login">Đăng nhập</button>
     </form>
-    <p>Bạn chưa tạo tài khoản ?</p>
-    <a href="{% url 'register'%}">Đăng ký</a>
+    <div class="btc">
+        <p>Bạn chưa tạo tài khoản ?</p>
+        <a href="{% url 'register'%}">Đăng ký</a>
+    </div>
+    
 </div>
 {%else%}
-<div>
+<div class="register">
     <form method="POST">
         {% csrf_token %}
         {{form.as_p}}

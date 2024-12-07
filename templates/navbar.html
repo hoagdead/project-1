@@ -3,9 +3,9 @@
 <head>
     {% load static %}
     {% if request.session.theme == 'dark' %}
-    <link rel="stylesheet" href="{% static 'styles/dark.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/navbar_d.css' %}">
     {% else %}
-    <link rel="stylesheet" href="{% static 'styles/light.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/navbar_l.css' %}">
     {% endif %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
@@ -26,7 +26,7 @@
         <div class="search-box">
             <form method="GET" action="{%url 'home' %}">
             <input type="text" placeholder="Tìm kiếm"  name="q">
-            <button><i class="fa fa-search"></i></button> 
+            <button button type="submit" class="search-button"><i class="fa fa-search"></i></button> 
             </form>
         </div>
         {%if request.user.is_authenticated%}

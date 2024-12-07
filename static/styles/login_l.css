@@ -1,0 +1,108 @@
+/* Reset cơ bản */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9; /* Nền sáng */
+    color: #333; /* Văn bản tối */
+    margin: 0;
+    padding: 0;
+}
+
+/* Container chính */
+.login, .register {
+    width: 100%;
+    max-width: 400px;
+    margin: 150px auto;
+    padding: 20px;
+    background-color: #fff; /* Nền trắng */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Bóng nhẹ */
+}
+
+/* Header */
+.hl {
+    text-align: center;
+    padding: 15px 0;
+    font-size: 24px;
+    background-color: #4CAF50; /* Màu xanh điểm nhấn */
+    color: #fff; /* Văn bản trắng */
+    border-radius: 10px 10px 0 0;
+    height: fit-content;
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.ip {
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #ccc; /* Gạch dưới input */
+    padding: 5px 0; /* Khoảng cách nội dung */
+}
+
+.ip i {
+    font-size: 20px;
+    color: #4CAF50; /* Màu icon */
+    margin-right: 10px; /* Khoảng cách giữa icon và input */
+}
+
+form input[type="text"],
+form input[type="password"] {
+    flex: 1; /* Input mở rộng hết không gian */
+    border: none; /* Không có viền */
+    padding: 8px 0; /* Khoảng cách trên-dưới */
+    font-size: 14px;
+    background-color: transparent; /* Nền trong suốt */
+    color: #333; /* Màu chữ */
+    border-bottom: 2px solid #4CAF50; /* Đổi màu gạch dưới khi focus */
+}
+
+form input:focus {
+    outline: none; /* Không có outline */
+    
+    box-shadow: none; /* Không có hiệu ứng shadow */
+}
+
+/* Nút bấm */
+form button {
+    background-color: #4CAF50; /* Nền nút xanh */
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #45a049; /* Màu đậm hơn khi hover */
+}
+
+/* Văn bản bổ trợ */
+.btc, p {
+    text-align: center;
+    margin: 10px 0;
+}
+
+a {
+    color: #4CAF50; /* Liên kết xanh */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Thông báo */
+.messages {
+    list-style: none;
+    padding: 10px;
+    background-color: #f8d7da; /* Nền thông báo lỗi */
+    color: #721c24; /* Văn bản lỗi */
+    border: 1px solid #f5c6cb; /* Viền lỗi */
+    border-radius: 5px;
+    margin: 15px 0;
+}
