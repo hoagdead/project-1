@@ -1,0 +1,23 @@
+/* setup for all */
+body{
+    background-color: #f4f4f4;
+    padding-top: 75px;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+hr {
+    display: none;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+
+
+.top_all{
+    display: grid;
+    grid-template-columns: 6fr 3fr;
+}

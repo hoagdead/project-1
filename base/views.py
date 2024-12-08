@@ -517,3 +517,7 @@ def submit_ontap(request):
         return render(request, 'base/submit_answer.html', {'score': total_score})
     return redirect("luyen_tap")
 
+def trang_chu(request):
+    on_tap = bai_hoc.objects.all()[:5]
+    context={'on_tap':on_tap}
+    return render(request, 'base/trang_chu.html' ,context)
