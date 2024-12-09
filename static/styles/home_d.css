@@ -149,7 +149,7 @@ a{
     margin-bottom: 20px;
 }
 /* Responsive for mobile */
-@media (max-width: 768px) {
+@media (max-width: 780px) {
     body {
         padding-top: 50px;
     }

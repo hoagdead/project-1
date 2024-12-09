@@ -400,3 +400,111 @@ a{
     padding-right: 10px;
     color: white;
 }
+@media only screen and (max-width: 780px) {
+    body {
+        padding-top: 50px;
+    }
+
+    .home-container {
+        grid-template-columns: 1fr;
+    }
+
+    .room-wraper {
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+
+    .room_display {
+        grid-template-rows: 1fr;
+        padding: 0;
+    }
+
+    .right_bar, .left_bar {
+        display: none;
+    }
+
+    .topic_wraper {
+        padding: 10px;
+        padding-top: 75px;
+    }
+
+    .topic_name {
+        grid-template-columns: 3fr 1fr;
+    }
+
+    .post {
+        margin: 10px;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .top_section {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .top_section button {
+        margin: 10px auto;
+    }
+
+    .middle_section {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .bottom_section {
+        grid-template-columns: 1fr;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .bottom_section a {
+        justify-self: center;
+        margin: 5px auto;
+    }
+
+    .inside_post {
+        grid-template-rows: auto auto auto;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .comment-form {
+        flex-direction: column;
+        position: static;
+        padding: 5px;
+    }
+
+    .comment-form input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .submit_ans {
+        margin: 10px auto;
+        padding: 20px;
+        width: 90%;
+    }
+
+    .notification {
+        margin: 10px;
+    }
+
+    .exam-container {
+        margin: 10px;
+        padding: 15px;
+        border-radius: 20px;
+    }
+
+    .de {
+        grid-template-columns: 1fr;
+        border: none;
+    }
+
+    .de a {
+        font-size: 16px;
+        padding: 10px;
+        margin: 10px auto;
+    }
+}

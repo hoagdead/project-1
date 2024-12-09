@@ -115,7 +115,7 @@
 }
 
 /* Responsive Design for Mobile */
-@media (max-width: 768px) {
+@media (max-width:  780px) {
     .nav-left {
         gap: 0.5rem;
     }
