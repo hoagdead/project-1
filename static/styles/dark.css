@@ -400,7 +400,7 @@ a{
     padding-right: 10px;
     color: white;
 }
-@media only screen and (max-width: 780px) {
+@media only screen and (max-width: 900px) {
     body {
         padding-top: 50px;
     }
