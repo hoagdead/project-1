@@ -518,6 +518,6 @@ def submit_ontap(request):
     return redirect("luyen_tap")
 
 def trang_chu(request):
-    on_tap = bai_hoc.objects.all()[:5]
+    on_tap = bai_hoc.objects.all()[:10]
     context={'on_tap':on_tap}
     return render(request, 'base/trang_chu.html' ,context)

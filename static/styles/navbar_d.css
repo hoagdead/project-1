@@ -11,22 +11,32 @@
     padding: 1rem 2rem;
     background-color: #2E2E40; 
     color: rgb(255, 255, 255);
+    border-bottom: 2px solid  #5F55B3;
+    transition: all 0.3s ease-in-out;
 }
 
 .nav-left {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
 }
 
 .nav-left a {
     color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
     text-decoration: none;
-    margin-left: 5px;
-    font-size: 17px;
+    color: inherit;
+    padding: 5px;
+    transition: color 0.3s;
+    white-space: nowrap;
 }
 
 .nav-left a:hover {
-    color: #000000;
+    color: #ffffff;
 }
 
 /* Logo Style */
@@ -185,4 +195,34 @@ body.light .navbar {
     color: inherit;
     margin-left: 1rem;
     text-decoration: none;
+}
+@media (max-width: 768px) {
+    .nav-left {
+        gap: 0.5rem;
+    }
+
+    .nav-left a span {
+        display: none; /* Ẩn văn bản, chỉ hiển thị icon */
+    }
+
+    .search-box {
+        display: none;
+        max-width: 150px;
+    }
+
+    .navbar {
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 0.5rem 1rem;
+    }
+
+    .user-info {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .username{
+        display: none;
+    }
 }

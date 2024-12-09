@@ -88,3 +88,72 @@
     color: #ffff;
 }
 
+@media (max-width: 768px) {
+    .midlle_section_1 {
+        padding: 10px;
+        display: grid;
+        grid-template-columns: 1fr; /* Chuyển về một cột */
+        gap: 20px;
+    }
+
+    .lesson_choice {
+        display: none;
+    }
+
+    .lesson_choice h3 {
+        font-size: 20px; /* Giảm kích thước chữ */
+        text-align: center;
+    }
+
+    .lc {
+        font-size: 16px; /* Giảm kích thước chữ */
+        padding: 8px;
+    }
+
+    .noi_dung {
+        font-size: 20px; /* Giảm kích thước chữ */
+        padding: 15px;
+    }
+
+    .noi_dung h3 {
+        font-size: 25px; /* Giảm kích thước tiêu đề */
+        text-align: center;
+    }
+
+    .noi_dung p {
+        font-size: 16px; /* Giảm kích thước chữ trong đoạn văn */
+        line-height: 1.5;
+        padding-left: 5px;
+    }
+
+    .midlle_section {
+        margin: 10px;
+        height: auto; /* Để chiều cao tự điều chỉnh */
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .midlle_section h3 {
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .bai {
+        margin-top: 15px;
+    }
+
+    .nd h3 {
+        font-size: 20px; /* Giảm kích thước tiêu đề */
+        margin-bottom: 5px;
+        text-align: left; /* Giữ căn lề trái */
+    }
+
+    .nd p {
+        font-size: 20px; /* Giảm kích thước chữ đoạn văn */
+        line-height: 1.4; /* Tăng khoảng cách giữa các dòng */
+    }
+
+    .nd {
+        padding: 5px; /* Giảm padding để tiết kiệm không gian */
+    }
+}

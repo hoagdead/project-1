@@ -1,0 +1,231 @@
+/* setup for all */
+body{
+    background-color: #2C2C37;
+    padding-top: 75px;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+hr {
+    display: none;
+}
+a{
+    text-decoration: none;
+    color: #ffffff;
+}
+.navbar{
+    border-bottom:2px solid  #5F55B3;
+}
+
+.top_all{
+    display: flex;
+    padding:30px 20px 70px 70px;
+
+}
+.top_all img{
+    height: 350px;
+    width: 800px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+.top_right{
+    margin-left: 60px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: 2px solid #5F55B3;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.top1{
+    background-color: #3F4054;
+    color: #ffffff;
+    border-radius: 5px;
+}
+.top1 p {
+    font-size: 30px;
+    justify-self: center;
+    padding: 4px 4px;
+}
+.bai{
+    padding-top: 7px;
+}   
+.mid1{
+    padding-top: 6px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.bai:hover{
+    padding: 5px;
+    border: 2px solid #5F55B3;
+    transform: translateY(-3px) translateX(3px);
+}
+.middle1{
+    display: flex;
+}
+.exam-container{
+    background-color: #2C2C37;
+    margin: 20px;
+    padding: 0 30px 30px 30px;
+    border-radius: 30px;
+}
+.de{
+    color: #ffffff;
+    background-color:#3F4054 ;
+    justify-self: center;
+    display: grid ;
+    width: 500px;
+    grid-template-columns: 1.4fr 3fr auto;
+    border: 3px solid #5F55B3;
+    border-radius: 10px;
+
+}
+.top{
+    padding: 20px;
+    width: fit-content;
+    padding-right: 10px;
+    border-right: 2px solid #5F55B3;
+}
+.top h3{
+    font-size: 20px;
+    justify-self: center;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-bottom: 3px;
+
+}
+.top i{
+    font-size: 14px;
+    margin-top: 2px;
+}
+.middle{
+    
+    padding: 20px;
+    padding-left: 3px;
+}
+.middle p{
+    font-size: 15px;
+}
+.de a{
+    background-color: #5F55B3;
+    justify-self: center;
+    font-size: 20px;
+    padding-top: 30%;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: white;
+}
+.middle_left{
+    width: 45%;
+    margin: 0 0 0 80px;
+    justify-items: center;
+    padding-top: 20px;
+}
+.middle_left h4{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    color: #ffffff;
+}
+.middle_right{
+    margin: 0 0 0 50px;
+    width: 45%;
+    font-size: 20px;
+    padding-left: 30px;
+    padding-right: 40px;
+}
+.middle_right h4{
+    justify-self: center;
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #ffffff;
+    padding-top:20px ;
+    padding-bottom: 10px;
+}
+.decor{
+    justify-self: center;
+    border-bottom:2px solid  #5F55B3;
+    width: 80%;
+    margin-top: calc(-20px);
+    margin-bottom: 20px;
+}
+/* Responsive for mobile */
+@media (max-width: 768px) {
+    body {
+        padding-top: 50px;
+    }
+
+    .top_all {
+        display: block;
+        padding: 20px;
+    }
+
+    .top_all img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .top_right {
+        margin-left: 0;
+        font-size: 16px;
+        padding: 10px;
+        box-shadow: none;
+    }
+
+    .middle1 {
+        flex-direction: column;
+    }
+
+    .middle_left,
+    .middle_right {
+        width: 100%;
+        margin: 0;
+        padding: 10px;
+    }
+
+    .middle_left h4,
+    .middle_right h4 {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .exam-container {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .de {
+        width: 100%;
+        grid-template-columns: 1fr 2fr;
+        font-size: 14px;
+    }
+
+    .top {
+        padding: 10px;
+        border-right: none;
+        border-bottom: 2px solid #5F55B3;
+    }
+
+    .top h3 {
+        font-size: 18px;
+    }
+
+    .middle {
+        padding: 10px;
+    }
+
+    .de a {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .middle_left h4,
+    .middle_right h4 {
+        font-size: 20px;
+    }
+
+    .decor {
+        width: 90%;
+        margin: 10px auto;
+    }
+}

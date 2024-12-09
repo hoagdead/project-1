@@ -13,36 +13,36 @@
     {% include 'navbar.html' %}
     <div class="top_all">
         <div class="top_left">
-            <p>img</p>
+            <img src="{% static 'images/icon/banner.png' %}" alt="banner images">
         </div>
         <div class="top_right">
             <div class="top1">
                 <p>Ôn tập</p>
             </div>
-            {%for bai in on_tap%}
-            <div>
-            <a href="{%url 'bai' bai.id %}">{{bai.name|title}}</a>
-            </div>
-            {%endfor%}
-            <div class="botton_1">
-            <a href="on_tap_pv">Xem thêm</a><i class="fa-solid fa-arrow-right" style="color: #ffffff;"></i>
+            <div class="mid1">
+                {%for bai in on_tap%}
+                <div class="bai">
+                <a href="{%url 'bai' bai.id %}">{{bai.name|title}}</a>
+                </div>
+                {%endfor%}
             </div>
         </div>
     </div>
-
-    <div class="middle">
+    <div class="decor">
+        <p></p>
+    </div>
+    <div class="middle1">
         <div class="middle_left">
-            <p>Ôn tập với các bài thi thử</p>
+            <h4>Ôn tập với các bài thi thử</h4>
             <div class="exam-container">
                 <div class="de">
                     <div class="top">
                     <h3>Đề 1</h3>
-                    <i class="fa-regular fa-clock"> </i> Thời gian: 50 phút
+                    <i class="fa-regular fa-clock"> </i> 50 phút
                     </div>
                     <div class="middle">
-                        <h4>Trong đề gồm có:</h4>
-                        <p>+ 28 câu trắc nghiệm</p>
-                        <p>+ 4 câu hỏi đúng sai</p>
+                        <p>28 câu trắc nghiệm</p>
+                        <p>2 câu hỏi đúng sai</p>
                     </div>
                     <a href="{%url 'de_thi' 1%}">
                         làm bài <i class="fa-solid fa-arrow-right"></i>
@@ -52,12 +52,12 @@
                 <div class="de">
                     <div class="top">
                     <h3>Đề 2</h3>
-                    <i class="fa-regular fa-clock"> </i> Thời gian: 50 phút
+                    <i class="fa-regular fa-clock"> </i> 50 phút
                     </div>
                     <div class="middle">
-                        <h4>Trong đề gồm có:</h4>
-                        <p>+ 28 câu trắc nghiệm</p>
-                        <p>+ 4 câu hỏi đúng sai</p>
+
+                        <p>28 câu trắc nghiệm</p>
+                        <p>2 câu hỏi đúng sai</p>
                     </div>
                     <a href="{%url 'de_thi' 2%}">
                         làm bài <i class="fa-solid fa-arrow-right"></i>
@@ -67,56 +67,26 @@
                 <div class="de">
                     <div class="top">
                     <h3>Đề 3</h3>
-                    <i class="fa-regular fa-clock"> </i> Thời gian: 50 phút
+                    <i class="fa-regular fa-clock"> </i> 50 phút
                     </div>
                     <div class="middle">
-                        <h4>Trong đề gồm có:</h4>
-                        <p>+ 28 câu trắc nghiệm</p>
-                        <p>+ 4 câu hỏi đúng sai</p>
+                        <p>28 câu trắc nghiệm</p>
+                        <p>2 câu hỏi đúng sai</p>
                     </div>
                     <a href="{%url 'de_thi' 3%}">
                         làm bài <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
-                <br>
-                <div class="de">
-                    <div class="top">
-                    <h3>Đề 4</h3>
-                    <i class="fa-regular fa-clock"> </i> Thời gian: 50 phút
-                    </div>
-                    <div class="middle">
-                        <h4>Trong đề gồm có:</h4>
-                        <p>+ 28 câu trắc nghiệm</p>
-                        <p>+ 4 câu hỏi đúng sai</p>
-                    </div>
-                    <a href="{%url 'de_thi' 4%}">
-                        làm bài <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-                <br>
-                <div class="de">
-                    <div class="top">
-                    <h3>Đề 5</h3>
-                    <i class="fa-regular fa-clock"> </i> Thời gian: 50 phút
-                    </div>
-                    <div class="middle">
-                        <h4>Trong đề gồm có:</h4>
-                        <p>+ 28 câu trắc nghiệm</p>
-                        <p>+ 4 câu hỏi đúng sai</p>
-                    </div>
-                    <a href="{%url 'de_thi' 5%}">làm bài <i class="fa-solid fa-arrow-right"></i></a>
-                    
-                </div>
-                </div>
-            </div>
+            </div>  
         </div>
-        <div class="middle_right">
-            <p>Ôn tập theo các chương</p>
-            {%for bai in on_tap%}
-            <div>
-                <a href="{%url 'luyen_tap' bai.id %}">Ôn tập {{bai.name|lower}}</a>
+            <div class="middle_right">
+                <h4>Ôn tập theo các chương</h4>
+                {%for bai in on_tap%}
+                <div class="bai">
+                    <a href="{%url 'luyen_tap' bai.id %}">Ôn tập {{bai.name|lower}}</a>
+                </div>
+                {%endfor%}
             </div>
-            {%endfor%}
         </div>
     </div>
     <footer>

@@ -14,12 +14,13 @@
     <nav class="navbar">
         <!-- Logo -->
         <div class="nav-left">
-            <a href="{%url 'trang_chu'%}"><h2>logo</h2></a>
-            <a href="{%url 'on_tap_pv'%}">Ôn Tập</a>
-            <a href="{%url 'luyen_tap_all'%}">Luyện tập</a>
-            <a href="{%url 'thi_thu'%}">Thi thử</a>
-            <a href="{%url 'home'%}">Diễn Đàn</a>
-            <a href="#">Giới Thiệu</a>
+            <a href="{% url 'trang_chu' %}">logo</a>
+            <a href="{% url 'trang_chu' %}"><i class="fas fa-home"></i> <span>Trang Chủ</span></a>
+            <a href="{% url 'on_tap_pv' %}"><i class="fas fa-book"></i> <span>Ôn Tập</span></a>
+            <a href="{% url 'luyen_tap_all' %}"><i class="fas fa-pencil-alt"></i> <span>Luyện Tập</span></a>
+            <a href="{% url 'thi_thu' %}"><i class="fas fa-trophy"></i> <span>Thi Thử</span></a>
+            <a href="{% url 'home' %}"><i class="fas fa-comments"></i> <span>Diễn Đàn</span></a>
+            <a href="#"><i class="fas fa-info-circle"></i> <span>Giới Thiệu</span></a>
         </div>
 
         <!-- Search Box -->
@@ -56,44 +57,36 @@
     </nav>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const toggle = document.getElementById("theme-toggle");
-    
-            toggle.addEventListener("change", function () {
-                // Gửi yêu cầu lưu chế độ sáng/tối
-                fetch("{% url 'change-mode' %}", {
-                    method: "POST",
-                    headers: {
-                        "X-CSRFToken": "{{ csrf_token }}", // Đảm bảo CSRF token được thêm
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ theme: this.checked ? "dark" : "light" })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        location.reload(); // Reload trang sau khi lưu thành công
-                    } else {
-                        console.error("Error saving theme preference");
-                    }
-                })
-                .catch(error => console.error("Request failed:", error));
-            });
-        });
-        document.addEventListener("DOMContentLoaded", function () {
-        const dropdownTrigger = document.getElementById("dropdown-trigger");
-        const dropdownMenu = document.getElementById("dropdown-menu");
-
-        // Toggle dropdown menu when user clicks on the profile picture
-        dropdownTrigger.addEventListener("click", function () {
-            dropdownMenu.classList.toggle("active");
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener("click", function (event) {
-            if (!dropdownTrigger.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                dropdownMenu.classList.remove("active");
-            }
+    // Handle theme toggle
+    const toggle = document.getElementById("theme-toggle");
+    toggle?.addEventListener("change", function () {
+        fetch("{% url 'change-mode' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ theme: this.checked ? "dark" : "light" }),
+        }).then((response) => {
+            if (response.ok) location.reload();
         });
     });
+
+    // Dropdown menu
+    const dropdownTrigger = document.getElementById("dropdown-trigger");
+    const dropdownMenu = document.getElementById("dropdown-menu");
+
+    dropdownTrigger?.addEventListener("click", function () {
+        dropdownMenu?.classList.toggle("active");
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!dropdownTrigger?.contains(event.target) && !dropdownMenu?.contains(event.target)) {
+            dropdownMenu?.classList.remove("active");
+        }
+    });
+});
+
     </script>    
 </body>
 

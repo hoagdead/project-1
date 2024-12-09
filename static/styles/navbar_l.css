@@ -9,104 +9,88 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    background-color: #ffffff; 
+    background-color: #ffffff;
     color: rgb(0, 0, 0);
+    border-bottom: 2px solid #4CAF50;
+    transition: all 0.3s ease-in-out;
 }
 
+/* Navigation Left Section */
 .nav-left {
     display: flex;
     align-items: center;
-}
-
-.nav-left a {
-    color: white;
-    text-decoration: none;
-    margin-left: 5px;
-    font-size: 17px;
-}
-
-.nav-left a:hover {
-    color: #000000;
+    gap: 1rem;
+    flex-wrap: wrap; /* Đảm bảo nội dung tự xuống dòng nếu quá dài */
 }
 
 /* Logo Style */
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
-    margin-right: 1rem;
+}
+
+/* Link and Icon Styling */
+.nav-left a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    text-decoration: none;
+    color: inherit;
+    padding: 5px;
+    transition: color 0.3s;
+    white-space: nowrap; /* Ngăn chữ bị chồng */
+}
+
+.nav-left a:hover {
+    color: #4CAF50;
 }
 
 /* Search Box */
 .search-box {
     position: relative;
-    display: inline-block;
-    width: 200px; /* Chiều rộng của hộp tìm kiếm */
-    margin-left: 600px;
-  }
-  
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 200px;
+}
+
 .search-box input[type="text"] {
     width: 100%;
-    padding: 8px 40px 8px 10px; /* Thêm không gian bên phải cho icon */
+    padding: 8px 40px 8px 10px;
     font-size: 1rem;
     border: none;
     border-radius: 20px;
     outline: none;
     background-color: #E9E9FB;
     color: rgb(0, 0, 0);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
-  
+
 .search-box input[type="text"]:focus {
     box-shadow: 0 0 10px #14B0C5;
     background-color: #ffffff;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
-  
+
 .search-box .search-button {
     position: absolute;
     top: 50%;
-    right: 10px; /* Căn phải */
+    right: 10px;
     transform: translateY(-50%);
     background: none;
     border: none;
     color: rgb(0, 0, 0);
     cursor: pointer;
-    font-size: 1.2rem; /* Kích thước icon */
+    font-size: 1.2rem;
 }
-/* Dropdown container styling */
+
+/* Dropdown Styling */
 .user-info {
     position: relative;
     display: flex;
+    align-items: center;
 }
 
-.dropdown-content {
-    padding: 10px;
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: #f9f9f9;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    width: 200px;
-    border-radius: 5px;
-}
-.dropdown-content {
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.dropdown-content.active {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-
-/* Dropdown visible when active */
-.dropdown-content.active {
-    display: block;
-}
-
-/* Profile picture styling */
 .profile-pic {
     cursor: pointer;
     width: 40px;
@@ -114,75 +98,50 @@
     border-radius: 50%;
     margin-right: 10px;
 }
-
-.dropdown-content a {
-    color: #000000;
-    text-decoration: none;
-    display: block;
-    margin: 0.5rem 0;
-}
-
-
-/* Toggle Switch */
-.theme-toggle {
-    display: flex;
-    align-items: center;
-    margin-top: 1rem;
-}
-
-.theme-toggle span {
-    margin-right: 8px;
-}
-
-.theme-toggle input {
-    display: none;
-}
-
-.theme-toggle .slider {
-    position: relative;
-    width: 40px;
-    height: 20px;
-    border-radius: 34px;
-    background-color: #ccc;
-    cursor: pointer;
-    transition: 0.4s;
-}
-
-.theme-toggle .slider:before {
+.dropdown-content {
     position: absolute;
-    content: "";
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    background-color: white;
-    transition: 0.4s;
-    left: 4px;
-    bottom: 2px;
+    right: 0;
+    top: 50px;
+    display: none;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    z-index: 10;
 }
 
-.theme-toggle input:checked + .slider:before {
-    transform: translateX(20px);
+.dropdown-content.active {
+    display: block;
 }
 
-.theme-toggle input:checked + .slider {
-    background-color: #4caf50;
-}
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+    .nav-left {
+        gap: 0.5rem;
+    }
 
+    .nav-left a span {
+        display: none; /* Ẩn văn bản, chỉ hiển thị icon */
+    }
 
-/* Định dạng chung cho navbar */
-body.light .navbar {
-    background-color: #f9f9f9;
-    color: #333;
-}
+    .search-box {
+        display: none;
+        max-width: 150px;
+    }
 
-.navbar {
-    display: flex;
-    padding: 1rem 2rem;
-    align-items: center;
-}
+    .navbar {
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 0.5rem 1rem;
+    }
 
-.nav-left a {
-    color: inherit;
-    margin-left: 1rem;
-    text-decoration: none;
+    .user-info {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .username{
+        display: none;
+    }
 }

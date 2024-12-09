@@ -214,3 +214,38 @@ a:hover {
     background-color: #007bff;
     color: #fff;
 }
+.smb{
+    margin-top: 20px;
+}
+.smb button{
+    height: 30px;
+    width: 100px;
+    background-color: #4F4FBC;
+    color: #FFFF;
+    border: none;
+}
+
+.dhrb{
+    display: flex;
+    width: 256px;
+    height: auto;
+    overflow-x: hidden;
+
+}
+
+.dhrb button{
+    border: 1px solid #5F55B3 ;
+    margin-right:6px;
+    background-color: #2e2e40;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+}
+.dhrb button:hover{
+    background-color: #0057b342;
+}
+.hiden {
+    display: none;
+    width: 0;
+    height: 0;
+}
