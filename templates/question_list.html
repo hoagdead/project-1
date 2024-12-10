@@ -53,20 +53,20 @@
                     <h2>Hãy chọn đúng/sai cho mỗi đáp án</h2>
                     <ul>
                         {% for question in type2 %}
-                        <div class="question" id="question_{{ forloop.counter|add:8 }}">
+                        <div class="question" id="question_{{ forloop.counter|add:24 }}">
                             <li>
                                 <strong>Câu {{ forloop.counter }}: {{ question.name }}</strong><br>
                                 <ul class="answers-container">
                                     {% for answer in question.answers %}
                                     <li class="option-container-tf">
-                                        <span class="radio-label"><strong>{{ answer.0 }}.</strong> {{ answer.1 }}</span>
+                                        <span class="radio-label"><strong>{{ answer.label }}.</strong> {{ answer.text }}</span>
                                         <div class="radio-group">
                                             <label class="radio-option">
-                                                <input type="radio" name="answer_{{ answer.0 }}_{{ question.id }}" value="True" class="hidden-radio">
+                                                <input type="radio" name="answer_{{ answer.label }}_{{ question.id }}" value="True" class="hidden-radio">
                                                 <span class="radio-circle">Đ</span>
                                             </label>
                                             <label class="radio-option">
-                                                <input type="radio" name="answer_{{ answer.0 }}_{{ question.id }}" value="False" class="hidden-radio">
+                                                <input type="radio" name="answer_{{ answer.label }}_{{ question.id }}" value="False" class="hidden-radio">
                                                 <span class="radio-circle">S</span>
                                             </label>
                                         </div>
@@ -81,36 +81,37 @@
             
                 <button type="submit">Nộp bài</button>
             </form>
-            
         </div>
 
         <!-- Thanh bên -->
         <div class="side_bar">
-            <h2>thời gian còn Lại</h2>
+            <h2>Thời gian còn lại</h2>
             <span id="timer">50:00</span>
             <h3>Danh sách câu hỏi</h3>
             <h4>Phần 1</h4>
             <div class="dhrb">
             {% for question in type1 %}
-            <a href="#question_{{ forloop.counter|add:8 }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter }}')">{{ forloop.counter }}</a>
+            <a href="#question_{{ forloop.counter }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter }}')">{{ forloop.counter }}</a>
             {% endfor %}
             </div>
             <h4>Phần 2</h4> 
             <div class="dhrb">
             {% for question in type2 %}
-            <a href="#question_{{ forloop.counter|add:8 }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter|add:8 }}')">{{ forloop.counter }}</a>
+            <a href="#question_{{ forloop.counter|add:24 }}" onclick="scrollToQuestion(event, 'question_{{ forloop.counter|add:24 }}')">{{ forloop.counter }}</a>
             {% endfor %}
             </div>
             <button id="submitSidebarButton" class="smb">Nộp bài</button>
         </div>
     </div>
+
+    <!-- Modal cảnh báo -->
     <div id="warningModal" class="hidden">
         <div class="modal-content">
             <h3>Bạn chưa trả lời hết các câu hỏi!</h3>
             <p>Các câu chưa làm:</p>
             <ul id="unansweredList"></ul>
             <div class="modal-actions">
-                <button id="backToQuestionsButton">Quay lại làm bài</button> <!-- Đúng ID -->
+                <button id="backToQuestionsButton">Quay lại làm bài</button>
                 <button id="confirmSubmitButton">Nộp bài</button>
             </div>
         </div>
@@ -118,14 +119,16 @@
     
     <!-- JavaScript -->
     <script>
+        // Cuộn mượt đến câu hỏi
         function scrollToQuestion(event, questionId) {
-            event.preventDefault(); // Ngăn trang tải lại
+            event.preventDefault();
             const target = document.getElementById(questionId);
             if (target) {
-                target.scrollIntoView({ behavior: 'smooth' }); // Cuộn mượt đến phần tử
+                target.scrollIntoView({ behavior: 'smooth' });
             }
-        };
-         // Đồng hồ đếm ngược
+        }
+
+        // Đồng hồ đếm ngược
         let totalSeconds = 50 * 60;
         const timerElement = document.getElementById('timer');
         function updateTimer() {
@@ -138,70 +141,49 @@
                 alert("Hết giờ! Bài thi của bạn sẽ được nộp tự động.");
                 document.getElementById('questionForm').submit();
             }
-        };
+        }
         setInterval(updateTimer, 1000);
 
-        // Kiểm tra câu hỏi chưa trả lời
-        function getUnansweredQuestions(){
+        // Lấy danh sách câu hỏi chưa trả lời
+        function getUnansweredQuestions() {
             const unanswered = [];
             document.querySelectorAll('.question').forEach((question) => {
                 const id = question.id.split('_')[1];
                 const answered = document.querySelector(`input[name="answer_${id}"]:checked`);
                 if (!answered) unanswered.push(id);
             });
-        };
+            return unanswered;
+        }
 
-
-        // Hiển thị modal
+        // Hiển thị modal cảnh báo
         function showModal(unanswered) {
             const modal = document.getElementById('warningModal');
             const unansweredList = document.getElementById('unansweredList');
-            if (unanswered.length > 0) {
-                // Nếu có câu hỏi chưa trả lời, hiển thị modal và thay đổi class
-                // Xóa danh sách cũ trong modal
-                unansweredList.innerHTML = '';
-
-                // Thêm các câu hỏi chưa trả lời vào modal
-                unanswered.forEach(id => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `Câu ${id}`;
-                    unansweredList.appendChild(listItem);
-                });
             unansweredList.innerHTML = unanswered.map(id => `<li>Câu ${id}</li>`).join('');
             modal.classList.remove('hidden');
-        }};
-
-
-        // Nộp bài
-        document.getElementById('submitButton').addEventListener('click', () => {
-            const unanswered = getUnansweredQuestions();
-            if (unanswered.length > 0) {
-                showModal(unanswered);
-            } else {
-                document.getElementById('questionForm').submit();
-            }
-        });
-        document.getElementById('submitSidebarButton').addEventListener('click', () => {
-            const unanswered = getUnansweredQuestions();
-            if (unanswered.length > 0) {
-                showModal(unanswered);
-            } else {
-                document.getElementById('questionForm').submit();
-            }
-        });
-
-        document.getElementById('backToQuestionsButton').addEventListener('click', () => {
-            document.getElementById('warningModal').classList.add('hidden');
-        });
-
-        document.getElementById('confirmSubmitButton').addEventListener('click', () => {
-            document.getElementById('questionForm').submit();
-        });
-        const submitButton = document.getElementById('submitButton');
-        if (submitButton) {
-            submitButton.addEventListener('click', () => {'submit'});
         }
 
+        // Nộp bài khi nhấn nút submit
+        function handleSubmit() {
+            const unanswered = getUnansweredQuestions();
+            if (unanswered.length > 0) {
+                showModal(unanswered);
+            } else {
+                document.getElementById('questionForm').submit();
+            }
+        }
+
+        // Gắn sự kiện cho các nút
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('submitButton').addEventListener('click', handleSubmit);
+            document.getElementById('submitSidebarButton').addEventListener('click', handleSubmit);
+            document.getElementById('backToQuestionsButton').addEventListener('click', () => {
+                document.getElementById('warningModal').classList.add('hidden');
+            });
+            document.getElementById('confirmSubmitButton').addEventListener('click', () => {
+                document.getElementById('questionForm').submit();
+            });
+        });
     </script>
 </body>
 </html>

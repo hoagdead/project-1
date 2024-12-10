@@ -259,11 +259,13 @@
     }
 }
 /* Responsive Design for Mobile */
-@media (max-width: 1000px) {
+@media (max-width: 1400px) {
     body {
         font-size: 16px; /* Điều chỉnh kích thước chữ nhỏ hơn */
     }
-
+    .all_questions{
+        margin-left: 5px;
+    }
     .hiden1 button{
         width: 30px;
         height: fit-content;

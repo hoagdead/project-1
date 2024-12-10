@@ -196,7 +196,7 @@ body.light .navbar {
     margin-left: 1rem;
     text-decoration: none;
 }
-@media (max-width:  900px) {
+@media (max-width:  1400px) {
     .nav-left {
         gap: 0.5rem;
     }

@@ -473,7 +473,7 @@ a{
 
 
 /* Giao diện điện thoại */
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1400px) {
     body {
         padding-top: 50px;
     }

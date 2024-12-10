@@ -88,7 +88,7 @@
     color: #ffff;
 }
 
-@media (max-width:  900px) {
+@media (max-width:  1400px) {
     .midlle_section_1 {
         padding: 10px;
         display: grid;

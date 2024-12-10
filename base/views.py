@@ -259,7 +259,7 @@ def question_and_submit(request, de_id):
             correct_count = 0
             for ans_key in ['A', 'B', 'C', 'D']:
                 selected_answer = request.POST.get(f'answer_{ans_key}_{question["id"]}')
-                correct_ans = question[f'correct_answer_{ans_key.lower()}']
+                correct_ans = question[f'correct_answer_{ans_key.lower()}'] if selected_answer else None
                 if selected_answer == correct_ans:
                     correct_count += 1
 
@@ -510,7 +510,7 @@ def submit_luyentap(request, bai_id):
             print(request.POST.get(f'answer_{question["id"]}'))
             print("dap an:",question['correct_answer'] )
             selected_answer = request.POST.get(f'answer_{question["id"]}')
-            selected_answer = "Ans_" + selected_answer.lower()
+            selected_answer = "Ans_" + selected_answer.lower() if selected_answer else None
             if selected_answer and selected_answer == question['correct_answer']:
                 score += 1.25 
         return render(request, 'base/submit_answer.html', {
