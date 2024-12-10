@@ -502,7 +502,7 @@ def luyen_tap(request, bai_id):
 # Xử lý nộp bài thi
 
 def submit_luyentap(request, bai_id):
-    questions = question_type1s(8, bai_id) 
+    questions = question_type1s(24, bai_id) 
     if request.method == 'POST':
         score = 0
         total_questions = len(questions)

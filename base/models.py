@@ -21,7 +21,6 @@ class Topic(models.Model):
     description = models.TextField(null = True, blank = True)
     def __str__ (self):
         return self.name
-    
     def room_count(self):
         return self.room_set.count()
     
