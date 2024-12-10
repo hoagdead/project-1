@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thi thử đề {{ de }}</title>
+    <title>Thi thử</title>
     {% load static %}
     {% if request.session.theme == 'dark' %}
     <link rel="stylesheet" href="{% static 'styles/q_dark.css' %}">
@@ -14,17 +14,15 @@
 <body>
     <!-- Thanh điều hướng -->
     <div class="navbar">
-        <a href="{% url 'thi_thu' %}">Thoát</a>
+        <a href="{% url 'luyen_tap_all' %}">Thoát</a>
         <p>{{ request.user }}</p>
     </div>
 
     <!-- Phần chính -->
     <div class="middle_section">
         <div class="all_questions">
-            <form id="questionForm" method="POST" action="{% url 'submit_ontap' %}">
+            <form id="questionForm" method="POST" action="{% url 'submit_luyentap' bai_id%}">
                 {% csrf_token %}
-
-                <!-- Câu hỏi loại 1 -->
                 <h2>Hãy chọn đáp án đúng</h2>
                 <ul>
                     {% for question in type1 %}
@@ -51,7 +49,7 @@
                     {% endfor %}
                 </ul>
 
-                <button type="submit" class="hiden">Nộp bài</button>
+                <button type="submit" class="hidden">Nộp bài</button>
             </form>
         </div>
 
@@ -63,13 +61,11 @@
             <h4>Phần 1</h4>
             <div class="dhrb">
                 {% for question in type1 %}
-                <button>
                     <a 
                         href="#question_{{ forloop.counter }}" 
                         onclick="scrollToQuestion(event, 'question_{{ forloop.counter }}')">
                         {{ forloop.counter }}
                     </a>
-                </button>
                 {% endfor %}
             </div>
             <div class="smb">
@@ -79,7 +75,7 @@
     </div>
 
     <!-- Modal -->
-    <div id="warningModal" class="hiden">
+    <div id="warningModal" class="hidden">
         <div class="modal-content">
             <h3>Bạn chưa trả lời hết các câu hỏi!</h3>
             <p>Các câu chưa làm:</p>
@@ -107,7 +103,7 @@
                 const questionId = question.id.split('_')[1];
                 const answered = document.querySelector(`input[name="answer_${questionId}"]:checked`);
                 if (!answered) {
-                    unanswered.push(questionId);
+                    unanswered.push(questionId); // Thêm câu chưa trả lời vào danh sách
                 }
             });
 
@@ -120,9 +116,9 @@
                     listItem.textContent = `Câu ${id}`;
                     unansweredList.appendChild(listItem);
                 });
-                modal.classList.replace('hidden', 'modal');
+                modal.classList.replace('hidden', 'modal'); // Hiển thị modal khi có câu chưa trả lời
             } else {
-                document.getElementById('questionForm').submit();
+                document.getElementById('questionForm').submit(); // Nếu tất cả câu hỏi đã trả lời, nộp bài
             }
         });
 

@@ -147,7 +147,7 @@ a{
     margin-bottom: 20px;
 }
 /* Responsive for mobile */
-@media (max-width: 900px) {
+@media (max-width: 1300px) {
     body {
         padding-top: 50px;
     }

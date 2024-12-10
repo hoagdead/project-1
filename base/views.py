@@ -196,6 +196,7 @@ def question_type1(sl):
             'name': question.name,
             'answers': answers,
             'id': question.id,
+            'correct_answer': question.Corect_ans 
         })
     return trao_doi_cau_hoi
 
@@ -208,7 +209,7 @@ def question_type2(sl):
         cau_hoi_dung_sai = random.sample(cau_hoi_dung_sai, so_luong_cau_hoi_2)
 
     trao_doi_cau_hoi = []
-    
+
     # Xáo trộn đáp án cho câu hỏi loại đúng/sai
     for question in cau_hoi_dung_sai:
         answers = [
@@ -218,55 +219,51 @@ def question_type2(sl):
             ('D', question.Ans_d, question.Corect_ans_d)
         ]
         random.shuffle(answers)  # Xáo trộn thứ tự các đáp án
+        
+        # Tạo danh sách các đáp án đúng
+        correct_answers = {
+            f"correct_answer_{ans[0].lower()}": ans[2] for ans in answers
+        }
+
         trao_doi_cau_hoi.append({
-            'type': 'true_false',  # Đánh dấu loại câu hỏi
+            'type': 'true_false',
             'name': question.name,
-            'answers': answers,
+            'answers': [
+                {'label': ans[0], 'text': ans[1]} for ans in answers
+            ],
             'id': question.id,
+            **correct_answers,  # Gộp các đáp án đúng vào dictionary
         })
+
     return trao_doi_cau_hoi
-
-def question_list(request,de_id):
-    de = de_id
-    tong_cau_hoi = 30
-    cau_hoi_loai_1 = 28
+def question_and_submit(request, de_id):
+    # Khởi tạo dữ liệu câu hỏi
+    tong_cau_hoi = 26
+    cau_hoi_loai_1 = 24
     cau_hoi_loai_2 = tong_cau_hoi - cau_hoi_loai_1
-    type1 = question_type1(cau_hoi_loai_1)
-    type2 = question_type2(cau_hoi_loai_2)
-    return render(request, 'question_list.html', {'type1':type1 , 'type2': type2, 'de':de})
+    type1_questions = question_type1(cau_hoi_loai_1)  # Lấy câu hỏi loại 1
+    type2_questions = question_type2(cau_hoi_loai_2)  # Lấy câu hỏi loại 2
 
-def submit_answer(request):
     if request.method == 'POST':
         total_score = 0
 
-        # Tính điểm cho câu hỏi loại chọn 1 đáp án
-        for question in Question.objects.filter(type=1):
-            user_answer = request.POST.get(f'answer_{question.id}')
-            if user_answer and user_answer == question.Corect_ans:
-                total_score += 1  # Mỗi câu hỏi chọn đáp án đúng được 1 điểm
+        # Xử lý câu hỏi loại 1
+        for question in type1_questions:
+            selected_answer = request.POST.get(f'answer_{question["id"]}')
+            selected_answer = f"Ans_{selected_answer.lower()}" if selected_answer else None
+            if selected_answer and selected_answer == question['correct_answer']:
+                total_score += 1  # Mỗi câu loại 1 đúng được 1 điểm
 
-        # Tính điểm cho câu hỏi loại đúng/sai
-        for question in Question2.objects.filter(type=2):
+        # Xử lý câu hỏi loại 2
+        for question in type2_questions:
             correct_count = 0
+            for ans_key in ['A', 'B', 'C', 'D']:
+                selected_answer = request.POST.get(f'answer_{ans_key}_{question["id"]}')
+                correct_ans = question[f'correct_answer_{ans_key.lower()}']
+                if selected_answer == correct_ans:
+                    correct_count += 1
 
-            # Kiểm tra từng đáp án đúng/sai
-            user_answer_a = request.POST.get(f'answer_A_{question.id}')
-            if user_answer_a and user_answer_a == question.Corect_ans_a:
-                correct_count += 1
-
-            user_answer_b = request.POST.get(f'answer_B_{question.id}')
-            if user_answer_b and user_answer_b == question.Corect_ans_b:
-                correct_count += 1
-
-            user_answer_c = request.POST.get(f'answer_C_{question.id}')
-            if user_answer_c and user_answer_c == question.Corect_ans_c:
-                correct_count += 1
-
-            user_answer_d = request.POST.get(f'answer_D_{question.id}')
-            if user_answer_d and user_answer_d == question.Corect_ans_d:
-                correct_count += 1
-
-            # Tính điểm cho câu đúng/sai
+            # Tính điểm dựa trên số đáp án đúng
             if correct_count == 1:
                 total_score += 0.1
             elif correct_count == 2:
@@ -275,14 +272,22 @@ def submit_answer(request):
                 total_score += 0.5
             elif correct_count == 4:
                 total_score += 1
-                
-        if total_score > 10:
-            total_score = 10
 
-        # Sau khi tính điểm, chuyển hướng tới trang kết quả
-        return render(request, 'base/submit_answer.html', {'score': total_score})
-    return redirect('question_list')
+        # Đảm bảo điểm không vượt quá 10
+        total_score = min(total_score, 10)
 
+        # Render trang kết quả
+        return render(request, 'base/submit_answer.html', {
+            'score': total_score,
+            'total_questions': len(type1_questions) + len(type2_questions),
+        })
+
+    # Render trang câu hỏi
+    return render(request, 'question_list.html', {
+        'type1': type1_questions,
+        'type2': type2_questions,
+        'de': de_id,
+    })
 
 
 
@@ -464,10 +469,11 @@ def luyen_tap_all(request):
     context ={'al':all_lesson,}
     return render(request, 'base/luyen_tap_all.html', context)
 
-def question_type1s(sl,bai_id):
+# Lấy câu hỏi ngẫu nhiên cho phần luyện tập
+def question_type1s(sl, bai_id):
     so_luong_cau_hoi_1 = sl
     bai = bai_hoc.objects.get(id=bai_id)
-    cau_hoi_nhieu_dap_an = list(Question.objects.filter(bai=bai))
+    cau_hoi_nhieu_dap_an = list(Question.objects.filter(bai=bai))  # Lọc câu hỏi theo bài học
     if len(cau_hoi_nhieu_dap_an) > so_luong_cau_hoi_1:
         cau_hoi_nhieu_dap_an = random.sample(cau_hoi_nhieu_dap_an, so_luong_cau_hoi_1)
     trao_doi_cau_hoi = []
@@ -478,45 +484,44 @@ def question_type1s(sl,bai_id):
             ('C', question.Ans_c),
             ('D', question.Ans_d)
         ]
-        #random.shuffle(answers)  # Xáo trộn thứ tự các đáp án
         trao_doi_cau_hoi.append({
-            'type': 'multiple_choice',  # Đánh dấu loại câu hỏi
+            'type': 'multiple_choice',
             'name': question.name,
             'answers': answers,
             'id': question.id,
+            'correct_answer': question.Corect_ans 
         })
     return trao_doi_cau_hoi
+
+# View luyện tập
 def luyen_tap(request, bai_id):
-    cau_hoi = question_type1s(8,bai_id)
-    return render(request, 'base/luyen_tap.html', {'type1':cau_hoi})
-   
-def answer_view(request):
-    if request.method == "POST":
-        question_id = request.POST.get('question_id')
-        answer = request.POST.get('answer')
+    cau_hoi = question_type1s(8, bai_id)
+    return render(request, 'base/luyen_tap.html', {'type1': cau_hoi})
 
-        return JsonResponse({
-            "type": "result",
-            "score": 5,
-            "total": 10
-        })
-    
-def submit_ontap(request):
+
+# Xử lý nộp bài thi
+
+def submit_luyentap(request, bai_id):
+    questions = question_type1s(8, bai_id) 
     if request.method == 'POST':
-        total_score = 0
-
-        # Tính điểm cho câu hỏi loại chọn 1 đáp án
-        for question in Question.objects.filter(type=1):
-            user_answer = request.POST.get(f'answer_{question.id}')
-            if user_answer and user_answer == question.Corect_ans:
-                total_score += 1.25  # Mỗi câu hỏi chọn đáp án đúng được 1 điểm
-        if total_score > 10:
-            total_score = 10
-
-        # Sau khi tính điểm, chuyển hướng tới trang kết quả
-        return render(request, 'base/submit_answer.html', {'score': total_score})
-    return redirect("luyen_tap")
-
+        score = 0
+        total_questions = len(questions)
+        for question in questions:
+            print(request.POST.get(f'answer_{question["id"]}'))
+            print("dap an:",question['correct_answer'] )
+            selected_answer = request.POST.get(f'answer_{question["id"]}')
+            selected_answer = "Ans_" + selected_answer.lower()
+            if selected_answer and selected_answer == question['correct_answer']:
+                score += 1.25 
+        return render(request, 'base/submit_answer.html', {
+            'score': score,
+            'total_questions': total_questions,
+        })
+    else:
+        return render(request, 'base/luyen_tap.html', {
+            'type1': questions,
+            'bai_id': bai_id,
+        })
 def trang_chu(request):
     on_tap = bai_hoc.objects.all()[:10]
     context={'on_tap':on_tap}

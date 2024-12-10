@@ -10,7 +10,7 @@ urlpatterns = [
     path('register/', views.registerpage, name="register"),
     
     #url cho page chính và từng room
-    path('', views.home , name="home"),
+    path('', views.trang_chu , name="home"),
     path('room/<str:pk>/', views.room, name="room"),
     
     #url khi muốn cập nhật room
@@ -29,16 +29,15 @@ urlpatterns = [
     path('upload_cau_hoi', views.upload_questions, name='upload_questions'),
     path('set-theme/', views.set_theme, name='set_theme'),
     path('thi_thu/', views.thi_thu, name='thi_thu'),
-    path('thi_thu/de/<int:de_id>/', views.question_list, name='de_thi'),
-    path('thi_thu/submit', views.submit_answer, name='submit_answer'),
+    path('thi_thu/de/<int:de_id>/', views.question_and_submit, name='de_thi'),
+    path('thi_thu/de/submit/<int:de_id>', views.question_and_submit, name='submit_answer'),
     path('preview/<int:lesson_id>/', views.preview_lesson, name='preview_lesson'),  
     path('0n_tap', views.bai_hoc_all, name='on_tap_pv'),
     path('on_tap', views.bai_hoc_i, name='on_tap'),
     path('on_tap/bai/<int:lesson_id>/', views.bai, name='bai'),
-    path('on_tap/bai/submit', views.submit_ontap, name='submit_ontap'),
     path('luyen_tap', views.luyen_tap_all, name='luyen_tap_all'),
-    path('luyen_tap/<int:bai_id>', views.luyen_tap, name='luyen_tap'),
-    path('answer/', views.answer_view, name='answer_view'),
-    path('trang_chu/', views.trang_chu, name='trang_chu'),
+    path('luyen_tap/bai/<int:bai_id>', views.submit_luyentap, name='luyen_tap'),
+    path('luyen_tap/bai/submit/<int:bai_id>', views.submit_luyentap, name='submit_luyentap'),
+    path('forum/', views.home, name='forum'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

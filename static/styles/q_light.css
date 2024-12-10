@@ -5,7 +5,9 @@ body {
     line-height: 1.6; /* Tăng khoảng cách dòng */
     color: #333; /* Màu chữ mặc định */
 }
-
+fieldset{
+    border: none;
+}
 * {
     margin: 0;
     padding: 0;
@@ -205,50 +207,98 @@ a:hover {
     margin-top: 36px;
 }
 
-.side_bar a.completed {
-    color: green; /* Màu khi câu hỏi đã làm */
+.sidebar a.answered {
+    background-color: #4CAF50; /* Nền xanh */
+    color: white; /* Chữ trắng */
+    padding: 5px; /* Khoảng cách bên trong */
+    border-radius: 4px; /* Bo góc */
+    text-decoration: none; /* Loại bỏ gạch chân */
+    display: inline-block; /* Đảm bảo áp dụng được padding */
 }
 /* Modal ẩn mặc định */
-.hiden {
+.hidden {
     display: none;
     width: 0;
     height: 0;
 }
-.modal {
+/* Kiểu dáng cho modal */
+#warningModal {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Nền tối mờ */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%; /* Chiếm 90% chiều ngang màn hình */
+    max-width: 400px; /* Giới hạn chiều ngang tối đa */
+    background-color: #fff; /* Nền trắng */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng */
+    border-radius: 10px; /* Góc bo tròn */
+    overflow: hidden;
+    z-index: 1000; /* Đưa modal lên trên cùng */
 }
+
+/* Nội dung bên trong modal */
 .modal-content {
-    background-color: white;
     padding: 20px;
-    border-radius: 8px;
+    font-family: Arial, sans-serif;
     text-align: center;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-.modal-actions {
-    margin-top: 20px;
-}
-.modal-actions button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-#backToQuestions {
-    background-color: #f0f0f0;
+
+/* Tiêu đề của modal */
+.modal-content h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
     color: #333;
+}
+
+/* Danh sách các câu chưa làm */
+/* Danh sách các câu chưa làm */
+.modal-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    display: flex; /* Sử dụng Flexbox */
+    flex-wrap: wrap; /* Cho phép xuống dòng nếu vượt quá chiều rộng */
+    gap: 8px; /* Khoảng cách giữa các mục */
+    justify-content: center; /* Canh giữa */
+}
+
+/* Mỗi mục trong danh sách */
+.modal-content ul li {
+    font-size: 14px;
+    color: #666;
+    border: 2px solid #4CAF50; /* Màu nền nhẹ */
+    padding: 5px 10px; /* Khoảng cách bên trong */
+    border-radius: 5px; /* Bo góc */
+    display: inline-block; /* Hiển thị nội dung ngắn gọn */
+    min-width: 30px; /* Đặt kích thước tối thiểu */
+    text-align: center; /* Canh giữa nội dung */
+}
+
+/* Các nút hành động trong modal */
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+/* Kiểu dáng nút */
+.modal-actions button {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Nút "Quay lại làm bài" */
+#backToQuestionsButton {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+#backToQuestionsButton:hover {
+    background-color: #ddd;
 }
 #confirmSubmit {
     background-color: #007bff;
@@ -288,21 +338,112 @@ a:hover {
     border: none;
 }
 
-.dhrb{
+.dhrb {
     display: flex;
-    width: 256px;
+    flex-wrap: wrap; /* Cho phép các nút xuống dòng */
+    width: 100%; /* Đảm bảo chiếm hết chiều rộng */
     height: auto;
-    overflow-x: hidden;
-
+    overflow-x: hidden; /* Ẩn cuộn ngang */
+    overflow-y: hidden;
+    gap: 5px; /* Thêm khoảng cách giữa các nút */
 }
 
-.dhrb button{
-    margin-right:6px;
+.dhrb a {
+    margin-right: 6px;
     background-color: #FFF;
-    width: 20px;
-    height: 20px;
+    width: 25px; /* Điều chỉnh kích thước nút nếu cần */
+    height: 25px;
     border-radius: 4px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    border: 2px solid #4CAF50;
 }
-.dhrb button:hover{
-    background-color: #0057b342;
+.hiden1 {
+    display: none;
+}
+@media (max-width: 1000px) {
+    body {
+        font-size: 16px; /* Điều chỉnh kích thước chữ nhỏ hơn */
+    }
+
+    .hiden1{
+        display: block;
+        display: block;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 14px;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .navbar {
+        grid-template-columns: 1fr 3fr 1fr;
+        height: 60px;
+    }
+
+    .navbar a, .navbar p {
+        font-size: 14px; /* Giảm kích thước chữ cho navbar */
+        padding-left: 10px;
+    }
+
+    .middle_section {
+        grid-template-columns: 1fr; /* Đưa về một cột */
+        gap: 10px;
+        padding: 0 10px;
+    }
+
+    .question {
+        width: auto; /* Chiều rộng tự động vừa với màn hình */
+        font-size: 18px; /* Giảm kích thước chữ */
+        padding: 15px;
+    }
+
+    .side_bar {
+        display: none;
+        position: static; /* Đặt sidebar xuống dưới */
+        width: 100%; /* Full màn hình */
+        margin-right: 0;
+        margin-top: 20px;
+        padding: 10px;
+    }
+
+    .side_bar button {
+        font-size: 14px; /* Kích thước nhỏ hơn */
+        padding: 5px 10px;
+    }
+
+    .option-container label, .option-container span {
+        font-size: 16px; /* Giảm kích thước chữ */
+    }
+
+    .radio-circle {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+    }
+
+    .smb button {
+        width: 80px;
+        height: 25px;
+    }
+
+    .dhrb {
+        flex-wrap: wrap; /* Chia hàng cho nút nếu không đủ chỗ */
+        justify-content: center;
+    }
+
+    .dhrb button {
+        width: 15px;
+        height: 15px;
+        margin-right: 4px;
+    }
+
+    .modal-content {
+        padding: 15px; /* Giảm khoảng cách trong modal */
+    }
 }
