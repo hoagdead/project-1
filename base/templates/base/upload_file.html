@@ -1,16 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload File</title>
+    <style>
+        /* CSS Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .upload-form {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-drag-area {
+            border: 2px dashed #007bff;
+            padding: 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .file-drag-area p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .file-drag-area.dragging {
+            background-color: #d6e8f5;
+            border-color: #0056b3;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <h1>Upload File Word</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
+        <!-- Khu vực kéo thả file -->
+        <div id="file-drag-area" class="file-drag-area">
+            <p>Kéo và thả file Word vào đây hoặc nhấp để chọn file</p>
+            <input type="file" name="file" id="file-input" accept=".doc,.docx" required>
+        </div>
         <button type="submit">Upload</button>
     </form>
 
-    
+    <script>
+        // Xử lý kéo và thả file
+        const dragArea = document.getElementById('file-drag-area');
+        const fileInput = document.getElementById('file-input');
+
+        // Khi nhấp vào khu vực kéo thả, focus vào input file
+        dragArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Xử lý khi kéo file vào khu vực kéo thả
+        dragArea.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dragArea.classList.add('dragging');
+        });
+
+        dragArea.addEventListener('dragleave', () => {
+            dragArea.classList.remove('dragging');
+        });
+
+        dragArea.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dragArea.classList.remove('dragging');
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files; // Đặt các file vào input
+            }
+        });
+    </script>
 </body>
 </html>

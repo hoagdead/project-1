@@ -1,13 +1,20 @@
-#tạo ra 1 form để tạo room bằng cách lấy form mẫu mà django đã cho
 from django import forms
 from django.forms import ModelForm
-from .models import Room, Question,UploadedFile
+from .models import Room, Question, UploadedFile
 
 class UploadFileForm(forms.Form):
-    file = forms.FileField(label="Upload Word File")
+    file = forms.FileField(
+        label="Upload Word File",
+        required=True,
+        help_text="Chọn một file Word (.doc, .docx) để tải lên."
+    )
 
 class UploadQuestionForm(forms.Form):
-    file = forms.FileField(label="Chọn file Word")
+    file = forms.FileField(
+        label="Chọn file Word",
+        required=True,
+        help_text="Chọn một file Word (.doc, .docx) để tải lên.",
+    )
     QUESTION_TYPE_CHOICES = [
         (1, "Chọn 1 đáp án đúng"),
         (2, "Đúng/Sai"),
@@ -18,7 +25,7 @@ class UploadQuestionForm(forms.Form):
         widget=forms.RadioSelect
     )
 
-class RoomForm(ModelForm): 
+class RoomForm(ModelForm):
     class Meta:
         model = Room
         fields = '__all__'
@@ -38,7 +45,7 @@ class RoomForm(ModelForm):
         super(RoomForm, self).__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Room name'})
         self.fields['description'].widget.attrs.update({'class': 'form-control'})
- 
+
 class QuestionForm(ModelForm):
     class Meta:
         model = Question

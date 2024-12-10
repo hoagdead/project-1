@@ -1,22 +1,69 @@
-{%extends 'base/home.html' %}
+{% extends 'base/home.html' %}
 
-{%block content%}
+{% block content %}
 <style>
-    .block_container{
-        display: grid;
-        grid-template-columns: 3fr 1fr;
+    /* Container chứa 2 phần: form và notification */
+    .block_container {
+        padding-top: 100px;
+        display: flex;
+        justify-content: center; /* Căn giữa toàn bộ container */
+        align-items: flex-start; /* Căn form lên trên */
+        gap: 20px; /* Khoảng cách giữa form và notification */
+    }
+    /* Căn chỉnh và làm đẹp cho phần form */
+    .block_container form {
+        background-color: #f9f9f9;  /* Màu nền nhẹ nhàng */
+        padding: 20px;  /* Khoảng cách xung quanh form */
+        border-radius: 8px;  /* Bo góc cho form */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* Đổ bóng nhẹ cho form */
+        max-width: 500px;  /* Giới hạn chiều rộng của form */
+        width: 100%;  /* Đảm bảo form không quá rộng */
+    }
+
+    /* Thiết kế cho các input trong form */
+    .block_container form input[type="text"], 
+    .block_container form input[type="email"], 
+    .block_container form input[type="password"], 
+    .block_container form textarea {
+        width: 100%;  /* Đảm bảo các trường input chiếm hết chiều rộng */
+        padding: 10px;  /* Khoảng cách bên trong input */
+        margin-bottom: 15px;  /* Khoảng cách giữa các input */
+        border: 1px solid #ccc;  /* Viền mỏng xung quanh các input */
+        border-radius: 5px;  /* Bo góc cho input */
+        font-size: 16px;  /* Kích thước chữ trong input */
+    }
+
+    /* Nút submit */
+    .block_container form input[type="submit"] {
+        background-color: #4CAF50; /* Màu nền của nút submit */
+        color: white; /* Màu chữ */
+        padding: 10px 20px; /* Kích thước của nút */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .block_container form input[type="submit"]:hover {
+        background-color: #45a049; /* Màu khi hover */
+    }
+
+    /* Căn chỉnh notification ở bên phải */
+    .noti {
+        align-self: flex-start; /* Căn notification lên đầu */
+        margin-left: 20px; /* Khoảng cách giữa form và notification */
     }
 </style>
+
 <div class="block_container">
     <div>
-        <form method="POST" action="">
+        <form method="POST" action="{%url 'forum'%}">
             {% csrf_token %}
-            {{form.as_p}}
-            <input type="submit" name = "Submit"/>
+            {{ form.as_p }}
+            <input type="submit" name="Submit" />
         </form>
     </div>
-    <div>
-        {%include 'base/notification_bar.html'%}
-    </div>
+
 </div>
-{%endblock content %}
+
+{% endblock content %}

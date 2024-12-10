@@ -3,79 +3,148 @@
 <head>
     <title>Preview Lesson</title>
     <style>
-        /* Thêm CSS để định dạng nội dung */
-        p {
+        /* Định dạng cơ bản cho body */
+        body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Định dạng tiêu đề chính */
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-top: 30px;
+        }
+
+        /* Định dạng cho phần nội dung bài học */
+        .lesson-content {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        /* Định dạng cho phần liên kết */
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 16px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Định dạng cho phần form */
+        form {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h3 {
+            font-size: 18px;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        td {
+            background-color: #fafafa;
+        }
+
+        /* Thêm hover cho các hàng trong bảng */
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        /* Tạo khoảng cách dưới cho các dòng */
+        tr:last-child td {
+            border-bottom: 1px solid #ccc;
         }
     </style>
 </head>
 <body>
     <h1>Preview: {{ lesson.name }}</h1>
-    <div>
-    <div>
-        {% autoescape off %}
-        {{ lesson.noi_dung }}
-        {% endautoescape %}
-    </div>
+    <div class="lesson-content">
+        <div>
+            {% autoescape off %}
+            {{ lesson.noi_dung }}
+            {% endautoescape %}
+        </div>
     </div>
     <a href="/">Upload another file</a>
 
-    <br>
-    <br>
+    <br><br>
+
     <h1>Preview:</h1>
     <a href="{% url 'upload_questions' %}">Upload another file</a>
-
 
     <form method="POST">
         {% csrf_token %}
         <h3>Xem trước các câu hỏi đã tải lên:</h3>
-        <table border="1">
-          <thead>
-            <tr>
-              <th>Câu hỏi</th>
-              <th>Đáp án A</th>
-              <th>Đáp án B</th>
-              <th>Đáp án C</th>
-              <th>Đáp án D</th>
-              <th>Đáp án đúng</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for question in questions %}
-              <tr>
-                <td>{{ question.name }}</td>
-                <td>{{ question.Ans_a }}</td>
-                <td>{{ question.Ans_b }}</td>
-                <td>{{ question.Ans_c }}</td>
-                <td>{{ question.Ans_d }}</td>
-                <td>
-                  {% if question.correct == "Ans_a" %}
-                    <p>A</p>
-                  {% elif question.correct == "Ans_b" %}
-                    <p>B</p>
-                  {% elif question.correct == "Ans_c" %}
-                    <p>C</p>
-                  {% elif question.correct == "Ans_d" %}
-                    <p>D</p>
-                  {% endif %}
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
+        <table>
+            <thead>
+                <tr>
+                    <th>Câu hỏi</th>
+                    <th>Đáp án A</th>
+                    <th>Đáp án B</th>
+                    <th>Đáp án C</th>
+                    <th>Đáp án D</th>
+                    <th>Đáp án đúng</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in questions %}
+                    <tr>
+                        <td>{{ question.name }}</td>
+                        <td>{{ question.Ans_a }}</td>
+                        <td>{{ question.Ans_b }}</td>
+                        <td>{{ question.Ans_c }}</td>
+                        <td>{{ question.Ans_d }}</td>
+                        <td>{{ question.correct }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <h3>Chọn bài học để lưu:</h3>
+            <select name="bai" required>
+              <option value="" disabled selected>Chọn bài học</option>
+              {% for bai in all_bai %}
+                <option value="{{ bai.id }}">{{ bai.name }}</option>
+              {% endfor %}
+            </select>
+            <br><br>
+            <button type="submit" name="save_questions">Lưu câu hỏi</button>
+          </form>
         </table>
-        <hr>
-        <h3>Chọn bài học để lưu:</h3>
-        <select name="bai" required>
-          <option value="" disabled selected>Chọn bài học</option>
-          {% for bai in all_bai %}
-            <option value="{{ bai.id }}">{{ bai.name }}</option>
-          {% endfor %}
-        </select>
-        <br><br>
-        <button type="submit" name="save_questions">Lưu câu hỏi</button>
-      </form>
-      
-    
+    </form>
 </body>
 </html>

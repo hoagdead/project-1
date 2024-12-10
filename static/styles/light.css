@@ -469,9 +469,44 @@ a{
     padding-right: 5px;
     border-radius: 8px;
 }
+.admin_test {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    width: 300px;
+    margin: 0 auto;
 
+}
 
+.admin_test h3 {
+    font-size: 20px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
 
+.admin_test a {
+    display: block;
+    padding: 10px;
+    margin: 8px 0;
+    text-decoration: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.admin_test a:hover {
+    background-color: #0056b3;
+    color: #fff;
+}
+
+.admin_test a:active {
+    background-color: #003d80;
+}
 /* Giao diện điện thoại */
 @media only screen and (max-width: 1400px) {
     body {
