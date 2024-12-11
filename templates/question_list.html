@@ -54,7 +54,7 @@
                 <fieldset>
                     <h2>Phần 2: Hãy chọn đúng/sai</h2>
                         <!-- Loại câu hỏi Type 3 -->
-                        <h3>Loại câu hỏi (Type 3)</h3>
+                        <h3>Phần chung</h3>
                         <ul>
                             {% for question in type2|slice:":2" %}
                             <div class="question" id="question_{{ forloop.counter|add:24 }}">
@@ -85,7 +85,7 @@
                         </ul>
 
                         <!-- Loại câu hỏi Type 4 -->
-                        <h3>Loại câu hỏi (Type 4)</h3>
+                        <h3>Phần riêng cho cs</h3>
                         <ul>
                             {% for question in type2|slice:"2:4" %}
                             <div class="question" id="question_{{ forloop.counter|add:26 }}">
@@ -116,7 +116,7 @@
                         </ul>
 
                         <!-- Loại câu hỏi Type 5 -->
-                        <h3>Loại câu hỏi (Type 5)</h3>
+                        <h3>phần riêng cho ICT</h3>
                         <ul>
                             {% for question in type2|slice:"4:6" %}
                             <div class="question" id="question_{{ forloop.counter|add:28 }}">
