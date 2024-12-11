@@ -507,6 +507,20 @@ a{
 .admin_test a:active {
     background-color: #003d80;
 }
+.correct {
+    color: green;
+    font-weight: bold;
+}
+
+.incorrect {
+    color: red;
+    font-weight: bold;
+}
+
+.unanswered {
+    color: gray;
+    font-weight: bold;
+}
 /* Giao diện điện thoại */
 @media only screen and (max-width: 1400px) {
     body {

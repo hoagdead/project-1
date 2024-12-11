@@ -176,12 +176,8 @@ def createquestion(request):
     context={'form':form}
     return render(request,'base/question_form.html',context)        
 
-
-def question_type1(sl):
-    so_luong_cau_hoi_1 = sl
+def question_type1():
     cau_hoi_nhieu_dap_an = list(Question.objects.filter(type=1))
-    if len(cau_hoi_nhieu_dap_an) > so_luong_cau_hoi_1:
-        cau_hoi_nhieu_dap_an = random.sample(cau_hoi_nhieu_dap_an, so_luong_cau_hoi_1)
     trao_doi_cau_hoi = []
     for question in cau_hoi_nhieu_dap_an:
         answers = [
@@ -190,105 +186,119 @@ def question_type1(sl):
             ('C', question.Ans_c),
             ('D', question.Ans_d)
         ]
-        #random.shuffle(answers)  # Xáo trộn thứ tự các đáp án
         trao_doi_cau_hoi.append({
-            'type': 'multiple_choice',  # Đánh dấu loại câu hỏi
+            'type': 'multiple_choice',
             'name': question.name,
             'answers': answers,
             'id': question.id,
-            'correct_answer': question.Corect_ans 
+            'correct_answer': f"Ans_{question.Corect_ans[-1].lower()}"
         })
     return trao_doi_cau_hoi
 
-def question_type2(sl):
-    so_luong_cau_hoi_2 = sl
-
-    # Lấy ngẫu nhiên một số câu hỏi từ model Question2 (loại đúng/sai)
-    cau_hoi_dung_sai = list(Question2.objects.filter(type=2))
-    if len(cau_hoi_dung_sai) > so_luong_cau_hoi_2:
-        cau_hoi_dung_sai = random.sample(cau_hoi_dung_sai, so_luong_cau_hoi_2)
-
+def question_type2():
+    cau_hoi_dung_sai = list(Question2.objects.filter(type__in=[2, 3, 4, 5]))  # Lọc các loại đúng/sai
     trao_doi_cau_hoi = []
-
-    # Xáo trộn đáp án cho câu hỏi loại đúng/sai
     for question in cau_hoi_dung_sai:
         answers = [
-            ('A', question.Ans_a, question.Corect_ans_a),
-            ('B', question.Ans_b, question.Corect_ans_b),
-            ('C', question.Ans_c, question.Corect_ans_c),
-            ('D', question.Ans_d, question.Corect_ans_d)
+            {'label': 'A', 'text': question.Ans_a, 'correct': question.Corect_ans_a},
+            {'label': 'B', 'text': question.Ans_b, 'correct': question.Corect_ans_b},
+            {'label': 'C', 'text': question.Ans_c, 'correct': question.Corect_ans_c},
+            {'label': 'D', 'text': question.Ans_d, 'correct': question.Corect_ans_d},
         ]
-        random.shuffle(answers)  # Xáo trộn thứ tự các đáp án
-        
-        # Tạo danh sách các đáp án đúng
-        correct_answers = {
-            f"correct_answer_{ans[0].lower()}": ans[2] for ans in answers
-        }
-
         trao_doi_cau_hoi.append({
             'type': 'true_false',
             'name': question.name,
-            'answers': [
-                {'label': ans[0], 'text': ans[1]} for ans in answers
-            ],
             'id': question.id,
-            **correct_answers,  # Gộp các đáp án đúng vào dictionary
+            'answers': answers,
         })
-
     return trao_doi_cau_hoi
-def question_and_submit(request, de_id):
-    # Khởi tạo dữ liệu câu hỏi
-    tong_cau_hoi = 26
-    cau_hoi_loai_1 = 24
-    cau_hoi_loai_2 = tong_cau_hoi - cau_hoi_loai_1
-    type1_questions = question_type1(cau_hoi_loai_1)  # Lấy câu hỏi loại 1
-    type2_questions = question_type2(cau_hoi_loai_2)  # Lấy câu hỏi loại 2
 
+
+import random
+def question_and_submit(request, de_id):
     if request.method == 'POST':
+        user_answers = json.loads(request.POST.get('userAnswers', '{}'))
         total_score = 0
+        review_data = []
+
+        # Lấy danh sách câu hỏi
+        type1_questions = question_type1()  # Lấy câu hỏi loại 1
+        type2_questions = question_type2()  # Lấy câu hỏi đúng/sai
+
+        # Random và giới hạn số lượng câu hỏi
+        random.shuffle(type1_questions)
+        random.shuffle(type2_questions)
+
+        type1_questions = type1_questions[:24]  # 24 câu loại 1
+        type2_questions = type2_questions[:6]  # 6 câu đúng/sai (2 câu mỗi loại)
 
         # Xử lý câu hỏi loại 1
         for question in type1_questions:
-            selected_answer = request.POST.get(f'answer_{question["id"]}')
-            selected_answer = f"Ans_{selected_answer.lower()}" if selected_answer else None
-            if selected_answer and selected_answer == question['correct_answer']:
-                total_score += 1  # Mỗi câu loại 1 đúng được 1 điểm
+            question_id = str(question['id'])
+            selected_answer = user_answers.get(question_id)
+            is_correct = selected_answer == question['correct_answer']
+            if is_correct:
+                total_score += 1
+            review_data.append({
+                'type': 'multiple_choice',
+                'id': question['id'],
+                'name': question['name'],
+                'selected_answer': selected_answer,
+                'correct_answer': question['correct_answer'],
+                'is_correct': is_correct,
+                'answers': question['answers'],
+            })
 
-        # Xử lý câu hỏi loại 2
+        # Xử lý câu hỏi đúng/sai
         for question in type2_questions:
+            question_id = str(question['id'])
+            answer_states = []
             correct_count = 0
-            for ans_key in ['A', 'B', 'C', 'D']:
-                selected_answer = request.POST.get(f'answer_{ans_key}_{question["id"]}')
-                correct_ans = question[f'correct_answer_{ans_key.lower()}'] if selected_answer else None
-                if selected_answer == correct_ans:
+
+            for answer in question['answers']:
+                selected_answer = user_answers.get(f'{question_id}_{answer["label"]}')
+                is_correct = selected_answer == str(answer['correct'])
+                answer_states.append({
+                    'label': answer['label'],
+                    'text': answer['text'],
+                    'selected_answer': selected_answer,
+                    'correct_answer': str(answer['correct']),
+                    'is_correct': is_correct,
+                })
+                if is_correct:
                     correct_count += 1
 
-            # Tính điểm dựa trên số đáp án đúng
-            if correct_count == 1:
-                total_score += 0.1
-            elif correct_count == 2:
-                total_score += 0.2
-            elif correct_count == 3:
-                total_score += 0.5
-            elif correct_count == 4:
-                total_score += 1
+            # Điểm cho câu đúng/sai
+            total_score += correct_count * 0.25
+            review_data.append({
+                'type': 'true_false',
+                'id': question['id'],
+                'name': question['name'],
+                'answers': answer_states,
+            })
 
-        # Đảm bảo điểm không vượt quá 10
         total_score = min(total_score, 10)
 
-        # Render trang kết quả
         return render(request, 'base/submit_answer.html', {
             'score': total_score,
-            'total_questions': len(type1_questions) + len(type2_questions),
+            'review_data': review_data,
         })
 
-    # Render trang câu hỏi
+    # Nếu GET, hiển thị danh sách câu hỏi
+    type1_questions = question_type1()
+    type2_questions = question_type2()
+
+    random.shuffle(type1_questions)
+    random.shuffle(type2_questions)
+
+    type1_questions = type1_questions[:24]
+    type2_questions = type2_questions[:6]  # 6 câu đúng/sai (2 câu mỗi loại)
+
     return render(request, 'question_list.html', {
         'type1': type1_questions,
         'type2': type2_questions,
         'de': de_id,
     })
-
 
 
 def upload_file(request):
@@ -513,7 +523,7 @@ def submit_luyentap(request, bai_id):
             selected_answer = "Ans_" + selected_answer.lower() if selected_answer else None
             if selected_answer and selected_answer == question['correct_answer']:
                 score += 1.25 
-        return render(request, 'base/submit_answer.html', {
+        return render(request, 'base/submit_answer2.html', {
             'score': score,
             'total_questions': total_questions,
         })

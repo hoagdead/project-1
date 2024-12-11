@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thi thử đề {{de}}</title>
+    <title>Thi thử đề {{ de }}</title>
     {% load static %}
     {% if request.session.theme == 'dark' %}
     <link rel="stylesheet" href="{% static 'styles/q_dark.css' %}">
@@ -22,12 +22,12 @@
     <!-- Phần chính -->
     <div class="middle_section">
         <div class="all_questions">
-            <form id="questionForm" method="POST" action="{% url 'submit_answer' de%}">
+            <form id="questionForm" method="POST" action="{% url 'submit_answer' de %}">
                 {% csrf_token %}
-                
+
                 <!-- Câu hỏi loại 1 -->
                 <fieldset>
-                    <h2>Hãy chọn đáp án đúng</h2>
+                    <h2>Phần 1: Hãy chọn đáp án đúng</h2>
                     <ul>
                         {% for question in type1 %}
                         <div class="question" id="question_{{ forloop.counter }}">
@@ -36,7 +36,9 @@
                                 <ul>
                                     {% for answer in question.answers %}
                                     <li class="option-container">
-                                        <input type="radio" name="answer_{{ question.id }}" value="{{ answer.0 }}" id="option_{{ question.id }}_{{ answer.0 }}" class="hidden-radio">
+                                        <input type="radio" name="answer_{{ question.id }}" value="{{ answer.0 }}" 
+                                            id="option_{{ question.id }}_{{ answer.0 }}" class="hidden-radio" 
+                                            onclick="saveAnswer('{{ question.id }}', '{{ answer.0 }}')">
                                         <label for="option_{{ question.id }}_{{ answer.0 }}" class="radio-circle">{{ answer.0 }}</label>
                                         <span class="radio-label">{{ answer.1 }}</span>
                                     </li>
@@ -47,38 +49,105 @@
                         {% endfor %}
                     </ul>
                 </fieldset>
-            
+
                 <!-- Câu hỏi loại 2 -->
                 <fieldset>
-                    <h2>Hãy chọn đúng/sai cho mỗi đáp án</h2>
-                    <ul>
-                        {% for question in type2 %}
-                        <div class="question" id="question_{{ forloop.counter|add:24 }}">
-                            <li>
-                                <strong>Câu {{ forloop.counter }}: {{ question.name }}</strong><br>
-                                <ul class="answers-container">
-                                    {% for answer in question.answers %}
-                                    <li class="option-container-tf">
-                                        <span class="radio-label"><strong>{{ answer.label }}.</strong> {{ answer.text }}</span>
-                                        <div class="radio-group">
-                                            <label class="radio-option">
-                                                <input type="radio" name="answer_{{ answer.label }}_{{ question.id }}" value="True" class="hidden-radio">
-                                                <span class="radio-circle">Đ</span>
-                                            </label>
-                                            <label class="radio-option">
-                                                <input type="radio" name="answer_{{ answer.label }}_{{ question.id }}" value="False" class="hidden-radio">
-                                                <span class="radio-circle">S</span>
-                                            </label>
-                                        </div>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        </div>
-                        {% endfor %}
-                    </ul>
+                    <h2>Phần 2: Hãy chọn đúng/sai</h2>
+                        <!-- Loại câu hỏi Type 3 -->
+                        <h3>Loại câu hỏi (Type 3)</h3>
+                        <ul>
+                            {% for question in type2|slice:":2" %}
+                            <div class="question" id="question_{{ forloop.counter|add:24 }}">
+                                <li>
+                                    <strong>Câu {{ forloop.counter }}: {{ question.name }}</strong><br>
+                                    <ul class="answers-container">
+                                        {% for answer in question.answers %}
+                                        <li class="option-container-tf">
+                                            <span class="radio-label"><strong>{{ answer.label }}.</strong> {{ answer.text }}</span>
+                                            <div class="radio-group">
+                                                <label class="radio-option">
+                                                    <input type="radio" name="answer_{{ question.id }}_{{ answer.label }}" value="True" class="hidden-radio" 
+                                                        onclick="saveAnswer('{{ question.id }}_{{ answer.label }}', 'True')">
+                                                    <span class="radio-circle">Đ</span>
+                                                </label>
+                                                <label class="radio-option">
+                                                    <input type="radio" name="answer_{{ question.id }}_{{ answer.label }}" value="False" class="hidden-radio" 
+                                                        onclick="saveAnswer('{{ question.id }}_{{ answer.label }}', 'False')">
+                                                    <span class="radio-circle">S</span>
+                                                </label>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            </div>
+                            {% endfor %}
+                        </ul>
+
+                        <!-- Loại câu hỏi Type 4 -->
+                        <h3>Loại câu hỏi (Type 4)</h3>
+                        <ul>
+                            {% for question in type2|slice:"2:4" %}
+                            <div class="question" id="question_{{ forloop.counter|add:26 }}">
+                                <li>
+                                    <strong>Câu {{ forloop.counter|add:2 }}: {{ question.name }}</strong><br>
+                                    <ul class="answers-container">
+                                        {% for answer in question.answers %}
+                                        <li class="option-container-tf">
+                                            <span class="radio-label"><strong>{{ answer.label }}.</strong> {{ answer.text }}</span>
+                                            <div class="radio-group">
+                                                <label class="radio-option">
+                                                    <input type="radio" name="answer_{{ question.id }}_{{ answer.label }}" value="True" class="hidden-radio" 
+                                                        onclick="saveAnswer('{{ question.id }}_{{ answer.label }}', 'True')">
+                                                    <span class="radio-circle">Đ</span>
+                                                </label>
+                                                <label class="radio-option">
+                                                    <input type="radio" name="answer_{{ question.id }}_{{ answer.label }}" value="False" class="hidden-radio" 
+                                                        onclick="saveAnswer('{{ question.id }}_{{ answer.label }}', 'False')">
+                                                    <span class="radio-circle">S</span>
+                                                </label>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            </div>
+                            {% endfor %}
+                        </ul>
+
+                        <!-- Loại câu hỏi Type 5 -->
+                        <h3>Loại câu hỏi (Type 5)</h3>
+                        <ul>
+                            {% for question in type2|slice:"4:6" %}
+                            <div class="question" id="question_{{ forloop.counter|add:28 }}">
+                                <li>
+                                    <strong>Câu {{ forloop.counter|add:4 }}: {{ question.name }}</strong><br>
+                                    <ul class="answers-container">
+                                        {% for answer in question.answers %}
+                                        <li class="option-container-tf">
+                                            <span class="radio-label"><strong>{{ answer.label }}.</strong> {{ answer.text }}</span>
+                                            <div class="radio-group">
+                                                <label class="radio-option">
+                                                    <input type="radio" name="answer_{{ question.id }}_{{ answer.label }}" value="True" class="hidden-radio" 
+                                                        onclick="saveAnswer('{{ question.id }}_{{ answer.label }}', 'True')">
+                                                    <span class="radio-circle">Đ</span>
+                                                </label>
+                                                <label class="radio-option">
+                                                    <input type="radio" name="answer_{{ question.id }}_{{ answer.label }}" value="False" class="hidden-radio" 
+                                                        onclick="saveAnswer('{{ question.id }}_{{ answer.label }}', 'False')">
+                                                    <span class="radio-circle">S</span>
+                                                </label>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            </div>
+                            {% endfor %}
+                        </ul>
+
                 </fieldset>
-            
+
                 <button type="submit">Nộp bài</button>
             </form>
         </div>
@@ -103,87 +172,118 @@
             <button id="submitSidebarButton" class="smb">Nộp bài</button>
         </div>
     </div>
-
-    <!-- Modal cảnh báo -->
-    <div id="warningModal" class="hidden">
-        <div class="modal-content">
-            <h3>Bạn chưa trả lời hết các câu hỏi!</h3>
-            <p>Các câu chưa làm:</p>
-            <ul id="unansweredList"></ul>
-            <div class="modal-actions">
-                <button id="backToQuestionsButton">Quay lại làm bài</button>
-                <button id="confirmSubmitButton">Nộp bài</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- JavaScript -->
-    <script>
-        // Cuộn mượt đến câu hỏi
-        function scrollToQuestion(event, questionId) {
-            event.preventDefault();
-            const target = document.getElementById(questionId);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // Đồng hồ đếm ngược
-        let totalSeconds = 50 * 60;
-        const timerElement = document.getElementById('timer');
-        function updateTimer() {
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
-            timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            if (totalSeconds > 0) {
-                totalSeconds--;
-            } else {
-                alert("Hết giờ! Bài thi của bạn sẽ được nộp tự động.");
-                document.getElementById('questionForm').submit();
-            }
-        }
-        setInterval(updateTimer, 1000);
-
-        // Lấy danh sách câu hỏi chưa trả lời
-        function getUnansweredQuestions() {
-            const unanswered = [];
-            document.querySelectorAll('.question').forEach((question) => {
-                const id = question.id.split('_')[1];
-                const answered = document.querySelector(`input[name="answer_${id}"]:checked`);
-                if (!answered) unanswered.push(id);
-            });
-            return unanswered;
-        }
-
-        // Hiển thị modal cảnh báo
-        function showModal(unanswered) {
-            const modal = document.getElementById('warningModal');
-            const unansweredList = document.getElementById('unansweredList');
-            unansweredList.innerHTML = unanswered.map(id => `<li>Câu ${id}</li>`).join('');
-            modal.classList.remove('hidden');
-        }
-
-        // Nộp bài khi nhấn nút submit
-        function handleSubmit() {
-            const unanswered = getUnansweredQuestions();
-            if (unanswered.length > 0) {
-                showModal(unanswered);
-            } else {
-                document.getElementById('questionForm').submit();
-            }
-        }
-
-        // Gắn sự kiện cho các nút
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('submitButton').addEventListener('click', handleSubmit);
-            document.getElementById('submitSidebarButton').addEventListener('click', handleSubmit);
-            document.getElementById('backToQuestionsButton').addEventListener('click', () => {
-                document.getElementById('warningModal').classList.add('hidden');
-            });
-            document.getElementById('confirmSubmitButton').addEventListener('click', () => {
-                document.getElementById('questionForm').submit();
-            });
-        });
-    </script>
 </body>
+<script>
+    function saveAnswer(questionId, answer) {
+        // Lấy dữ liệu từ Local Storage
+        let userAnswers = JSON.parse(localStorage.getItem('userAnswers')) || {};
+        // Lưu đáp án đã chọn
+        userAnswers[questionId] = answer;
+        // Cập nhật Local Storage
+        localStorage.setItem('userAnswers', JSON.stringify(userAnswers));
+    }
+
+    function submitAnswers() {
+        // Gửi dữ liệu từ Local Storage đến server
+        const userAnswers = JSON.parse(localStorage.getItem('userAnswers')) || {};
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "{% url 'submit_answer' de %}";
+        form.style.display = 'none';
+
+        const csrfToken = '{{ csrf_token }}';
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = 'csrfmiddlewaretoken';
+        csrfInput.value = csrfToken;
+        form.appendChild(csrfInput);
+
+        const answersInput = document.createElement('input');
+        answersInput.type = 'hidden';
+        answersInput.name = 'userAnswers';
+        answersInput.value = JSON.stringify(userAnswers);
+        form.appendChild(answersInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+    
+    // Cuộn mượt đến câu hỏi
+    function scrollToQuestion(event, questionId) {
+        event.preventDefault();
+        const target = document.getElementById(questionId);
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    // Đồng hồ đếm ngược
+    let totalSeconds = 50 * 60;
+    const timerElement = document.getElementById('timer');
+    function updateTimer() {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        timerElement.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        if (totalSeconds > 0) {
+            totalSeconds--;
+            localStorage.setItem('remainingTime', totalSeconds);
+        } else {
+            alert("Hết giờ! Bài thi của bạn sẽ được nộp tự động.");
+            document.getElementById('questionForm').submit();
+        }
+    }
+    setInterval(updateTimer, 1000);
+
+    // Lấy danh sách câu hỏi chưa trả lời
+    function getUnansweredQuestions() {
+        const unanswered = [];
+        document.querySelectorAll('.question').forEach((question) => {
+            const id = question.id.split('_')[1];
+            const answered = document.querySelector(`input[name="answer_${id}"]:checked`);
+            if (!answered) unanswered.push(id);
+        });
+        return unanswered;
+    }
+
+    // Hiển thị modal cảnh báo
+    function showModal(unanswered) {
+        const modal = document.getElementById('warningModal');
+        const unansweredList = document.getElementById('unansweredList');
+        unansweredList.innerHTML = unanswered.map(id => `<li>Câu ${id}</li>`).join('');
+        modal.classList.remove('hidden');
+    }
+
+    // Nộp bài khi nhấn nút submit
+    function handleSubmit() {
+        const unanswered = getUnansweredQuestions();
+        if (unanswered.length > 0) {
+            showModal(unanswered);
+        } else {
+            submitAnswers();
+        }
+    }
+
+    // Gắn sự kiện cho các nút
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedTime = localStorage.getItem('remainingTime');
+        if (savedTime) {
+            totalSeconds = parseInt(savedTime, 10);
+        }
+
+        const userAnswers = JSON.parse(localStorage.getItem('userAnswers')) || {};
+        for (const [key, value] of Object.entries(userAnswers)) {
+            const input = document.querySelector(`input[name="answer_${key}"][value="${value}"]`);
+            if (input) {
+                input.checked = true;
+            }
+        }
+
+        document.getElementById('submitButton').addEventListener('click', handleSubmit);
+        document.getElementById('submitSidebarButton').addEventListener('click', handleSubmit);
+        document.getElementById('backToQuestionsButton').addEventListener('click', () => {
+            document.getElementById('warningModal').classList.add('hidden');
+        });
+        document.getElementById('confirmSubmitButton').addEventListener('click', submitAnswers);
+    });
+</script>
 </html>

@@ -84,6 +84,52 @@
 .nd {
     padding: 10px;  
 }
+.nd table {
+    width: 100%; /* Làm cho bảng chiếm toàn bộ chiều rộng của phần chứa */
+    border-collapse: collapse; /* Gộp viền bảng */
+    margin: 10px 0 30px 30px; /* Tạo khoảng cách trên và dưới bảng */
+    font-size: 18px; /* Cỡ chữ bảng */
+}
+
+.nd table th, .nd table td {
+    padding: 12px 20px; /* Tăng khoảng cách ngang giữa nội dung trong ô */
+    border: 1px solid #ddd; /* Đường viền để dễ phân biệt */
+    text-align: left; /* Căn chỉnh nội dung theo bên trái */
+}
+
+.nd table {
+    border-collapse: collapse; /* Gộp viền để đẹp hơn */
+    width: 100%; /* Đảm bảo bảng sử dụng toàn bộ chiều rộng */
+    margin-bottom: 20px; /* Tạo khoảng cách dưới bảng */
+}
+
+.nd table tr {
+    border-spacing: 0; /* Đảm bảo không có khoảng cách giữa các dòng */
+}
+
+
+.nd table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Màu nền xen kẽ cho các dòng */
+}
+
+.nd table tr:hover {
+    background-color: #f1f1f1; /* Hiệu ứng khi di chuột vào dòng */
+}
+.correct {
+    color: green;
+    font-weight: bold;
+}
+
+.incorrect {
+    color: red;
+    font-weight: bold;
+}
+
+.unanswered {
+    color: gray;
+    font-weight: bold;
+}
+
 
 @media (max-width:  1400px) {
     .midlle_section_1 {

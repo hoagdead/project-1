@@ -73,7 +73,7 @@ class Question(models.Model):
         ('D', 'Answer D'),
     ]
     Corect_ans = models.CharField(max_length=1, choices=SELECTION_CHOICES, default=None)
-    type = models.IntegerField(default=1,editable=False)
+    type = models.IntegerField(default=1,editable=True)
     
     def __str__(self):
         return self.name[:50] + "..." 
@@ -95,7 +95,7 @@ class Question2(models.Model):
     Corect_ans_c = models.CharField(max_length=5, choices=SELECTION_CHOICES, default=None)
     Corect_ans_d = models.CharField(max_length=5, choices=SELECTION_CHOICES, default=None)
 
-    type = models.IntegerField(default=2,editable=False)
+    type = models.IntegerField(default=2,editable=True)
     def __str__(self):
         return self.name[:50] + "..." 
 

@@ -9,12 +9,12 @@
     <h3>Chủ Đề</h3>
     <hr>
     <div class="topic_all">
-        <a href="{%url 'home'%}">Tất Cả</a>
+        <a href="{%url 'forum'%}">Tất Cả</a>
     </div>
     <div class="topic_display">
         {%for topic in topics%}
             <div class="topic_name">
-                <a href="{%url 'home'%}?q={{topic.name}}">{{topic.name}}</a>   
+                <a href="{%url 'forum'%}?q={{topic.name}}">{{topic.name}}</a>   
                 <div class="topic_rc">
                     <p>{{topic.room_count}}</p>
                 </div>
