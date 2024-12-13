@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path, include
+from django.views.generic import TemplateView
 #path('tên trang/', view.tên của trang trong views, name = "tên ngắn gọn của trang")
 urlpatterns = [
     #url cho trang login/logout/register 
@@ -23,6 +25,8 @@ urlpatterns = [
     path('profile/<str:pk>', views.userprofile, name="profile"),
     path('create-question/', views.createquestion, name="create-question"),
     path('change-mode', views.change_mode, name="change-mode"),
+    path('personal-space/', TemplateView.as_view(template_name='base/dashboard.html'), name='personal-space'),
+    path('api/', include('base.api.urls')), 
     
 
     path('uploadbaihoc', views.upload_file, name='upload_bai_hoc'),

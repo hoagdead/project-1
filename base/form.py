@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Room, Question, UploadedFile
+from .models import Room, Question, UploadedFile, User
 
 class UploadFileForm(forms.Form):
     file = forms.FileField(
@@ -29,13 +29,10 @@ class RoomForm(ModelForm):
     class Meta:
         model = Room
         fields = '__all__'
+        exclude = ['host', 'participants']
         labels = {
             'name': 'Room Name',
             'description': 'Room Description',
-        }
-        help_texts = {
-            'name': 'Enter the name of the room.',
-            'description': 'Provide a brief description of the room.',
         }
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter room description here'}),
@@ -50,3 +47,9 @@ class QuestionForm(ModelForm):
     class Meta:
         model = Question
         fields=['name','Ans_a','Ans_b','Ans_c','Ans_d','Corect_ans']
+
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name'] 

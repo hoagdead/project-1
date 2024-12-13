@@ -35,11 +35,11 @@
         <div class="user-info">
             <img src="{% static 'images/useravt/profile.jpg' %}" alt="Profile Picture" class="profile-pic" id="dropdown-trigger">
             <div class="username">
-            <p><strong>Yoshino Hoang</strong></p>
-            <p>@Yoshinohoang</p>
+            <p><strong>{{ request.user.username }}</strong></p>
+            <p>@{{ request.user.username }}g</p>
             </div>
             <div class="dropdown-content" id="dropdown-menu">
-                <a href="#">Trang cá nhân</a>
+                <a href="{%url 'profile' user.id%}">Trang cá nhân</a>
                 <p>Current Theme: {{ request.session.theme }}</p>
                 <div>
                     <label class="theme-toggle">

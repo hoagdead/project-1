@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from .models import Room, Topic, Message,Question,Question2,bai_hoc
-from .form import RoomForm,QuestionForm,UploadFileForm
+from .form import RoomForm,QuestionForm,UploadFileForm,UserForm
 import random
 import os
 from docx import Document 
@@ -20,6 +20,10 @@ from .form import UploadQuestionForm
 from .utils import process_question_file, save_questions_to_db
 from django.utils.html import escape
 from docx.oxml.ns import qn
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
+from .models import Workspace
 '''
     ở đây sẽ dùng để xử lý request của người dùng
     một views mẫu:
@@ -32,7 +36,10 @@ from docx.oxml.ns import qn
             return redirect('url của trang muốn chuyển về') sử dụng để chuyển người dùng về một trang khác sẵn có
 '''
 
-
+@receiver(post_save, sender=User)
+def create_workspace(sender, instance, created, **kwargs):
+    if created:
+        Workspace.objects.create(user=instance)
 def Loginpage(request):
     page = 'login'
     if request.method == 'POST':
@@ -142,11 +149,6 @@ def deleteMessage(request,pk):
         return redirect('home')
     return render(request,'base/delete.html', {'obj':message})
 
-def userprofile(request,pk):
-    user= User.objects.get(id=pk)
-    rooms = user.room_set.all()
-    context={'user':user,'rooms':rooms}
-    return render(request,'profile.html',context)
 
 
 @csrf_exempt
@@ -160,9 +162,7 @@ def change_mode(request):
         return JsonResponse({"status": "invalid theme"}, status=400)
     return JsonResponse({"status": "invalid request"}, status=405)
 
-@login_required(login_url=('login'))
-def updateprofile(request):
-    return render(request)
+
 
 def createquestion(request):
     form = QuestionForm()
@@ -536,3 +536,13 @@ def trang_chu(request):
     on_tap = bai_hoc.objects.all()[:10]
     context={'on_tap':on_tap}
     return render(request, 'base/trang_chu.html' ,context)
+
+def userprofile(request,pk):
+    user= User.objects.get(id=pk)
+    rooms = user.room_set.all()
+    form = UserForm(instance=request.user)
+    context={'user':user,'rooms':rooms, 'form':form}
+    return render(request,'profile.html',context)
+
+
+#test

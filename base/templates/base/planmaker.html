@@ -1,0 +1,27 @@
+{% extends 'base/dashboard.html' %}
+
+{% block title %}Thêm kế hoạch{% endblock %}
+
+{% block content %}
+<h1>Thêm kế hoạch mới</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="tieu_de" class="form-label">Tiêu đề:</label>
+        <input type="text" class="form-control" id="tieu_de" name="tieu_de" required>
+    </div>
+    <div class="mb-3">
+        <label for="mo_ta" class="form-label">Mô tả:</label>
+        <textarea class="form-control" id="mo_ta" name="mo_ta"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="ngay_bat_dau" class="form-label">Ngày bắt đầu:</label>
+        <input type="datetime-local" class="form-control" id="ngay_bat_dau" name="ngay_bat_dau" required>
+    </div>
+    <div class="mb-3">
+        <label for="ngay_ket_thuc" class="form-label">Ngày kết thúc:</label>
+        <input type="datetime-local" class="form-control" id="ngay_ket_thuc" name="ngay_ket_thuc" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu kế hoạch</button>
+</form>
+{% endblock %}

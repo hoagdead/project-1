@@ -99,11 +99,25 @@ class Question2(models.Model):
     def __str__(self):
         return self.name[:50] + "..." 
 
+class Workspace(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="workspace")
+    name = models.CharField(max_length=100, default="My Personal Space")
 
-    
-
-
-
+class Block(models.Model):
+    BLOCK_TYPES = [
+        ('note', 'Note'),
+        ('image', 'Image'),
+        ('todolist', 'ToDoList'),
+    ]
+    workspace = models.ForeignKey(
+        Workspace,
+        on_delete=models.CASCADE,
+        related_name="blocks",
+        default=1  # ID của Workspace mặc định
+    )
+    type = models.CharField(max_length=20, choices=BLOCK_TYPES)
+    content = models.TextField(blank=True, null=True)
+    order = models.PositiveIntegerField(default=0)
 """
     testing
 """
