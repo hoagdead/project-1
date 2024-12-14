@@ -381,9 +381,11 @@ a{
 }
 
 .exam-container{
+    display: flex;
+    gap: 70px;
     background-color: #FFFF;
     margin: 20px;
-    padding: 30px;
+    padding: 30px 30px 30px 70px;
     border-radius: 30px;
 }
 .de{

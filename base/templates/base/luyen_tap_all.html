@@ -15,11 +15,11 @@
 <body>
     {% include 'navbar.html' %}
     <div class="midlle_section">
-        <h3>Luyện tập theo chủ đề</h3>
+        <h3>Luyện tập trắc nghiệm theo chủ đề</h3>
         <br>
         {%for bai in al%}
         <div class="bai">
-        <a href="{%url 'luyen_tap' bai.id%}">ÔN TẬP {{bai.name}}</a>
+        <a href="{%url 'luyen_tap' bai.id%}">LUYỆN TẬP {{bai.name}}</a>
         </div>
         {%endfor%}
     </div>

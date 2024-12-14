@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Room, Question, UploadedFile, User
+from .models import Room, Question, UploadedFile, User,UserProfile
 
 class UploadFileForm(forms.Form):
     file = forms.FileField(
@@ -52,4 +52,9 @@ class QuestionForm(ModelForm):
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name'] 
+        fields = ['username', 'email', 'first_name', 'last_name']
+
+class UserProfileForm(ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['avatar','background', 'bio', 'preferences']

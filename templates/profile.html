@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>{{request.user}} Profile</title>
+        <title>{{ user.username }} - Profile</title>
         {% load static %}
         {% if request.session.theme == 'dark' %}
         <link rel="stylesheet" href="{% static 'styles/dark.css' %}">
@@ -13,68 +13,48 @@
         {% endif %}
     </head>
     <body>
-        {% include 'navbar.html' %} 
-        <div class='block-wraper'>
-            <div>
-                <div class="user-profile" >
-                    <div class="profile">
-                        <img src="{%static 'images/useravt/profile.jpg'%}" alt="" width="200px" class="avt">
-                    </div>
-                    <div class="background">
-                        <img src="{%static 'images/useravt/usbgr2.png'%}" alt="" height="350px" class="bgimg">
-                    </div>
-                    <div class="user_infor">
-                        <div class="uleft">
-                            <h4>{{ user.username }}</h4>
-                            <p>{{ user.email }}</p>
-                        </div>
-                        {%if request.user == user%}
-                        <button id="edit-btn"><i class="fa-solid fa-user-pen"></i></button>
-                        {%endif%}
-                    </div>
+        {% include 'navbar.html' %}
+
+        <div class="block-wrapper">
+            <div class="user-profile">
+                <div class="profile">
+                    <!-- Hiển thị avatar, fallback nếu avatar không tồn tại -->
+                    {% if user.userprofile.avatar %}
+                        <img src="{{ user.userprofile.avatar.url }}" alt="User Avatar" width="200px" class="avatar">
+                    {% else %}
+                        <img src="{% static 'images/default_avatar.png' %}" alt="Default Avatar" width="200px" class="avatar">
+                    {% endif %}
                 </div>
-                <div class="fcmn">
-                    {%include 'base/feed_composnent.html'%}
+
+                <div class="background">
+                    <!-- Hiển thị hình nền, fallback nếu background không tồn tại -->
+                    {% if user.userprofile.background %}
+                        <img src="{{ user.userprofile.background.url }}" alt="User Background" height="350px" class="bgimg">
+                    {% else %}
+                        <img src="{% static 'images/default_background.jpg' %}" alt="Default Background" height="350px" class="bgimg">
+                    {% endif %}
+                </div>
+
+                <div class="user_info">
+                    <div class="uleft">
+                        <h4>{{ user.username }}</h4>
+                        <p>{{ user.email }}</p>
+                        <p>{{ user.userprofile.bio|default_if_none:"No bio available." }}</p>
+                    </div>
+
+                    <!-- Hiển thị nút chỉnh sửa nếu là chủ tài khoản -->
+                    {% if request.user == user %}
+                    <p>con cac</p>
+                    {% endif %}
                 </div>
             </div>
+
+            <div class="fcmn">
+                {% include 'base/feed_composnent.html' %}
+            </div>
             <div>
-                {%include 'base/notification_bar.html'%}
+                {% include 'base/notification_bar.html' %}
             </div>
         </div>
-
-        <!-- Phần Edit Profile -->
-        <div class="edit-profile-overlay" id="edit-profile-overlay">
-            <div class="edit-profile-modal">
-                <h2>Edit Profile</h2>
-                <form action="#" method="POST">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" value="{{ request.user.username }}">
-                    
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" value="{{ request.user.email }}">
-
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password">
-
-                    <button type="submit">Save Changes</button>
-                    <button type="button" id="close-btn">Cancel</button>
-                </form>
-            </div>
-        </div>
-
-        <script>
-            // Mở và đóng phần chỉnh sửa hồ sơ
-            const editBtn = document.getElementById('edit-btn');
-            const closeBtn = document.getElementById('close-btn');
-            const overlay = document.getElementById('edit-profile-overlay');
-
-            editBtn.addEventListener('click', () => {
-                overlay.classList.add('active');
-            });
-
-            closeBtn.addEventListener('click', () => {
-                overlay.classList.remove('active');
-            });
-        </script>
     </body>
 </html>

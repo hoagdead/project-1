@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cập nhật hồ sơ</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+    </head>
+    <body>
+        {% include 'navbar.html' %}
+
+        <h2>Cập nhật hồ sơ</h2>
+        <form action="{% url 'update_profile' user.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Lưu thay đổi</button>
+            <a href="{% url 'profile' user.id %}">Quay lại</a>
+        </form>
+    </body>
+</html>

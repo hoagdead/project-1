@@ -1,0 +1,29 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h2>Lịch sử hoạt động của người dùng</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Người dùng</th>
+            <th>Đường dẫn</th>
+            <th>Loại Request</th>
+            <th>Địa chỉ IP</th>
+            <th>Trình duyệt</th>
+            <th>Thời gian</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for activity in activities %}
+        <tr>
+            <td>{{ activity.user.username }}</td>
+            <td>{{ activity.path }}</td>
+            <td>{{ activity.method }}</td>
+            <td>{{ activity.user_agent }}</td>
+            <td>{{ activity.timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

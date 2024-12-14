@@ -23,7 +23,7 @@
         </div>
         <div class="top_right">
             <div class="top1">
-                <p>Ôn tập</p>
+                <p>Ôn tập kiến thức</p>
             </div>
             <div class="mid1">
                 {%for bai in on_tap%}
@@ -39,7 +39,7 @@
     </div>
     <div class="middle1">
         <div class="middle_left">
-            <h4>Ôn tập với các bài thi thử</h4>
+            <h4> Luyện đề với các bài thi thử</h4>
             <div class="exam-container">
                 <div class="de">
                     <div class="top">
@@ -86,7 +86,7 @@
             </div>  
         </div>
             <div class="middle_right">
-                <h4>Ôn tập theo các chương</h4>
+                <h4>Luyện tập trắc nghiệm theo các chủ đề</h4>
                 {%for bai in on_tap%}
                 <div class="bai">
                     <a href="{%url 'luyen_tap' bai.id %}">Ôn tập {{bai.name|lower}}</a>
