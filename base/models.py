@@ -100,39 +100,12 @@ class Question2(models.Model):
         return self.name[:50] + "..." 
     
 
-<<<<<<< Updated upstream
-class UserActivity(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Người dùng thực hiện
-    path = models.CharField(max_length=500)  # Đường dẫn truy cập
-    method = models.CharField(max_length=10)  # Loại request: GET, POST, etc.
-    timestamp = models.DateTimeField(auto_now_add=True)  # Thời gian thực hiện
-    ip_address = models.GenericIPAddressField(null=True, blank=True)  # Địa chỉ IP
-    user_agent = models.TextField(null=True, blank=True)  # Thông tin trình duyệt
-
-    def __str__(self):
-        return f"{self.user.username} - {self.path} - {self.timestamp}"
-    
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(upload_to='images/avatars/', blank=True, null=True)
-    background = models.ImageField(upload_to='images/backgrounds/', blank=True, null=True)
-    bio = models.TextField(blank=True, null=True)
-    preferences = models.JSONField(default=dict, blank=True, null=True)  # Lưu trữ theme, cài đặt cá nhân
-    created_at = models.DateTimeField(auto_now_add=True,null=True)
-
-    def __str__(self):
-        return self.user.username
-class Workspace(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="workspace")
-    name = models.CharField(max_length=100, default="My Personal Space")
-=======
 class Cau_hoi1(models.Model):
     Noi_dung = models.TextField(max_length=1000, blank=True)
     A = models.TextField(max_length=1000, blank=True)
     B = models.TextField(max_length=1000, blank=True)
     C = models.TextField(max_length=1000, blank=True)
     D = models.TextField(max_length=1000, blank=True)
->>>>>>> Stashed changes
 
     DE_CHOICES = [
         ("1", "Đề 1"),
@@ -250,9 +223,6 @@ class UserActivity(models.Model):
 """
 class UploadedFile(models.Model):
     file = models.FileField(upload_to='uploads/')
-<<<<<<< Updated upstream
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-=======
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 class UserProfile(models.Model):
@@ -268,4 +238,3 @@ class UserProfile(models.Model):
     comment_progress =  models.IntegerField(blank=True,null=True)
 
    
->>>>>>> Stashed changes

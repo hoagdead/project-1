@@ -2,32 +2,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
-<<<<<<< Updated upstream
-from .models import Room, Topic, Message,Question,Question2,bai_hoc,UserProfile
-from .form import RoomForm,QuestionForm,UploadFileForm,UserForm,UserProfileForm
-import random
-import os
-from docx import Document 
-=======
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.db.models import Q, Count
 from django.db.models.functions import ExtractHour
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
->>>>>>> Stashed changes
 from django.core.files.storage import default_storage
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-<<<<<<< Updated upstream
-from django.contrib.auth.models import User
-from .models import Workspace
-from django.db.models import Avg, Count
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import render
-from .models import UserActivity
-=======
 
 from django.utils.html import escape
 from django.contrib.auth.forms import UserCreationForm
@@ -49,7 +33,6 @@ import os
 import json
 
 
->>>>>>> Stashed changes
 '''
     ở đây sẽ dùng để xử lý request của người dùng
     một views mẫu:
@@ -61,8 +44,6 @@ import json
             hoặc
             return redirect('url của trang muốn chuyển về') sử dụng để chuyển người dùng về một trang khác sẵn có
 '''
-<<<<<<< Updated upstream
-=======
 
 @staff_member_required
 def activiti_log(request):
@@ -107,19 +88,10 @@ def activiti_log(request):
 
 
 
->>>>>>> Stashed changes
 @staff_member_required  # Chỉ admin mới xem được
 def user_activity_log(request):
     activities = UserActivity.objects.all().order_by('-timestamp')[:100]  # Lấy 100 hoạt động gần nhất
     return render(request, 'base/user_activity_log.html', {'activities': activities})
-<<<<<<< Updated upstream
-@receiver(post_save, sender=User)
-def create_workspace(sender, instance, created, **kwargs):
-    if created:
-        Workspace.objects.create(user=instance)
-=======
-
->>>>>>> Stashed changes
 def Loginpage(request):
     page = 'login'
     if request.method == 'POST':
@@ -818,21 +790,6 @@ def trang_chu(request):
     context={'on_tap':on_tap}
     return render(request, 'base/trang_chu.html' ,context)
 
-<<<<<<< Updated upstream
-def userprofile(request, pk):
-    # Lấy người dùng dựa trên primary key (pk)
-    user = get_object_or_404(User, id=pk)
-    rooms = Room.objects.filter(host=user)
-    user_profile = UserProfile.objects.filter(user=user).first()
-    form = UserForm(instance=request.user) if request.user == user else None
-    context = {
-        'user': user,
-        'rooms': rooms,
-        'form': form,
-        'user_profile': user_profile,
-    }
-    return render(request, 'profile.html', context)
-=======
 def userProfile(request,pk):
     user= User.objects.get(id=pk)
     profile = UserProfile.objects.get(user=user)
@@ -840,31 +797,12 @@ def userProfile(request,pk):
     form = EditUser(instance=request.user)
     context={'user':user,'rooms':rooms, 'form':form,'profile':profile,'usid':pk}
     return render(request,'profile.html',context)
->>>>>>> Stashed changes
 
 @login_required
 def update_profile(request, pk):
     # Lấy user dựa trên pk
     user = get_object_or_404(User, id=pk)
 
-<<<<<<< Updated upstream
-    if request.user != user:
-        return HttpResponse("Bạn không có quyền cập nhật hồ sơ này.", status=403)
-
-    # Lấy hoặc tạo UserProfile
-    profile, created = UserProfile.objects.get_or_create(user=user)
-
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect('profile', pk=pk)  # Quay lại trang hồ sơ cá nhân
-    else:
-        form = UserProfileForm(instance=profile)
-
-    return render(request, 'base/update_profile.html', {'form': form, 'user': user})
-#test
-=======
 def editprofile(request,pk):
     user= User.objects.get(id=pk)
     form = EditUser(instance=request.user)
@@ -979,4 +917,3 @@ def previews(request):
         'questions2': questions2,
         'all_bai': all_bai,
     })
->>>>>>> Stashed changes

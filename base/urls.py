@@ -18,8 +18,6 @@ urlpatterns = [
     path('update-room/<str:pk>/', views.updateroom, name="update-room"),
     path('delete-room/<str:pk>/', views.deleteRoom, name="delete-room"),
     path('delete-message/<str:pk>/', views.deleteMessage, name="delete-message"),
-<<<<<<< Updated upstream
-=======
     
     #testing
     path('profile/<str:pk>', views.userProfile, name="profile"),
@@ -31,7 +29,6 @@ urlpatterns = [
     path('upload-docx/', views.upload_docx, name='upload-docx'),
     path('previews2/', views.previews, name='previews'),
     
->>>>>>> Stashed changes
 
     # Quản lý hồ sơ cá nhân
     path('profile/<str:pk>/', views.userprofile, name="profile"),
@@ -51,25 +48,6 @@ urlpatterns = [
 
     # Thi thử
     path('thi_thu/', views.thi_thu, name='thi_thu'),
-<<<<<<< Updated upstream
-    path('thi_thu/de/<int:de_id>/', views.question_and_submit, name='de_thi'),
-    path('thi_thu/de/submit/<int:de_id>/', views.question_and_submit, name='submit_answer'),
-
-    # Quản lý giao diện
-    path('change-mode/', views.change_mode, name="change-mode"),
-    path('set-theme/', views.set_theme, name='set_theme'),
-
-    # Quản lý không gian cá nhân
-    path('personal-space/', TemplateView.as_view(template_name='base/dashboard.html'), name='personal-space'),
-
-    # Nhật ký hoạt động của người dùng
-    path('activity-log/', views.user_activity_log, name='user_activity_log'),
-
-    # API tích hợp
-    path('api/', include('base.api.urls')),
-
-    # Static files (Media)
-=======
     path('thi_thu/de/<int:de_id>/', views.question_list, name='de_thi'),
     path('thi_thu/de/submit/<int:de_id>', views.submit1, name='submit_answer'),
     path('preview/<int:lesson_id>/', views.preview_lesson, name='preview_lesson'),  
@@ -82,5 +60,4 @@ urlpatterns = [
     path('forum/', views.home, name='forum'),
     path('log/', views.activiti_log, name='log'),
     
->>>>>>> Stashed changes
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
