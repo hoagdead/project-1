@@ -1,0 +1,212 @@
+[33mcommit 614d7fb0033506d5f3e89f01fdaea55d99de16c2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: hikari <sunligt512@gmail.com>
+Date:   Wed Jan 1 14:59:24 2025 +0700
+
+    cc
+
+base/admin.py
+base/bot.py
+base/views.py
+
+[33mcommit 2cdd05d2cfdc0fd89bbe9bf9e36841b25f2ab00f[m
+Author: hikari <sunligt512@gmail.com>
+Date:   Wed Jan 1 14:57:26 2025 +0700
+
+    idk
+
+base/__pycache__/middleware.cpython-313.pyc
+base/__pycache__/middlewares.cpython-312.pyc
+base/__pycache__/utils.cpython-312.pyc
+base/__pycache__/utils.cpython-313.pyc
+base/admin.py
+base/api/__pycache__/__init__.cpython-312.pyc
+base/api/__pycache__/serializers.cpython-312.pyc
+base/api/__pycache__/serializers.cpython-313.pyc
+base/api/__pycache__/urls.cpython-312.pyc
+base/api/__pycache__/urls.cpython-313.pyc
+base/api/__pycache__/views.cpython-312.pyc
+base/api/__pycache__/views.cpython-313.pyc
+base/api/serializers.py
+base/api/urls.py
+base/api/views.py
+base/bot.py
+base/form.py
+base/middleware.py
+base/migrations/0020_cau_hoi1_cau_hoi2_remove_workspace_user_and_more.py
+base/migrations/0021_userprofile_comment_progress_and_more.py
+base/migrations/0022_userprofile_name.py
+base/migrations/__pycache__/0012_uploadedfile_remove_bai_hoc_lop_delete_lop_hoc.cpython-312.pyc
+base/migrations/__pycache__/0013_question_bai.cpython-312.pyc
+base/migrations/__pycache__/0014_alter_question_type_alter_question2_type_and_more.cpython-312.pyc
+base/migrations/__pycache__/0015_remove_personalspace_user_remove_plan_personal_space_and_more.cpython-312.pyc
+base/migrations/__pycache__/0016_remove_kehoach_khong_gian_and_more.cpython-312.pyc
+base/migrations/__pycache__/0017_workspace_remove_block_created_at_and_more.cpython-312.pyc
+base/migrations/__pycache__/0018_remove_block_page_remove_workspace_description_and_more.cpython-312.pyc
+base/migrations/__pycache__/0019_alter_block_type_alter_block_workspace_and_more.cpython-312.pyc
+base/migrations/__pycache__/0020_cau_hoi1_cau_hoi2_remove_workspace_user_and_more.cpython-313.pyc
+base/migrations/__pycache__/0021_userprofile_comment_progress_and_more.cpython-313.pyc
+base/migrations/__pycache__/0022_userprofile_name.cpython-313.pyc
+base/models.py
+base/templates/base/log.html
+base/templates/base/login_register.html
+base/templates/base/notification_bar.html
+base/templates/base/planmaker.html
+base/templates/base/previews2.html
+base/templates/base/submit_answer.html
+base/templates/base/update_profile.html
+base/templates/base/upload_cau_hoi.html
+base/templates/base/upload_docx.html
+base/urls.py
+base/views.py
+static/styles/light.css
+static/styles/navbar_l.css
+study/settings.py
+study/templatetags/__pycache__/custom_filter.cpython-312.pyc
+templates/footer.html
+templates/profile.html
+templates/question_list.html
+
+[33mcommit 9c219b7234efa93382a44aee7b5a2fd979e26850[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: hikari <sunligt512@gmail.com>
+Date:   Sat Dec 14 21:35:45 2024 +0700
+
+    idk
+
+base/__pycache__/admin.cpython-313.pyc
+base/__pycache__/form.cpython-313.pyc
+base/__pycache__/middlewares.cpython-313.pyc
+base/__pycache__/models.cpython-313.pyc
+base/__pycache__/urls.cpython-313.pyc
+base/__pycache__/views.cpython-313.pyc
+base/admin.py
+base/form.py
+base/middlewares.py
+base/migrations/0020_remove_userprofile_user_avata_and_more.py
+base/migrations/__pycache__/0020_remove_userprofile_user_avata_and_more.cpython-313.pyc
+base/models.py
+base/templates/base/bai_hoc_all.html
+base/templates/base/luyen_tap_all.html
+base/templates/base/notification_bar.html
+base/templates/base/submit_answer.html
+base/templates/base/thi_thu.html
+base/templates/base/trang_chu.html
+base/templates/base/update_profile.html
+base/templates/base/user_activity_log.html
+base/urls.py
+base/views.py
+db.sqlite3
+media/images/avatars/avt.png
+media/images/backgrounds/DALLE-2024-12-12-21.40.png
+static/styles/light.css
+study/__pycache__/settings.cpython-313.pyc
+study/__pycache__/urls.cpython-313.pyc
+study/settings.py
+study/urls.py
+templates/profile.html
+
+[33mcommit b1e473a3c78116d59a2c5a50dcae6f06955ca921[m
+Author: hikari <sunligt512@gmail.com>
+Date:   Fri Dec 13 20:14:27 2024 +0700
+
+    fix?
+
+base/__pycache__/admin.cpython-313.pyc
+base/__pycache__/form.cpython-313.pyc
+base/__pycache__/models.cpython-313.pyc
+base/__pycache__/urls.cpython-313.pyc
+base/__pycache__/views.cpython-313.pyc
+base/admin.py
+base/api/__pycache__/__init__.cpython-313.pyc
+base/api/__pycache__/serializers.cpython-313.pyc
+base/api/__pycache__/urls.cpython-313.pyc
+base/api/__pycache__/views.cpython-313.pyc
+base/api/serializers.py
+base/api/url.py
+base/api/urls.py
+base/api/views.py
+base/form.py
+base/migrations/0014_alter_question_type_alter_question2_type_and_more.py
+base/migrations/0015_remove_personalspace_user_remove_plan_personal_space_and_more.py
+base/migrations/0016_remove_kehoach_khong_gian_and_more.py
+base/migrations/0017_workspace_remove_block_created_at_and_more.py
+base/migrations/0018_remove_block_page_remove_workspace_description_and_more.py
+base/migrations/0019_alter_block_type_alter_block_workspace_and_more.py
+base/migrations/__pycache__/0014_alter_question_type_alter_question2_type_and_more.cpython-313.pyc
+base/migrations/__pycache__/0015_remove_personalspace_user_remove_plan_personal_space_and_more.cpython-313.pyc
+base/migrations/__pycache__/0016_remove_kehoach_khong_gian_and_more.cpython-313.pyc
+base/migrations/__pycache__/0017_workspace_remove_block_created_at_and_more.cpython-313.pyc
+base/migrations/__pycache__/0018_remove_block_page_remove_workspace_description_and_more.cpython-313.pyc
+base/migrations/__pycache__/0019_alter_block_type_alter_block_workspace_and_more.cpython-313.pyc
+base/models.py
+base/templates/base/dashboard.html
+base/templates/base/notification_bar.html
+base/templates/base/planmaker.html
+base/urls.py
+base/views.py
+db.sqlite3
+static/images/useravt/usbgr1.png
+static/images/useravt/usbgr2.png
+static/styles/light.css
+study/__pycache__/settings.cpython-313.pyc
+study/__pycache__/urls.cpython-313.pyc
+study/settings.py
+study/urls.py
+templates/navbar.html
+templates/profile.html
+
+[33mcommit 6dee526477eb2f2c699323f925208e22db6f2212[m
+Author: hikari <sunligt512@gmail.com>
+Date:   Wed Dec 11 12:46:28 2024 +0700
+
+    ok
+
+base/templates/base/submit_answer.html
+templates/question_list.html
+
+[33mcommit a220448bff28397e384eebf5ffcc7ed3d973abcd[m
+Author: hikari <sunligt512@gmail.com>
+Date:   Wed Dec 11 12:45:25 2024 +0700
+
+    hell nah
+
+base/__pycache__/models.cpython-313.pyc
+base/__pycache__/urls.cpython-313.pyc
+base/__pycache__/views.cpython-313.pyc
+base/models.py
+base/templates/base/submit_answer.html
+base/templates/base/submit_answer2.html
+base/templates/base/topic_bar.html
+base/views.py
+db.sqlite3
+"media/CH\341\273\246_\304\220\341\273\200_4.GI\341\273\232I_THI\341\273\206U_C\303\201C_LI\341\273\206U_C\306\240_S\341\273\236_D\341\273\256_LI\341\273\206U.docx"
+static/styles/b_light.css
+static/styles/light.css
+study/__pycache__/settings.cpython-313.pyc
+study/settings.py
+templates/navbar.html
+templates/question_list.html
+
+[33mcommit 2ab8443312b3e317c61f5669583e628c173c6a42[m
+Author: hikari <sunligt512@gmail.com>
+Date:   Wed Dec 11 00:04:27 2024 +0700
+
+    fix
+
+base/__pycache__/__init__.cpython-313.pyc
+base/__pycache__/form.cpython-313.pyc
+base/__pycache__/urls.cpython-313.pyc
+base/__pycache__/views.cpython-313.pyc
+base/form.py
+base/templates/base/luyen_tap.html
+base/templates/base/notification_bar.html
+base/templates/base/preview.html
+base/templates/base/room_form.html
+base/templates/base/submit_answer2.html
+base/templates/base/thi_thu.html
+base/templates/base/upload_file.html
+base/templates/base/upload_question.html
+db.sqlite3
+"media/CH\341\273\246_\304\220\341\273\200_2_CYxownv._M\341\272\240NG_M\303\201Y_T\303\215NH_V\303\200_INTERNET.docx"
+"media/CH\341\273\246_\304\220\341\273\200_2_DRpoAKs._M\341\272\240NG_M\303\201Y_T\303\215NH_V\303\200_INTERNET.docx"
+"media/CH\341\273\246_\304\220\341\273\200_2_lnP5qTT._M\341\272\240NG_M\303\201Y_T\303\215NH_V\303\200_INTERNET.docx"
+"media/CH\341\273\246_\304\220\341\273\200_3_\304\220\341\272\240O_\304\220\341\273\250C_PH\303\201P_LU\341\272\254T_V\303\200_V\304\202N_H\303\223A_TRONG_M\303\224I_TR\306\257\341\273\234NG_S\341\273\220_z

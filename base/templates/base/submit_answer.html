@@ -11,7 +11,6 @@
     </style>
 </head>
 <body>
-<<<<<<< HEAD
     <h1>Kết Quả Bài Làm</h1>
     <p>Điểm của bạn: {{ score }}/10</p>
 
@@ -47,15 +46,5 @@
     {% endfor %}
 
     <a href="{% url 'de_thi' de_id=de %}">Làm Lại Bài Thi</a>
-=======
-    {% include 'navbar.html' %}
-    <div class="submit_ans">
-        <h1>Kết quả thi của bạn</h1>
-        <p>Điểm của bạn là: {{ score }}</p>
-        <button class="remake">
-            <a href="{% url 'thi_thu' %}">Làm Lại bài</a>
-        </button>
-    </div>
->>>>>>> 9c219b7234efa93382a44aee7b5a2fd979e26850
 </body>
 </html>
