@@ -47,7 +47,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+<<<<<<< Updated upstream
     'base.middlewares.LogUserActivityMiddleware',
+=======
+<<<<<<< HEAD
+    'base.middleware.LogUserActivityMiddleware',
+=======
+    'base.middlewares.LogUserActivityMiddleware',
+>>>>>>> 9c219b7234efa93382a44aee7b5a2fd979e26850
+>>>>>>> Stashed changes
 ]
 
 ROOT_URLCONF = 'study.urls'

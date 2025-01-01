@@ -11,8 +11,79 @@
         {% else %}
         <link rel="stylesheet" href="{% static 'styles/light.css' %}">
         {% endif %}
+        <style>
+            .default_bgr, .user_bgr {
+                position: relative;
+                background-color: blue;
+                color: aqua;
+                background-size: cover;
+                background-position: center;
+                width: 100%;
+                height: 200px;
+            }
+        
+            .default_avt, .user_avt {
+                position: absolute;
+                top: 54%; /* Đặt ở giữa background */
+                left: 13%; /* Đặt ở giữa background */
+                transform: translate(-50%, -50%); /* Dịch chuyển để căn giữa */
+                background-size: cover;
+                background-position: center;
+                width: 9rem;
+                height: 9rem;
+                border-radius: 50%;
+                border: 6px solid white;
+                z-index: 10; /* Hiển thị trên background */
+            }
+        
+            .default_bgr {
+                background-image: url("{% static 'images/useravt/usbgr1.png' %}");
+            }
+        
+            .default_avt {
+                background-color: blueviolet;
+                background-image: url("{% static 'images/useravt/avt1.png' %}");
+            }
+        
+            .user_bgr {
+                background-image: url("{{ profile.background }}");
+            }
+        
+            .user_avt {
+                background-image: url("{{ profile.avata }}");
+            }
+        </style>
     </head>
     <body>
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+        {% include 'navbar.html' %} 
+        <div class='block-wraper'>
+            <div>
+                <div class="user-profile" >
+                    {% if not profile.background %}
+                    <div class="default_bgr"></div>
+                    {% else %}
+                    <div class="user_bgr"></div>
+                    {% endif %}
+
+                    {% if not profile.avata %}
+                    <div class="default_avt"></div>
+                    {% else %}
+                    <div class="user_avt"></div>
+                    {% endif %}
+                    <div class="user_infor">
+                        <div class="uleft">
+                            <h4>{{ profile.name }}</h4>
+                            <p>@{{ user.username }}</p>
+                        </div>
+                        {%if request.user == user%}
+                        <a href="{%url 'edit-profile' usid%}"><i class="fa-solid fa-user-pen"></i></a>
+                        {%endif%}
+                    </div>
+=======
+>>>>>>> Stashed changes
         {% include 'navbar.html' %}
 
         <div class="block-wrapper">
@@ -24,6 +95,10 @@
                     {% else %}
                         <img src="{% static 'images/default_avatar.png' %}" alt="Default Avatar" width="200px" class="avatar">
                     {% endif %}
+<<<<<<< Updated upstream
+=======
+>>>>>>> 9c219b7234efa93382a44aee7b5a2fd979e26850
+>>>>>>> Stashed changes
                 </div>
 
                 <div class="background">
@@ -33,6 +108,22 @@
                     {% else %}
                         <img src="{% static 'images/default_background.jpg' %}" alt="Default Background" height="350px" class="bgimg">
                     {% endif %}
+<<<<<<< Updated upstream
+                </div>
+
+                <div class="user_info">
+                    <div class="uleft">
+                        <h4>{{ user.username }}</h4>
+                        <p>{{ user.email }}</p>
+                        <p>{{ user.userprofile.bio|default_if_none:"No bio available." }}</p>
+                    </div>
+
+                    <!-- Hiển thị nút chỉnh sửa nếu là chủ tài khoản -->
+                    {% if request.user == user %}
+                    <p>con cac</p>
+                    {% endif %}
+=======
+>>>>>>> Stashed changes
                 </div>
 
                 <div class="user_info">
@@ -47,6 +138,10 @@
                     <p>con cac</p>
                     {% endif %}
                 </div>
+            </div>
+
+            <div class="fcmn">
+                {% include 'base/feed_composnent.html' %}
             </div>
 
             <div class="fcmn">

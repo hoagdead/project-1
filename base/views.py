@@ -1,33 +1,55 @@
-from django.shortcuts import render, redirect,get_object_or_404
-from django.db.models import Q
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
+<<<<<<< Updated upstream
 from .models import Room, Topic, Message,Question,Question2,bai_hoc,UserProfile
 from .form import RoomForm,QuestionForm,UploadFileForm,UserForm,UserProfileForm
 import random
 import os
 from docx import Document 
+=======
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.models import User
+from django.db.models import Q, Count
+from django.db.models.functions import ExtractHour
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+>>>>>>> Stashed changes
 from django.core.files.storage import default_storage
 from django.conf import settings
-import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
-from .form import UploadQuestionForm
-from .utils import process_question_file, save_questions_to_db
-from django.utils.html import escape
-from docx.oxml.ns import qn
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+<<<<<<< Updated upstream
 from django.contrib.auth.models import User
 from .models import Workspace
 from django.db.models import Avg, Count
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from .models import UserActivity
+=======
+
+from django.utils.html import escape
+from django.contrib.auth.forms import UserCreationForm
+from .models import (
+    Room, Topic, Message, Question, Question2, bai_hoc, 
+    UserActivity, Cau_hoi1, Cau_hoi2,UserProfile
+)
+from .form import (
+    RoomForm, QuestionForm, UploadFileForm, EditUser, 
+    UploadQuestionForm, 
+)
+from .utils import process_question_file, save_questions_to_db
+
+from docx import Document
+from docx.oxml.ns import qn
+
+import random
+import os
+import json
+
+
+>>>>>>> Stashed changes
 '''
     ở đây sẽ dùng để xử lý request của người dùng
     một views mẫu:
@@ -39,14 +61,65 @@ from .models import UserActivity
             hoặc
             return redirect('url của trang muốn chuyển về') sử dụng để chuyển người dùng về một trang khác sẵn có
 '''
+<<<<<<< Updated upstream
+=======
+
+@staff_member_required
+def activiti_log(request):
+    # Thống kê tổng số lượt truy cập trang
+    total_page_views = UserActivity.objects.count()
+
+    # Thống kê số lượt truy cập theo đường dẫn
+    stats_by_path = (
+        UserActivity.objects
+        .values('path')          
+        .annotate(so_luong=Count('id'))  
+        .order_by('-so_luong')      
+    )
+
+    # Thống kê số lượt truy cập theo giờ
+    stats_by_hour = (
+        UserActivity.objects
+        .annotate(gio=ExtractHour('timestamp'))  
+        .values('gio')
+        .annotate(so_luong=Count('id'))
+        .order_by('gio')  
+    )
+
+    # Thống kê số lượt truy cập các trang cụ thể
+    so_luot_dang_ky = UserActivity.objects.filter(path='/register/').count()
+    so_luot_forum = UserActivity.objects.filter(path='/forum/').count()
+    so_luot_on_tap = UserActivity.objects.filter(path='/0n_tap/').count()
+    so_luot_luyen_tap = UserActivity.objects.filter(path='/luyen_tap/').count()
+    so_luot_thi_thu = UserActivity.objects.filter(path='/thi_thu/').count()
+
+    context = {                   
+        'total_page_views': total_page_views,            
+        'stats_by_path': stats_by_path,                  
+        'stats_by_hour': stats_by_hour,                  
+        'so_luot_dang_ky': so_luot_dang_ky,  
+        'so_luot_forum': so_luot_forum,                      
+        'so_luot_on_tap': so_luot_on_tap,  
+        'so_luot_luyen_tap': so_luot_luyen_tap, 
+        'so_luot_thi_thu': so_luot_thi_thu, 
+    }
+    return render(request, 'base/log.html', context)
+
+
+
+>>>>>>> Stashed changes
 @staff_member_required  # Chỉ admin mới xem được
 def user_activity_log(request):
     activities = UserActivity.objects.all().order_by('-timestamp')[:100]  # Lấy 100 hoạt động gần nhất
     return render(request, 'base/user_activity_log.html', {'activities': activities})
+<<<<<<< Updated upstream
 @receiver(post_save, sender=User)
 def create_workspace(sender, instance, created, **kwargs):
     if created:
         Workspace.objects.create(user=instance)
+=======
+
+>>>>>>> Stashed changes
 def Loginpage(request):
     page = 'login'
     if request.method == 'POST':
@@ -69,24 +142,24 @@ def Logoutuser(request):
     return redirect('home')
 
 def registerpage(request):
-    page='register'
-    form  = UserCreationForm()
-    
+    form = UserCreationForm()
+
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
-        
+
         if form.is_valid():
-            
             user = form.save(commit=False)
             user.username = user.username.lower()
             user.save()
-            login(request,user)
-            
-            return redirect('home')
+            # Tạo hồ sơ người dùng ngay khi đăng ký
+            UserProfile.objects.create(user=user)
+            # Đăng nhập và chuyển hướng đến trang chỉnh sửa hồ sơ
+            login(request, user)
+            return redirect('edit-profile', usid=user.id)  # Chuyển hướng tới URL chỉnh sửa
         else:
             messages.error(request, 'Something went wrong')
-            
-    return render(request, 'base/login_register.html', {'form':form})
+
+    return render(request, 'base/login_register.html', {'form': form})
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -220,6 +293,211 @@ def question_type2():
         })
     return trao_doi_cau_hoi
 
+@csrf_protect
+def question_list(request, de_id):
+    if request.method == 'POST':
+        loai_chon = request.POST.get('loai')
+        if loai_chon not in ['ICT', 'CS']:
+            messages.error(request, 'Lựa chọn loại câu hỏi không hợp lệ.')
+            return redirect('de_thi', de_id=de_id)
+        
+        request.session['loai_chon'] = loai_chon
+
+        # Lấy và xáo trộn câu hỏi loại 1
+        cau_hoi_loai1 = list(Cau_hoi1.objects.filter(De=de_id))
+        random.shuffle(cau_hoi_loai1)
+        cau_hoi_loai1_chon = cau_hoi_loai1
+
+        # Lấy câu hỏi loại 2 chung
+        cau_hoi_chung = list(Cau_hoi2.objects.filter(De=de_id, Loai='chung'))
+        if len(cau_hoi_chung) >= 2:
+            cau_hoi_chung_chon = random.sample(cau_hoi_chung, 2)
+        else:
+            cau_hoi_chung_chon = cau_hoi_chung
+
+        # Lấy câu hỏi loại 2 theo loại chọn
+        cau_hoi_loai_chon = list(Cau_hoi2.objects.filter(De=de_id, Loai=loai_chon))
+        if len(cau_hoi_loai_chon) >= 2:
+            cau_hoi_loai_chon = random.sample(cau_hoi_loai_chon, 2)
+        else:
+            cau_hoi_loai_chon = cau_hoi_loai_chon
+
+        # Kết hợp các câu hỏi loại 2
+        cau_hoi_loai2 = cau_hoi_chung_chon + cau_hoi_loai_chon
+
+        # Chuyển đổi câu hỏi loại 1 thành dict
+        cau_hoi_loai1_serialized = [
+            {
+                'id': q.id,
+                'noi_dung': q.Noi_dung,
+                'A': q.A,
+                'B': q.B,
+                'C': q.C,
+                'D': q.D,
+                'dap_an_dung': q.Corect_ans,
+                'dap_an': [('A', q.A), ('B', q.B), ('C', q.C), ('D', q.D)],
+            }
+            for q in cau_hoi_loai1_chon
+        ]
+
+        # Chuyển đổi câu hỏi loại 2 thành dict
+        cau_hoi_loai2_serialized = [
+            {
+                'id': q.id,
+                'noi_dung': q.Noi_dung,
+                'loai': q.Loai,
+                'dap_an': [
+                    {
+                        'chu_thich': 'A',
+                        'noi_dung': q.A,
+                        'dap_an_dung': q.Corect_ans_a == 'True',
+                    },
+                    {
+                        'chu_thich': 'B',
+                        'noi_dung': q.B,
+                        'dap_an_dung': q.Corect_ans_b == 'True',
+                    },
+                    {
+                        'chu_thich': 'C',
+                        'noi_dung': q.C,
+                        'dap_an_dung': q.Corect_ans_c == 'True',
+                    },
+                    {
+                        'chu_thich': 'D',
+                        'noi_dung': q.D,
+                        'dap_an_dung': q.Corect_ans_d == 'True',
+                    },
+                ]
+            }
+            for q in cau_hoi_loai2
+        ]
+
+        # Lưu câu hỏi vào session
+        request.session['type1_questions'] = cau_hoi_loai1_serialized
+        request.session['type2_questions'] = cau_hoi_loai2_serialized
+
+        return redirect('de_thi', de_id=de_id)
+
+    elif request.method == 'GET':
+        cau_hoi_loai1 = request.session.get('type1_questions')
+        cau_hoi_loai2 = request.session.get('type2_questions')
+        loai_chon = request.session.get('loai_chon')
+
+        if not cau_hoi_loai1 or not cau_hoi_loai2:
+            return render(request, 'question_list.html', {
+                'de': de_id,
+                'hien_thi_chon_loai': True,
+            })
+        else:
+            return render(request, 'question_list.html', {
+                'type1': cau_hoi_loai1,
+                'type2': cau_hoi_loai2,
+                'de': de_id,
+                'loai_chon': loai_chon,
+                'hien_thi_chon_loai': False,
+            })
+    else:
+        messages.error(request, 'Phương thức yêu cầu không hợp lệ.')
+        return redirect('thi_thu')
+
+@csrf_protect
+def submit1(request, de_id):
+    if request.method == 'POST':
+        cau_hoi_loai1 = request.session.get('type1_questions', [])
+        cau_hoi_loai2 = request.session.get('type2_questions', [])
+        loai_chon = request.session.get('loai_chon')
+
+        if not cau_hoi_loai1 or not cau_hoi_loai2:
+            messages.error(request, 'Không tìm thấy câu hỏi trong phiên làm bài. Vui lòng bắt đầu lại bài thi.')
+            return redirect('de_thi', de_id=de_id)
+
+        dap_an_nguoi_dung = request.POST.dict()
+
+        tong_diem = 0
+        du_lieu_danh_gia = []
+
+        # Xử lý câu hỏi loại 1
+        for q in cau_hoi_loai1:
+            q_id = str(q['id'])
+            dap_an = dap_an_nguoi_dung.get(q_id)
+            dap_an_dung = q['dap_an_dung']
+            dung = dap_an == dap_an_dung
+            if dung:
+                tong_diem += 1
+            du_lieu_danh_gia.append({
+                'loai': 'chon_dap_an',
+                'id': q['id'],
+                'noi_dung': q['noi_dung'],
+                'dap_an_nguoi_chon': dap_an,
+                'dap_an_dung': dap_an_dung,
+                'dung': dung,
+                'dap_an': q['dap_an'],
+            })
+
+        # Xử lý câu hỏi loại 2
+        for q in cau_hoi_loai2:
+            q_id = str(q['id'])
+            noi_dung = q['noi_dung']
+            loai = q.get('loai', 'Chưa xác định')
+            dap_an = q['dap_an']
+            so_dap_an_dung = 0
+
+            for ans in dap_an:
+                chu_thich = ans['chu_thich']
+                dung = ans['dap_an_dung']
+                da_chon = dap_an_nguoi_dung.get(f'{q_id}_{chu_thich}') == 'True'
+                if da_chon and dung:
+                    so_dap_an_dung += 1
+
+            if so_dap_an_dung == 1:
+                diem = 0.1
+            elif so_dap_an_dung == 2:
+                diem = 0.25
+            elif so_dap_an_dung == 3:
+                diem = 0.5
+            elif so_dap_an_dung == 4:
+                diem = 1
+            else:
+                diem = 0
+
+            tong_diem += diem
+
+            du_lieu_danh_gia.append({
+                'loai': 'dung_sai',
+                'id': q['id'],
+                'noi_dung': noi_dung,
+                'loai_cau_hoi': loai,
+                'so_dap_an_dung': so_dap_an_dung,
+                'diem': diem,
+                'dap_an': [
+                    {
+                        'chu_thich': ans['chu_thich'],
+                        'noi_dung': ans['noi_dung'],
+                        'dap_an_nguoi_chon': 'Đ' if (dap_an_nguoi_dung.get(f"{q_id}_{ans['chu_thich']}") == 'True') else 'S',
+                        'dap_an_dung': 'Đ' if ans['dap_an_dung'] else 'S',
+                        'dung': (dap_an_nguoi_dung.get(f"{q_id}_{ans['chu_thich']}") == 'True') == ans['dap_an_dung'],
+                    }
+                    for ans in dap_an
+                ],
+            })
+
+        tong_diem = min(tong_diem, 10)
+
+        try:
+            del request.session['type1_questions']
+            del request.session['type2_questions']
+            del request.session['loai_chon']
+        except KeyError:
+            pass
+
+        return render(request, 'base/nop_dap_an.html', {
+            'diem': tong_diem,
+            'du_lieu_danh_gia': du_lieu_danh_gia,
+        })
+
+    else:
+        messages.error(request, 'Phương thức yêu cầu không hợp lệ.')
+        return redirect('thi_thu', de_id=de_id)
 
 import random
 def question_and_submit(request, de_id):
@@ -540,6 +818,7 @@ def trang_chu(request):
     context={'on_tap':on_tap}
     return render(request, 'base/trang_chu.html' ,context)
 
+<<<<<<< Updated upstream
 def userprofile(request, pk):
     # Lấy người dùng dựa trên primary key (pk)
     user = get_object_or_404(User, id=pk)
@@ -553,12 +832,22 @@ def userprofile(request, pk):
         'user_profile': user_profile,
     }
     return render(request, 'profile.html', context)
+=======
+def userProfile(request,pk):
+    user= User.objects.get(id=pk)
+    profile = UserProfile.objects.get(user=user)
+    rooms = user.room_set.all()
+    form = EditUser(instance=request.user)
+    context={'user':user,'rooms':rooms, 'form':form,'profile':profile,'usid':pk}
+    return render(request,'profile.html',context)
+>>>>>>> Stashed changes
 
 @login_required
 def update_profile(request, pk):
     # Lấy user dựa trên pk
     user = get_object_or_404(User, id=pk)
 
+<<<<<<< Updated upstream
     if request.user != user:
         return HttpResponse("Bạn không có quyền cập nhật hồ sơ này.", status=403)
 
@@ -575,3 +864,119 @@ def update_profile(request, pk):
 
     return render(request, 'base/update_profile.html', {'form': form, 'user': user})
 #test
+=======
+def editprofile(request,pk):
+    user= User.objects.get(id=pk)
+    form = EditUser(instance=request.user)
+    return render(request,'base/update_profile.html', {'form':form})
+from django.shortcuts import render, redirect
+from .models import Cau_hoi1, Cau_hoi2
+from docx import Document
+
+def upload_docx(request):
+    if request.method == 'POST' and request.FILES['file']:
+        question_type = request.POST.get('question_type')  # Lấy loại câu hỏi từ form
+        file = request.FILES['file']
+        document = Document(file)
+
+        # Lấy tất cả các đoạn văn
+        paragraphs = document.paragraphs
+
+        question = None
+        answers = {}
+
+        for para in paragraphs:
+            text = para.text.strip()
+
+            if text.startswith("Câu "):  # Phát hiện câu hỏi mới
+                # Lưu câu hỏi trước đó
+                if question and answers:
+                    if question_type == 'Cau_hoi1':
+                        Cau_hoi1.objects.create(
+                            Noi_dung=question,
+                            A=answers.get('A', ''),
+                            B=answers.get('B', ''),
+                            C=answers.get('C', ''),
+                            D=answers.get('D', ''),
+                        )
+                    elif question_type == 'Cau_hoi2':
+                        Cau_hoi2.objects.create(
+                            Noi_dung=question,
+                            A=answers.get('A', ''),
+                            B=answers.get('B', ''),
+                            C=answers.get('C', ''),
+                            D=answers.get('D', ''),
+                            Corect_ans_a='True' if 'Đ' in answers.get('A', '') else 'False',
+                            Corect_ans_b='True' if 'Đ' in answers.get('B', '') else 'False',
+                            Corect_ans_c='True' if 'Đ' in answers.get('C', '') else 'False',
+                            Corect_ans_d='True' if 'Đ' in answers.get('D', '') else 'False',
+                        )
+
+                # Cập nhật câu hỏi mới
+                question = text.split(".", 1)[1].strip()
+                answers = {}
+
+            elif text.startswith("A."):
+                answers['A'] = text[2:].strip()
+            elif text.startswith("B."):
+                answers['B'] = text[2:].strip()
+            elif text.startswith("C."):
+                answers['C'] = text[2:].strip()
+            elif text.startswith("D."):
+                answers['D'] = text[2:].strip()
+
+        # Lưu câu hỏi cuối cùng
+        if question and answers:
+            if question_type == 'Cau_hoi1':
+                Cau_hoi1.objects.create(
+                    Noi_dung=question,
+                    A=answers.get('A', ''),
+                    B=answers.get('B', ''),
+                    C=answers.get('C', ''),
+                    D=answers.get('D', ''),
+                )
+            elif question_type == 'Cau_hoi2':
+                Cau_hoi2.objects.create(
+                    Noi_dung=question,
+                    A=answers.get('A', ''),
+                    B=answers.get('B', ''),
+                    C=answers.get('C', ''),
+                    D=answers.get('D', ''),
+                    Corect_ans_a='True' if 'Đ' in answers.get('A', '') else 'False',
+                    Corect_ans_b='True' if 'Đ' in answers.get('B', '') else 'False',
+                    Corect_ans_c='True' if 'Đ' in answers.get('C', '') else 'False',
+                    Corect_ans_d='True' if 'Đ' in answers.get('D', '') else 'False',
+                )
+
+        return redirect('previews')  # Chuyển hướng sau khi thành công
+
+    return render(request, 'base/upload_docx.html')
+
+
+def previews(request):
+    # Lấy danh sách các câu hỏi loại 1 và loại 2
+    questions1 = Cau_hoi1.objects.all()
+    questions2 = Cau_hoi2.objects.all()
+
+    # Lấy danh sách bài học để hiển thị trong dropdown
+    all_bai = bai_hoc.objects.all()
+
+    if request.method == 'POST':
+        # Lưu câu hỏi vào bài học được chọn
+        bai_id = request.POST.get('bai')
+        if bai_id and request.POST.get('save_questions'):
+            bai = bai_hoc.objects.get(id=bai_id)
+            for question in questions1:
+                question.bai = bai
+                question.save()
+            for question in questions2:
+                question.bai = bai
+                question.save()
+            return redirect('success')  # Chuyển hướng sau khi lưu thành công
+
+    return render(request, 'base/previews2.html', {
+        'questions1': questions1,
+        'questions2': questions2,
+        'all_bai': all_bai,
+    })
+>>>>>>> Stashed changes

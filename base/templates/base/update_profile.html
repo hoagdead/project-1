@@ -4,6 +4,104 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Cập nhật hồ sơ</title>
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+        <style>
+            /* CSS cho phần thân */
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                background-color: #f4f4f9;
+                color: #333;
+                padding: 00px 20px 20px 20px;
+                margin-top: 85px;
+            }
+
+            /* Tiêu đề */
+            .form-title {
+                text-align: center;
+                color: #444;
+                margin-bottom: 20px;
+            }
+
+            /* Form container */
+            .profile-form {
+                max-width: 500px;
+                margin: 0 auto;
+                padding: 20px;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Các trường input */
+            .profile-form p {
+                margin-bottom: 15px;
+                
+            }
+            .profile-form label {
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .profile-form input,
+            .profile-form textarea,
+            .profile-form select {
+                width: 96%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+
+            /* Nút submit */
+            .profile-form .btn-submit {
+                display: inline-block;
+                width: 100%;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                padding: 10px;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                margin-top: 10px;
+                transition: background-color 0.3s ease;
+            }
+
+            .profile-form .btn-submit:hover {
+                background-color: #0056b3;
+            }
+
+            /* Liên kết quay lại */
+            .profile-form .back-link {
+                display: inline-block;
+                text-align: center;
+                margin-top: 10px;
+                color: #007bff;
+                text-decoration: none;
+                font-size: 14px;
+            }
+
+            .profile-form .back-link:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="navbar">
+            {% include 'navbar.html' %}
+        </div>
+       
+        <form class="profile-form" action="{% url 'edit-profile' user.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2 class="form-title">Cập nhật hồ sơ</h2>
+            {{ form.as_p }}
+            <button type="submit" class="btn-submit">Lưu thay đổi</button>
+            <a href="{% url 'profile' user.id %}" class="back-link">Quay lại</a>
+=======
+>>>>>>> Stashed changes
         {% load static %}
         <link rel="stylesheet" href="{% static 'styles/main.css' %}">
     </head>
@@ -16,6 +114,10 @@
             {{ form.as_p }}
             <button type="submit">Lưu thay đổi</button>
             <a href="{% url 'profile' user.id %}">Quay lại</a>
+<<<<<<< Updated upstream
+=======
+>>>>>>> 9c219b7234efa93382a44aee7b5a2fd979e26850
+>>>>>>> Stashed changes
         </form>
     </body>
 </html>

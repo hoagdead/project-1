@@ -18,6 +18,20 @@ urlpatterns = [
     path('update-room/<str:pk>/', views.updateroom, name="update-room"),
     path('delete-room/<str:pk>/', views.deleteRoom, name="delete-room"),
     path('delete-message/<str:pk>/', views.deleteMessage, name="delete-message"),
+<<<<<<< Updated upstream
+=======
+    
+    #testing
+    path('profile/<str:pk>', views.userProfile, name="profile"),
+    path('edit-profile/<str:pk>', views.editprofile, name="edit-profile"),
+    path('create-question/', views.createquestion, name="create-question"),
+    path('change-mode', views.change_mode, name="change-mode"),
+    path('personal-space/', TemplateView.as_view(template_name='base/dashboard.html'), name='personal-space'),
+    path('api/', include('base.api.urls')), 
+    path('upload-docx/', views.upload_docx, name='upload-docx'),
+    path('previews2/', views.previews, name='previews'),
+    
+>>>>>>> Stashed changes
 
     # Quản lý hồ sơ cá nhân
     path('profile/<str:pk>/', views.userprofile, name="profile"),
@@ -37,6 +51,7 @@ urlpatterns = [
 
     # Thi thử
     path('thi_thu/', views.thi_thu, name='thi_thu'),
+<<<<<<< Updated upstream
     path('thi_thu/de/<int:de_id>/', views.question_and_submit, name='de_thi'),
     path('thi_thu/de/submit/<int:de_id>/', views.question_and_submit, name='submit_answer'),
 
@@ -54,4 +69,18 @@ urlpatterns = [
     path('api/', include('base.api.urls')),
 
     # Static files (Media)
+=======
+    path('thi_thu/de/<int:de_id>/', views.question_list, name='de_thi'),
+    path('thi_thu/de/submit/<int:de_id>', views.submit1, name='submit_answer'),
+    path('preview/<int:lesson_id>/', views.preview_lesson, name='preview_lesson'),  
+    path('0n_tap', views.bai_hoc_all, name='on_tap_pv'),
+    path('on_tap', views.bai_hoc_i, name='on_tap'),
+    path('on_tap/bai/<int:lesson_id>/', views.bai, name='bai'),
+    path('luyen_tap', views.luyen_tap_all, name='luyen_tap_all'),
+    path('luyen_tap/bai/<int:bai_id>', views.submit_luyentap, name='luyen_tap'),
+    path('luyen_tap/bai/submit/<int:bai_id>', views.submit_luyentap, name='submit_luyentap'),
+    path('forum/', views.home, name='forum'),
+    path('log/', views.activiti_log, name='log'),
+    
+>>>>>>> Stashed changes
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

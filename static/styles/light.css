@@ -538,15 +538,16 @@ a{
     position: relative;
     background-color: #FFF;
     width: 84%;
-    height: calc(33% + 29px);
+    height: calc(33% );
 }
 .profile img{
     border-radius: 100px;
     border: 10px solid #FFF;
 }
 .user_infor{
+    width: 70%;
     display: grid;
-    grid-template-columns: 3fr 1fr;
+    grid-template-columns: 1fr 1fr;
 }
 .uleft{
     padding-top: 10px;

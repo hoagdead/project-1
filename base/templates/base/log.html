@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Log Hoạt Động Người Dùng</title>
+    <!-- Thêm Bootstrap CSS để cải thiện giao diện (tùy chọn) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container{
+            margin-top: 100px;
+        }
+        body {
+            padding: 20px;
+        }
+        .stats-section {
+            margin-bottom: 40px;
+        }
+        .stats-section h2 {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        th, td {
+            text-align: center;
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        {% include 'navbar.html' %}
+    </div>
+    <div class="container">
+        <h1 class="mb-4">Hoạt Động Người Dùng</h1>
+
+        <!-- Tổng số lượt truy cập -->
+        <div class="stats-section">
+            <h2>Tổng Số Lượt Truy Cập</h2>
+            <p><strong>Tổng số lượt truy cập trang:</strong> {{ total_page_views }}</p>
+        </div>
+
+        <!-- Số lượt truy cập các trang cụ thể -->
+        <div class="stats-section">
+            <h2>Số Lượt Truy Cập Các Trang Cụ Thể</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <p><strong>Đăng Ký:</strong> {{ sl_dang_ky }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Forum:</strong> {{ sl_forum }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Ôn Tập:</strong> {{ sl_on_tap }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <p><strong>Luyện Tập:</strong> {{ sl_luyen_tap }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Thi Thử:</strong> {{ sl_thi_thu }}</p>
+                </div>
+                <!-- Thêm các trang khác nếu cần -->
+            </div>
+        </div>
+
+        
+
+        <!-- Thống kê theo giờ -->
+        <div class="stats-section">
+            <h2>Thống Kê Theo Giờ</h2>
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Giờ</th>
+                        <th>Số Lượt Truy Cập</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in stats_by_hour %}
+                    <tr>
+                        <td>{{ stat.hour }}</td>
+                        <td>{{ stat.count }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2">Không có dữ liệu.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    
+    </div>
+
+    <!-- Thêm Bootstrap JS và phụ thuộc nếu cần (tùy chọn) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

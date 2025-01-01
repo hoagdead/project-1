@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Preview Questions</title>
+    <style>
+        /* Định dạng cơ bản */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h3 {
+            text-align: center;
+        }
+        .lesson-content, form {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        select, button {
+            display: block;
+            margin: 20px 0;
+            padding: 10px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Xem trước các câu hỏi</h1>
+
+    <div class="lesson-content">
+        <h3>Câu hỏi 1 đã tải lên:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Câu hỏi</th>
+                    <th>Đáp án A</th>
+                    <th>Đáp án B</th>
+                    <th>Đáp án C</th>
+                    <th>Đáp án D</th>
+                    <th>Đáp án đúng</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in questions1 %}
+                <tr>
+                    <td>{{ question.Noi_dung }}</td>
+                    <td>{{ question.A }}</td>
+                    <td>{{ question.B }}</td>
+                    <td>{{ question.C }}</td>
+                    <td>{{ question.D }}</td>
+                    <td>{{ question.Corect_ans }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Câu hỏi 2 đã tải lên:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Câu hỏi</th>
+                    <th>Đáp án A</th>
+                    <th>Đáp án B</th>
+                    <th>Đáp án C</th>
+                    <th>Đáp án D</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in questions2 %}
+                <tr>
+                    <td>{{ question.Noi_dung }}</td>
+                    <td>{{ question.A }} {% if question.Corect_ans_a == 'True' %}Đ{% else %}S{% endif %}</td>
+                    <td>{{ question.B }} {% if question.Corect_ans_b == 'True' %}Đ{% else %}S{% endif %}</td>
+                    <td>{{ question.C }} {% if question.Corect_ans_c == 'True' %}Đ{% else %}S{% endif %}</td>
+                    <td>{{ question.D }} {% if question.Corect_ans_d == 'True' %}Đ{% else %}S{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <form method="POST">
+            {% csrf_token %}
+            <h3>Chọn bài học để lưu:</h3>
+            <select name="bai" required>
+                <option value="" disabled selected>Chọn bài học</option>
+                {% for bai in all_bai %}
+                <option value="{{ bai.id }}">{{ bai.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" name="save_questions">Lưu câu hỏi</button>
+        </form>
+    </div>
+</body>
+</html>

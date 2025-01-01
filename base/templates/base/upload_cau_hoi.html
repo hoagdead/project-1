@@ -1,0 +1,159 @@
+<!-- preview.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Preview Câu Hỏi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .cau_hoi1, .cau_hoi2 {
+            margin-bottom: 20px;
+        }
+
+        .cau_hoi2 input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+
+        .success {
+            color: green;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        select, input[type="radio"] {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Preview Câu Hỏi</h1>
+
+    <!-- Thông báo lỗi hoặc thành công -->
+    <div class="message">
+        {% if messages %}
+            {% for message in messages %}
+                <p class="{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Thêm kiểm tra số lượng câu hỏi -->
+    <p>Số câu hỏi loại 1: {{ cau_hoi1_questions|length }}</p>
+    <p>Số câu hỏi loại 2: {{ cau_hoi2_questions|length }}</p>
+
+    <form method="post" action="{% url 'upload_questions' %}">
+        {% csrf_token %}
+        <h2>Chọn Đề để Lưu Câu Hỏi</h2>
+        <label for="bai">Đề:</label>
+        <select name="bai" id="bai" required>
+            <option value="">-- Chọn Đề --</option>
+            {% for de_code, de_name in all_bai %}
+                <option value="{{ de_code }}">{{ de_name }}</option>
+            {% endfor %}
+        </select>
+
+        <h2>Câu Hỏi Loại 1 (Multiple Choice)</h2>
+        <ul>
+            {% for question in cau_hoi1_questions %}
+                <li class="cau_hoi1">
+                    <strong>{{ forloop.counter }}. {{ question.Noi_dung }}</strong><br>
+                    <ul>
+                        <li>A. {{ question.A }}</li>
+                        <li>B. {{ question.B }}</li>
+                        <li>C. {{ question.C }}</li>
+                        <li>D. {{ question.D }}</li>
+                    </ul>
+                    <p><strong>Đáp Án Đúng:</strong> {{ question.Corect_ans }}</p>
+                </li>
+            {% empty %}
+                <li>Không có câu hỏi loại 1 nào được tải.</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Câu Hỏi Loại 2 (True/False)</h2>
+        <ul>
+            {% for question in cau_hoi2_questions %}
+                <li class="cau_hoi2">
+                    <strong>{{ forloop.counter }}. {{ question.Noi_dung }}</strong><br>
+                    <h4>Chọn Loại:</h4>
+                    <select name="Loai_{{ forloop.counter }}" id="loai_{{ forloop.counter }}" required>
+                        <option value="">-- Chọn Loại --</option>
+                        <option value="chung">Chung</option>
+                        <option value="ICT">ICT</option>
+                        <option value="CS">CS</option>
+                    </select><br><br>
+                    <h4>Đánh Dấu Đúng/Sai Cho Các Đáp Án:</h4>
+                    <ul>
+                        {% if question.A %}
+                            <li>
+                                A. {{ question.A }}<br>
+                                <label>Đúng:</label>
+                                <input type="radio" name="Corect_ans_a_{{ forloop.counter }}" value="True" required> True
+                                <input type="radio" name="Corect_ans_a_{{ forloop.counter }}" value="False" required> False
+                            </li>
+                        {% endif %}
+                        {% if question.B %}
+                            <li>
+                                B. {{ question.B }}<br>
+                                <label>Đúng:</label>
+                                <input type="radio" name="Corect_ans_b_{{ forloop.counter }}" value="True" required> True
+                                <input type="radio" name="Corect_ans_b_{{ forloop.counter }}" value="False" required> False
+                            </li>
+                        {% endif %}
+                        {% if question.C %}
+                            <li>
+                                C. {{ question.C }}<br>
+                                <label>Đúng:</label>
+                                <input type="radio" name="Corect_ans_c_{{ forloop.counter }}" value="True" required> True
+                                <input type="radio" name="Corect_ans_c_{{ forloop.counter }}" value="False" required> False
+                            </li>
+                        {% endif %}
+                        {% if question.D %}
+                            <li>
+                                D. {{ question.D }}<br>
+                                <label>Đúng:</label>
+                                <input type="radio" name="Corect_ans_d_{{ forloop.counter }}" value="True" required> True
+                                <input type="radio" name="Corect_ans_d_{{ forloop.counter }}" value="False" required> False
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+            {% empty %}
+                <li>Không có câu hỏi loại 2 nào được tải.</li>
+            {% endfor %}
+        </ul>
+        <button type="submit" name="save_questions">Lưu Câu Hỏi</button>
+    </form>
+</body>
+</html>

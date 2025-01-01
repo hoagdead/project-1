@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Questions</title>
+</head>
+<body>
+    <h1>Upload Questions</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="question_type">Chọn loại câu hỏi:</label>
+        <select name="question_type" id="question_type" required>
+            <option value="" disabled selected>Chọn loại câu hỏi</option>
+            <option value="Cau_hoi1">Câu hỏi 1</option>
+            <option value="Cau_hoi2">Câu hỏi 2</option>
+        </select>
+        <br><br>
+        <label for="file">Tải lên file DOCX:</label>
+        <input type="file" name="file" id="file" accept=".docx" required>
+        <br><br>
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>
