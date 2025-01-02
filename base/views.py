@@ -23,7 +23,6 @@ from docx.oxml.ns import qn
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
-from .models import Workspace
 from django.db.models import Avg, Count
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
@@ -43,10 +42,7 @@ from .models import UserActivity
 def user_activity_log(request):
     activities = UserActivity.objects.all().order_by('-timestamp')[:100]  # Lấy 100 hoạt động gần nhất
     return render(request, 'base/user_activity_log.html', {'activities': activities})
-@receiver(post_save, sender=User)
-def create_workspace(sender, instance, created, **kwargs):
-    if created:
-        Workspace.objects.create(user=instance)
+
 def Loginpage(request):
     page = 'login'
     if request.method == 'POST':
