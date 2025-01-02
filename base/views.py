@@ -343,77 +343,48 @@ def upload_file(request):
             uploaded_file = request.FILES['file']
             doc = Document(uploaded_file)
 
-            # Nội dung HTML sẽ được tạo ra
-            content = ""
-
-            # Duyệt qua các phần tử của tài liệu
+            # Duyệt qua các phần tử của tài liệu để lấy câu hỏi và câu trả lời
             for element in doc.element.body:
-                # Nếu là đoạn văn (paragraph)
-                if element.tag == qn('w:p'):  # Kiểm tra đoạn văn
-                    paragraph = next(p for p in doc.paragraphs if p._element == element)
-                    paragraph_html = "<p style='text-indent: 2em;'>"
-
-                    # Xử lý các đoạn văn (runs)
-                    for run in paragraph.runs:
-                        text = escape(run.text)
-
-                        # Định dạng văn bản
-                        if run.bold:
-                            text = f"<strong>{text}</strong>"
-                        if run.italic:
-                            text = f"<em>{text}</em>"
-                        if run.underline:
-                            text = f"<u>{text}</u>"
-                        if run.font.color and run.font.color.rgb:
-                            color = run.font.color.rgb
-                            text = f"<span style='color: #{color};'>{text}</span>"
-
-                        paragraph_html += text
-
-                    paragraph_html += "</p>"
-                    content += paragraph_html
-
-                # Nếu là bảng (table)
-                elif element.tag == qn('w:tbl'):  # Kiểm tra bảng
+                # Nếu là bảng (table), xử lý câu hỏi
+                if element.tag == qn('w:tbl'):
                     table = next(t for t in doc.tables if t._element == element)
-                    table_html = "<table border='1' style='border-collapse: collapse; width: 100%;'>"
-
+                    
                     for row in table.rows:
-                        table_html += "<tr>"
-                        for cell in row.cells:
-                            cell_content = ""
-                            for paragraph in cell.paragraphs:
-                                for run in paragraph.runs:
-                                    text = escape(run.text)
-                                    if run.bold:
-                                        text = f"<strong>{text}</strong>"
-                                    if run.italic:
-                                        text = f"<em>{text}</em>"
-                                    if run.underline:
-                                        text = f"<u>{text}</u>"
-                                    if run.font.color and run.font.color.rgb:
-                                        color = run.font.color.rgb
-                                        text = f"<span style='color: #{color};'>{text}</span>"
-                                    cell_content += text
-                                cell_content += "<br>"
-                            table_html += f"<td>{cell_content}</td>"
-                        table_html += "</tr>"
-                    table_html += "</table>"
-                    content += table_html
+                        cells = row.cells
+                        if len(cells) >= 6:  # Đảm bảo bảng có ít nhất 6 cột (Nội dung, A, B, C, D, Đáp án)
+                            question_content = cells[0].text.strip()
+                            answer_a = cells[1].text.strip()
+                            answer_b = cells[2].text.strip()
+                            answer_c = cells[3].text.strip()
+                            answer_d = cells[4].text.strip()
+                            correct_answer = cells[5].text.strip().upper()
 
-            # Lưu vào cơ sở dữ liệu
-            lesson = bai_hoc.objects.create(
-                name=uploaded_file.name,
-                noi_dung=content,
-                file_di_kem=uploaded_file
-            )
+                            # Xác định đáp án đúng
+                            correct_a = 'True' if correct_answer == 'A' else 'False'
+                            correct_b = 'True' if correct_answer == 'B' else 'False'
+                            correct_c = 'True' if correct_answer == 'C' else 'False'
+                            correct_d = 'True' if correct_answer == 'D' else 'False'
 
-            # Chuyển hướng đến trang preview
-            return redirect('preview_lesson', lesson_id=lesson.id)
+                            # Lưu vào cơ sở dữ liệu
+                            Question2.objects.create(
+                                Noi_dung=question_content,
+                                A=answer_a,
+                                B=answer_b,
+                                C=answer_c,
+                                D=answer_d,
+                                Corect_ans_a=correct_a,
+                                Corect_ans_b=correct_b,
+                                Corect_ans_c=correct_c,
+                                Corect_ans_d=correct_d,
+                                type=2  # Có thể thay đổi type tùy theo loại câu hỏi
+                            )
+
+            # Chuyển hướng đến trang danh sách câu hỏi
+            return redirect('preview_lesson')  # Đảm bảo bạn đã định nghĩa route này
     else:
         form = UploadFileForm()
-    return render(request, 'base/upload_file.html', {'form': form})
 
+    return render(request, 'base/upload_file.html', {'form': form})
 
 def preview_lesson(request, lesson_id):
     try:
