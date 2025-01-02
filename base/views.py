@@ -334,22 +334,30 @@ def nop_dap_an(request, de_id):
     else:
         messages.error(request, 'Phương thức yêu cầu không hợp lệ.')
         return redirect('thi_thu', de_id=de_id)
-
 def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             uploaded_file = request.FILES['file']
             doc = Document(uploaded_file)
-            questions = []  # Danh sách câu hỏi được xử lý
 
-            # Duyệt qua các đoạn văn trong tài liệu
+            questions = []
+            current_type = None  # Loại câu hỏi: 1 (trắc nghiệm) hoặc 2 (đúng/sai)
             current_question = None
+
             for paragraph in doc.paragraphs:
                 text = paragraph.text.strip()
 
-                # Xác định bắt đầu của một câu hỏi
-                if text.startswith("Câu"):
+                # Xác định loại câu hỏi dựa trên tiêu đề phần
+                if text.startswith(("PHẦN 1", "Phần 1")):
+                    current_type = 1
+                    continue
+                elif text.startswith(("PHẦN 2", "Phần 2")):
+                    current_type = 2
+                    continue
+
+                # Phát hiện câu hỏi mới
+                if text.startswith("Câu "):
                     if current_question:
                         questions.append(current_question)
                     current_question = {
@@ -358,86 +366,83 @@ def upload_file(request):
                         "B": "",
                         "C": "",
                         "D": "",
-                        "correct": None,
+                        "Corect_ans_single": None,
+                        "Corect_ans_a": "None",
+                        "Corect_ans_b": "None",
+                        "Corect_ans_c": "None",
+                        "Corect_ans_d": "None",
+                        "Loai": "None",
+                        "type": current_type
                     }
 
-                # Xác định các đáp án
-                elif text.startswith(("A.", "B.", "C.", "D.")):
-                    key = text[0]  # Lấy ký tự đầu tiên làm key (A, B, C, D)
-                    answer_text = text[2:].strip()
-                    if answer_text and current_question:
-                        current_question[key] = answer_text
-                        # Kiểm tra định dạng in đậm để xác định đáp án đúng
+                # Xác định nội dung đáp án
+                elif text.startswith(("A.", "B.", "C.", "D.")) and current_question:
+                    answer_key = text[0]  # Lấy ký tự đầu tiên (A, B, C, D)
+                    answer_text = text[2:].strip()  # Lấy nội dung sau dấu "."
+                    if answer_key in ["A", "B", "C", "D"]:
+                        current_question[answer_key] = answer_text
+
+                        # Đánh dấu đáp án đúng nếu in đậm
                         is_correct = any(run.bold for run in paragraph.runs)
                         if is_correct:
-                            current_question["correct"] = key
+                            correct_field = f"Corect_ans_{answer_key.lower()}"
+                            current_question[correct_field] = "True"
 
             # Thêm câu hỏi cuối cùng nếu còn sót
             if current_question:
                 questions.append(current_question)
 
-            # Lưu vào cơ sở dữ liệu
-            for q in questions:
-                Question2.objects.create(
-                    Noi_dung=q["Noi_dung"],
-                    A=q["A"],
-                    B=q["B"],
-                    C=q["C"],
-                    D=q["D"],
-                    Corect_ans_a="True" if q["correct"] == "A" else "False",
-                    Corect_ans_b="True" if q["correct"] == "B" else "False",
-                    Corect_ans_c="True" if q["correct"] == "C" else "False",
-                    Corect_ans_d="True" if q["correct"] == "D" else "False",
-                    type=2,  # Giả sử đây là câu hỏi đúng/sai hoặc dạng trắc nghiệm
-                )
+            # Lưu câu hỏi vào session để xử lý trong preview
+            request.session["questions"] = questions
+            return redirect("preview_questions")
 
-            return redirect('preview_lesson')  # Điều hướng tới trang preview sau khi lưu
     else:
         form = UploadFileForm()
 
     return render(request, 'base/upload_file.html', {'form': form})
-def preview_lesson(request):
-    # Lấy danh sách tất cả các câu hỏi
-    questions = Question2.objects.all()
 
+
+def preview_questions(request):
+    questions = request.session.get("questions", [])
     if request.method == "POST":
-        # Lấy đề từ form
         selected_de = request.POST.get("de")
         if not selected_de:
-            return render(request, 'base/preview.html', {
-                'questions': questions,
-                'error': "Bạn cần chọn đề trước khi lưu."
+            return render(request, "base/preview.html", {
+                "questions": questions,
+                "DE_CHOICES": Question2.DE_CHOICES,
+                "LOAI_CHOICES": Question2.LOAI_CHOICES,
+                "error": "Bạn cần chọn đề trước khi lưu."
             })
 
-        # Cập nhật từng câu hỏi
-        for question in questions:
-            # Cập nhật đáp án đúng
-            if question.type == 1:  # Loại câu hỏi trắc nghiệm
-                correct_answer = request.POST.get(f"correct_single_{question.id}")
-                if correct_answer:
-                    question.Corect_ans_single = correct_answer
-            elif question.type == 2:  # Loại câu hỏi đúng/sai
-                question.Corect_ans_a = "True" if request.POST.get(f"correct_{question.id}_A") else "False"
-                question.Corect_ans_b = "True" if request.POST.get(f"correct_{question.id}_B") else "False"
-                question.Corect_ans_c = "True" if request.POST.get(f"correct_{question.id}_C") else "False"
-                question.Corect_ans_d = "True" if request.POST.get(f"correct_{question.id}_D") else "False"
+        for idx, question in enumerate(questions):
+            if question["type"] == 2:  # Câu hỏi đúng/sai
+                question["Loai"] = request.POST.get(f"loai_{idx}", "None")
 
-            # Cập nhật loại câu hỏi
-            if question.type == 2:  # Chỉ áp dụng cho loại đúng/sai
-                selected_loai = request.POST.get(f"loai_{question.id}")
-                if selected_loai:
-                    question.Loai = selected_loai
+        # Lưu vào cơ sở dữ liệu
+        for q in questions:
+            Question2.objects.create(
+                Noi_dung=q["Noi_dung"],
+                A=q["A"],
+                B=q["B"],
+                C=q["C"],
+                D=q["D"],
+                Corect_ans_single=q["Corect_ans_single"],
+                Corect_ans_a=q["Corect_ans_a"],
+                Corect_ans_b=q["Corect_ans_b"],
+                Corect_ans_c=q["Corect_ans_c"],
+                Corect_ans_d=q["Corect_ans_d"],
+                Loai=q["Loai"],
+                De=selected_de,
+                type=q["type"]
+            )
 
-            # Cập nhật đề
-            question.De = selected_de
-            question.save()
+        request.session.pop("questions", None)
+        return redirect("upload_bai_hoc")
 
-        return redirect("preview_lesson")
-
-    return render(request, 'base/preview.html', {
-        'questions': questions,
-        'DE_CHOICES': Question2.DE_CHOICES,
-        'LOAI_CHOICES': Question2.LOAI_CHOICES
+    return render(request, "base/preview.html", {
+        "questions": questions,
+        "DE_CHOICES": Question2.DE_CHOICES,
+        "LOAI_CHOICES": Question2.LOAI_CHOICES
     })
 
 

@@ -66,71 +66,37 @@
     <h1>Preview câu hỏi</h1>
     <form method="post">
         {% csrf_token %}
-        
-        <!-- Chọn đề -->
         <label for="de">Chọn đề:</label>
-        <select name="de" id="de" required>
+        <select name="de" required>
             {% for value, label in DE_CHOICES %}
                 <option value="{{ value }}">{{ label }}</option>
             {% endfor %}
         </select>
-
-        <!-- Hiển thị câu hỏi -->
+    
         <table>
             <thead>
                 <tr>
-                    <th>Nội dung câu hỏi</th>
+                    <th>Nội dung</th>
                     <th>Đáp án A</th>
                     <th>Đáp án B</th>
                     <th>Đáp án C</th>
                     <th>Đáp án D</th>
-                    <th>Đáp án đúng</th>
                     <th>Loại (ICT/CS)</th>
                 </tr>
             </thead>
             <tbody>
                 {% for question in questions %}
                     <tr>
-                        <td>{{ question.name }}</td>
-                        <td>
-                            {{ question.Ans_a }}
-                            {% if question.type == 2 %}
-                                <input type="radio" name="correct_{{ forloop.counter }}" value="A" {% if question.correct_a == "True" %}checked{% endif %}>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ question.Ans_b }}
-                            {% if question.type == 2 %}
-                                <input type="radio" name="correct_{{ forloop.counter }}" value="B" {% if question.correct_b == "True" %}checked{% endif %}>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ question.Ans_c }}
-                            {% if question.type == 2 %}
-                                <input type="radio" name="correct_{{ forloop.counter }}" value="C" {% if question.correct_c == "True" %}checked{% endif %}>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ question.Ans_d }}
-                            {% if question.type == 2 %}
-                                <input type="radio" name="correct_{{ forloop.counter }}" value="D" {% if question.correct_d == "True" %}checked{% endif %}>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if question.type == 1 %}
-                                <select name="correct_single_{{ forloop.counter }}">
-                                    <option value="A" {% if question.correct == "Ans_a" %}selected{% endif %}>A</option>
-                                    <option value="B" {% if question.correct == "Ans_b" %}selected{% endif %}>B</option>
-                                    <option value="C" {% if question.correct == "Ans_c" %}selected{% endif %}>C</option>
-                                    <option value="D" {% if question.correct == "Ans_d" %}selected{% endif %}>D</option>
-                                </select>
-                            {% endif %}
-                        </td>
+                        <td>{{ question.Noi_dung }}</td>
+                        <td>{{ question.A }}</td>
+                        <td>{{ question.B }}</td>
+                        <td>{{ question.C }}</td>
+                        <td>{{ question.D }}</td>
                         <td>
                             {% if question.type == 2 %}
-                                <select name="loai_{{ forloop.counter }}">
+                                <select name="loai_{{ forloop.counter0 }}">
                                     {% for value, label in LOAI_CHOICES %}
-                                        <option value="{{ value }}" {% if question.Loai == value %}selected{% endif %}>{{ label }}</option>
+                                        <option value="{{ value }}">{{ label }}</option>
                                     {% endfor %}
                                 </select>
                             {% else %}
@@ -141,8 +107,7 @@
                 {% endfor %}
             </tbody>
         </table>
-
-        <button type="submit" name="save_questions">Lưu câu hỏi</button>
+        <button type="submit">Lưu câu hỏi</button>
     </form>
 </body>
 </html>
