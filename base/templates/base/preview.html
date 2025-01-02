@@ -1,150 +1,148 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Preview Lesson</title>
+    <title>Preview Câu hỏi</title>
     <style>
-        /* Định dạng cơ bản cho body */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
+            background-color: #f4f4f9;
             margin: 0;
             padding: 0;
         }
 
-        /* Định dạng tiêu đề chính */
         h1 {
             text-align: center;
-            color: #4CAF50;
-            margin-top: 30px;
+            color: #333;
+            margin-top: 50px;
         }
 
-        /* Định dạng cho phần nội dung bài học */
-        .lesson-content {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        /* Định dạng cho phần liên kết */
-        a {
-            text-decoration: none;
-            color: #007bff;
-            font-size: 16px;
-            margin-top: 20px;
-            display: inline-block;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* Định dạng cho phần form */
         form {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
+            width: 80%;
+            margin: 20px auto;
             background-color: #ffffff;
+            padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-        }
-
-        h3 {
-            font-size: 18px;
-            color: #555;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
-        table, th, td {
-            border: 1px solid #ccc;
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
         }
 
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
-
-        th {
+        table th {
             background-color: #f2f2f2;
             color: #333;
         }
 
-        td {
-            background-color: #fafafa;
+        select, input[type="radio"] {
+            margin: 5px 0;
         }
 
-        /* Thêm hover cho các hàng trong bảng */
-        tr:hover {
-            background-color: #f1f1f1;
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
         }
-        
-        /* Tạo khoảng cách dưới cho các dòng */
-        tr:last-child td {
-            border-bottom: 1px solid #ccc;
+
+        button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <h1>Preview: {{ lesson.name }}</h1>
-    <div class="lesson-content">
-        <div>
-            {% autoescape off %}
-            {{ lesson.noi_dung }}
-            {% endautoescape %}
-        </div>
-    </div>
-    <a href="/">Upload another file</a>
-
-    <br><br>
-
-    <h1>Preview:</h1>
-    <a href="{% url 'upload_questions' %}">Upload another file</a>
-
-    <form method="POST">
+    <h1>Preview câu hỏi</h1>
+    <form method="post">
         {% csrf_token %}
-        <h3>Xem trước các câu hỏi đã tải lên:</h3>
+        
+        <!-- Chọn đề -->
+        <label for="de">Chọn đề:</label>
+        <select name="de" id="de" required>
+            {% for value, label in DE_CHOICES %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Hiển thị câu hỏi -->
         <table>
             <thead>
                 <tr>
-                    <th>Câu hỏi</th>
+                    <th>Nội dung câu hỏi</th>
                     <th>Đáp án A</th>
                     <th>Đáp án B</th>
                     <th>Đáp án C</th>
                     <th>Đáp án D</th>
                     <th>Đáp án đúng</th>
+                    <th>Loại (ICT/CS)</th>
                 </tr>
             </thead>
             <tbody>
                 {% for question in questions %}
                     <tr>
                         <td>{{ question.name }}</td>
-                        <td>{{ question.Ans_a }}</td>
-                        <td>{{ question.Ans_b }}</td>
-                        <td>{{ question.Ans_c }}</td>
-                        <td>{{ question.Ans_d }}</td>
-                        <td>{{ question.correct }}</td>
+                        <td>
+                            {{ question.Ans_a }}
+                            {% if question.type == 2 %}
+                                <input type="radio" name="correct_{{ forloop.counter }}" value="A" {% if question.correct_a == "True" %}checked{% endif %}>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ question.Ans_b }}
+                            {% if question.type == 2 %}
+                                <input type="radio" name="correct_{{ forloop.counter }}" value="B" {% if question.correct_b == "True" %}checked{% endif %}>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ question.Ans_c }}
+                            {% if question.type == 2 %}
+                                <input type="radio" name="correct_{{ forloop.counter }}" value="C" {% if question.correct_c == "True" %}checked{% endif %}>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ question.Ans_d }}
+                            {% if question.type == 2 %}
+                                <input type="radio" name="correct_{{ forloop.counter }}" value="D" {% if question.correct_d == "True" %}checked{% endif %}>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if question.type == 1 %}
+                                <select name="correct_single_{{ forloop.counter }}">
+                                    <option value="A" {% if question.correct == "Ans_a" %}selected{% endif %}>A</option>
+                                    <option value="B" {% if question.correct == "Ans_b" %}selected{% endif %}>B</option>
+                                    <option value="C" {% if question.correct == "Ans_c" %}selected{% endif %}>C</option>
+                                    <option value="D" {% if question.correct == "Ans_d" %}selected{% endif %}>D</option>
+                                </select>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if question.type == 2 %}
+                                <select name="loai_{{ forloop.counter }}">
+                                    {% for value, label in LOAI_CHOICES %}
+                                        <option value="{{ value }}" {% if question.Loai == value %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% else %}
+                                ---
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
-            <h3>Chọn bài học để lưu:</h3>
-            <select name="bai" required>
-              <option value="" disabled selected>Chọn bài học</option>
-              {% for bai in all_bai %}
-                <option value="{{ bai.id }}">{{ bai.name }}</option>
-              {% endfor %}
-            </select>
-            <br><br>
-            <button type="submit" name="save_questions">Lưu câu hỏi</button>
-          </form>
         </table>
+
+        <button type="submit" name="save_questions">Lưu câu hỏi</button>
     </form>
 </body>
 </html>

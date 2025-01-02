@@ -25,9 +25,9 @@ urlpatterns = [
 
     # Câu hỏi và bài học
     path('create-question/', views.createquestion, name="create-question"),
-    path('uploadbaihoc/', views.upload_file, name='upload_bai_hoc'),
-    path('upload_cau_hoi/', views.upload_questions, name='upload_questions'),
-    path('preview/<int:lesson_id>/', views.preview_lesson, name='preview_lesson'),
+    path('uploadbaihoc/', views.upload_questions, name='upload_bai_hoc'),
+    path('upload_cau_hoi/', views.upload_file, name='upload_questions'),
+    path('preview/', views.preview_lesson, name='preview_lesson'),
     path('0n_tap/', views.bai_hoc_all, name='on_tap_pv'),
     path('on_tap/', views.bai_hoc_i, name='on_tap'),
     path('on_tap/bai/<int:lesson_id>/', views.bai, name='bai'),

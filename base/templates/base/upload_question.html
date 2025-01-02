@@ -56,16 +56,29 @@
             background-color: #45a049;
         }
 
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <h1>Upload câu hỏi</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <p>{{ form.file.label }}</p>
+        {% if form.non_field_errors %}
+            <div class="error">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+        <p>{{ form.file.label_tag }}</p>
         {{ form.file }}
-        <p>{{ form.question_type.label }}</p>
-        {{ form.question_type }}
+        {% if form.file.errors %}
+            <div class="error">
+                {{ form.file.errors }}
+            </div>
+        {% endif %}
         <button type="submit">Upload</button>
     </form>   
 </body>

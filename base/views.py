@@ -335,64 +335,112 @@ def nop_dap_an(request, de_id):
         messages.error(request, 'Phương thức yêu cầu không hợp lệ.')
         return redirect('thi_thu', de_id=de_id)
 
-
 def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             uploaded_file = request.FILES['file']
             doc = Document(uploaded_file)
+            questions = []  # Danh sách câu hỏi được xử lý
 
-            # Duyệt qua các phần tử của tài liệu để lấy câu hỏi và câu trả lời
-            for element in doc.element.body:
-                # Nếu là bảng (table), xử lý câu hỏi
-                if element.tag == qn('w:tbl'):
-                    table = next(t for t in doc.tables if t._element == element)
-                    
-                    for row in table.rows:
-                        cells = row.cells
-                        if len(cells) >= 6:  # Đảm bảo bảng có ít nhất 6 cột (Nội dung, A, B, C, D, Đáp án)
-                            question_content = cells[0].text.strip()
-                            answer_a = cells[1].text.strip()
-                            answer_b = cells[2].text.strip()
-                            answer_c = cells[3].text.strip()
-                            answer_d = cells[4].text.strip()
-                            correct_answer = cells[5].text.strip().upper()
+            # Duyệt qua các đoạn văn trong tài liệu
+            current_question = None
+            for paragraph in doc.paragraphs:
+                text = paragraph.text.strip()
 
-                            # Xác định đáp án đúng
-                            correct_a = 'True' if correct_answer == 'A' else 'False'
-                            correct_b = 'True' if correct_answer == 'B' else 'False'
-                            correct_c = 'True' if correct_answer == 'C' else 'False'
-                            correct_d = 'True' if correct_answer == 'D' else 'False'
+                # Xác định bắt đầu của một câu hỏi
+                if text.startswith("Câu"):
+                    if current_question:
+                        questions.append(current_question)
+                    current_question = {
+                        "Noi_dung": text.split(": ", 1)[1] if ": " in text else "",
+                        "A": "",
+                        "B": "",
+                        "C": "",
+                        "D": "",
+                        "correct": None,
+                    }
 
-                            # Lưu vào cơ sở dữ liệu
-                            Question2.objects.create(
-                                Noi_dung=question_content,
-                                A=answer_a,
-                                B=answer_b,
-                                C=answer_c,
-                                D=answer_d,
-                                Corect_ans_a=correct_a,
-                                Corect_ans_b=correct_b,
-                                Corect_ans_c=correct_c,
-                                Corect_ans_d=correct_d,
-                                type=2  # Có thể thay đổi type tùy theo loại câu hỏi
-                            )
+                # Xác định các đáp án
+                elif text.startswith(("A.", "B.", "C.", "D.")):
+                    key = text[0]  # Lấy ký tự đầu tiên làm key (A, B, C, D)
+                    answer_text = text[2:].strip()
+                    if answer_text and current_question:
+                        current_question[key] = answer_text
+                        # Kiểm tra định dạng in đậm để xác định đáp án đúng
+                        is_correct = any(run.bold for run in paragraph.runs)
+                        if is_correct:
+                            current_question["correct"] = key
 
-            # Chuyển hướng đến trang danh sách câu hỏi
-            return redirect('preview_lesson')  # Đảm bảo bạn đã định nghĩa route này
+            # Thêm câu hỏi cuối cùng nếu còn sót
+            if current_question:
+                questions.append(current_question)
+
+            # Lưu vào cơ sở dữ liệu
+            for q in questions:
+                Question2.objects.create(
+                    Noi_dung=q["Noi_dung"],
+                    A=q["A"],
+                    B=q["B"],
+                    C=q["C"],
+                    D=q["D"],
+                    Corect_ans_a="True" if q["correct"] == "A" else "False",
+                    Corect_ans_b="True" if q["correct"] == "B" else "False",
+                    Corect_ans_c="True" if q["correct"] == "C" else "False",
+                    Corect_ans_d="True" if q["correct"] == "D" else "False",
+                    type=2,  # Giả sử đây là câu hỏi đúng/sai hoặc dạng trắc nghiệm
+                )
+
+            return redirect('preview_lesson')  # Điều hướng tới trang preview sau khi lưu
     else:
         form = UploadFileForm()
 
     return render(request, 'base/upload_file.html', {'form': form})
+def preview_lesson(request):
+    # Lấy danh sách tất cả các câu hỏi
+    questions = Question2.objects.all()
 
-def preview_lesson(request, lesson_id):
-    try:
-        lesson = bai_hoc.objects.get(id=lesson_id)
-    except bai_hoc.DoesNotExist:
-        return HttpResponse("Lesson not found", status=404)
+    if request.method == "POST":
+        # Lấy đề từ form
+        selected_de = request.POST.get("de")
+        if not selected_de:
+            return render(request, 'base/preview.html', {
+                'questions': questions,
+                'error': "Bạn cần chọn đề trước khi lưu."
+            })
 
-    return render(request, 'base/preview.html', {'lesson': lesson})
+        # Cập nhật từng câu hỏi
+        for question in questions:
+            # Cập nhật đáp án đúng
+            if question.type == 1:  # Loại câu hỏi trắc nghiệm
+                correct_answer = request.POST.get(f"correct_single_{question.id}")
+                if correct_answer:
+                    question.Corect_ans_single = correct_answer
+            elif question.type == 2:  # Loại câu hỏi đúng/sai
+                question.Corect_ans_a = "True" if request.POST.get(f"correct_{question.id}_A") else "False"
+                question.Corect_ans_b = "True" if request.POST.get(f"correct_{question.id}_B") else "False"
+                question.Corect_ans_c = "True" if request.POST.get(f"correct_{question.id}_C") else "False"
+                question.Corect_ans_d = "True" if request.POST.get(f"correct_{question.id}_D") else "False"
+
+            # Cập nhật loại câu hỏi
+            if question.type == 2:  # Chỉ áp dụng cho loại đúng/sai
+                selected_loai = request.POST.get(f"loai_{question.id}")
+                if selected_loai:
+                    question.Loai = selected_loai
+
+            # Cập nhật đề
+            question.De = selected_de
+            question.save()
+
+        return redirect("preview_lesson")
+
+    return render(request, 'base/preview.html', {
+        'questions': questions,
+        'DE_CHOICES': Question2.DE_CHOICES,
+        'LOAI_CHOICES': Question2.LOAI_CHOICES
+    })
+
+
 
 @csrf_exempt
 def set_theme(request):
@@ -430,54 +478,42 @@ def bai(request,lesson_id):
         'all_lesson': all_lesson,
     }
     return render(request, 'base/bai_hoc_nd.html',context)
-
 def upload_questions(request):
     if request.method == "POST":
-        # Xử lý yêu cầu POST từ preview.html (Lưu câu hỏi vào DB)
         if "save_questions" in request.POST:
-            questions = request.session.get("questions", [])  # Lấy danh sách câu hỏi từ session
-            selected_bai = request.POST.get("bai")  # Lấy bài học từ form
+            questions = request.session.get("questions", [])
+            selected_de = request.POST.get("de")
+            selected_loai = request.POST.get("loai")
 
-            # Kiểm tra dữ liệu hợp lệ
-            if not selected_bai or not questions:
+            if not selected_de or not selected_loai or not questions:
                 return render(request, "base/preview.html", {
                     "questions": questions,
-                    "all_bai": bai_hoc.objects.all(),
-                    "error": "Chưa chọn bài học hoặc không có câu hỏi để lưu."
+                    "error": "Chưa chọn đầy đủ thông tin hoặc không có câu hỏi để lưu."
                 })
 
-            for question_data in questions:
-                Question.objects.create(
-                    name=question_data["name"],
-                    Ans_a=question_data["Ans_a"],
-                    Ans_b=question_data["Ans_b"],
-                    Ans_c=question_data["Ans_c"],
-                    Ans_d=question_data["Ans_d"],
-                    Corect_ans=question_data["correct"],  # Lưu đáp án đúng
-                    bai_id=selected_bai,  # Gán bài học vào câu hỏi
-                )
-            request.session.pop("questions", None)  # Xóa session sau khi lưu
-            return redirect("upload_questions")  # Redirect về trang upload
+            save_questions_to_db(questions, selected_de, selected_loai)
+            request.session.pop("questions", None)
+            return redirect("upload_questions")
 
-        # Xử lý POST từ upload_question.html
         else:
             form = UploadQuestionForm(request.POST, request.FILES)
             if form.is_valid():
-                file = request.FILES["file"]  # Lấy file được upload
-                questions = process_question_file(file)  # Xử lý file để lấy câu hỏi
-                request.session["questions"] = questions  # Lưu câu hỏi vào session
-                all_bai = bai_hoc.objects.all()  # Lấy danh sách bài học
-                return render(request, "base/preview.html", {
-                    "questions": questions, 
-                    "all_bai": all_bai
-                })
+                file = request.FILES["file"]
+                de = form.cleaned_data["de"]
+                loai = form.cleaned_data["loai"]
+                
+                try:
+                    questions = process_question_file(file)
+                except ValueError as e:
+                    return render(request, "base/upload_question.html", {"form": form, "error": str(e)})
+
+                request.session["questions"] = questions
+                return render(request, "base/preview.html", {"questions": questions, "de": de, "loai": loai})
             else:
                 return render(request, "base/upload_question.html", {"form": form, "error": "Form không hợp lệ."})
 
-    # Nếu là GET (tải trang upload câu hỏi)
     else:
         form = UploadQuestionForm()
-
     return render(request, "base/upload_question.html", {"form": form})
 
 def luyen_tap_all(request):

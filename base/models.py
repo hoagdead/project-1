@@ -105,6 +105,8 @@ class UserActivity(models.Model):
     path = models.CharField(max_length=500, null=True)  # Đường dẫn truy cập
     method = models.CharField(max_length=10, null=True)  # Loại request: GET, POST, etc.
     timestamp = models.DateTimeField(auto_now_add=True)  # Thời gian thực hiện
+    ip_address = models.GenericIPAddressField(null=True, blank=True)  # Địa chỉ IP
+    user_agent = models.TextField(null=True, blank=True)  # Thông tin trình duyệt
     def __str__(self):
         return f"{self.user.username} - {self.path} - {self.timestamp}"
     

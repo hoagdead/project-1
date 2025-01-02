@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Room, Question, UploadedFile, User,UserProfile
+from .models import Room, Question, UploadedFile, User,UserProfile,Question2
 
 class UploadFileForm(forms.Form):
     file = forms.FileField(
@@ -8,22 +8,25 @@ class UploadFileForm(forms.Form):
         required=True,
         help_text="Chọn một file Word (.doc, .docx) để tải lên."
     )
-
 class UploadQuestionForm(forms.Form):
     file = forms.FileField(
         label="Chọn file Word",
         required=True,
         help_text="Chọn một file Word (.doc, .docx) để tải lên.",
     )
-    QUESTION_TYPE_CHOICES = [
-        (1, "Chọn 1 đáp án đúng"),
-        (2, "Đúng/Sai"),
-    ]
-    question_type = forms.ChoiceField(
-        choices=QUESTION_TYPE_CHOICES,
-        label="Loại câu hỏi",
-        widget=forms.RadioSelect
+    de = forms.ChoiceField(
+        choices=Question2.DE_CHOICES,
+        label="Chọn đề",
+        required=True,
+        help_text="Chọn đề cho các câu hỏi.",
     )
+    loai = forms.ChoiceField(
+        choices=Question2.LOAI_CHOICES,
+        label="Loại câu hỏi",
+        required=True,
+        help_text="Chọn loại câu hỏi (Chung, ICT, CS).",
+    )
+
 
 class RoomForm(ModelForm):
     class Meta:
