@@ -7,8 +7,8 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from .models import Room, Topic, Message,Question,Question2,bai_hoc,UserProfile
 from .form import RoomForm,QuestionForm,UploadFileForm,UserForm,UserProfileForm
+from django.views.decorators.csrf import csrf_protect
 import random
-import os
 from docx import Document 
 from django.core.files.storage import default_storage
 from django.conf import settings
@@ -183,129 +183,161 @@ def createquestion(request):
     context={'form':form}
     return render(request,'base/question_form.html',context)        
 
-def question_type1():
-    cau_hoi_nhieu_dap_an = list(Question.objects.filter(type=1))
-    trao_doi_cau_hoi = []
-    for question in cau_hoi_nhieu_dap_an:
-        answers = [
-            ('A', question.Ans_a),
-            ('B', question.Ans_b),
-            ('C', question.Ans_c),
-            ('D', question.Ans_d)
-        ]
-        trao_doi_cau_hoi.append({
-            'type': 'multiple_choice',
-            'name': question.name,
-            'answers': answers,
-            'id': question.id,
-            'correct_answer': f"Ans_{question.Corect_ans[-1].lower()}"
-        })
-    return trao_doi_cau_hoi
 
-def question_type2():
-    cau_hoi_dung_sai = list(Question2.objects.filter(type__in=[2, 3, 4, 5]))  # Lọc các loại đúng/sai
-    trao_doi_cau_hoi = []
-    for question in cau_hoi_dung_sai:
-        answers = [
-            {'label': 'A', 'text': question.Ans_a, 'correct': question.Corect_ans_a},
-            {'label': 'B', 'text': question.Ans_b, 'correct': question.Corect_ans_b},
-            {'label': 'C', 'text': question.Ans_c, 'correct': question.Corect_ans_c},
-            {'label': 'D', 'text': question.Ans_d, 'correct': question.Corect_ans_d},
-        ]
-        trao_doi_cau_hoi.append({
-            'type': 'true_false',
-            'name': question.name,
-            'id': question.id,
-            'answers': answers,
-        })
-    return trao_doi_cau_hoi
-
-
-import random
-def question_and_submit(request, de_id):
+@csrf_protect
+def hien_thi_cau_hoi(request, de_id):
     if request.method == 'POST':
-        user_answers = json.loads(request.POST.get('userAnswers', '{}'))
-        total_score = 0
-        review_data = []
+        loai_chon = request.POST.get('loai')
+        if loai_chon not in ['ICT', 'CS']:
+            messages.error(request, 'Lựa chọn loại câu hỏi không hợp lệ.')
+            return redirect('de_thi', de_id=de_id)
 
-        # Lấy danh sách câu hỏi
-        type1_questions = question_type1()  # Lấy câu hỏi loại 1
-        type2_questions = question_type2()  # Lấy câu hỏi đúng/sai
+        request.session['loai_chon'] = loai_chon
 
-        # Random và giới hạn số lượng câu hỏi
-        random.shuffle(type1_questions)
-        random.shuffle(type2_questions)
+        # Lấy và xáo trộn câu hỏi loại 1 (dạng single choice)
+        cau_hoi_loai1 = list(Question2.objects.filter(De=de_id, type=1))
+        random.shuffle(cau_hoi_loai1)
 
-        type1_questions = type1_questions[:24]  # 24 câu loại 1
-        type2_questions = type2_questions[:6]  # 6 câu đúng/sai (2 câu mỗi loại)
+        # Lấy câu hỏi loại 2 (dạng multiple choice chung và theo loại)
+        cau_hoi_chung = list(Question2.objects.filter(De=de_id, type=2, Loai='chung'))
+        cau_hoi_loai_chon = list(Question2.objects.filter(De=de_id, type=2, Loai=loai_chon))
+
+        cau_hoi_chung_chon = random.sample(cau_hoi_chung, min(2, len(cau_hoi_chung)))
+        cau_hoi_loai_chon = random.sample(cau_hoi_loai_chon, min(2, len(cau_hoi_loai_chon)))
+
+        cau_hoi_loai2 = cau_hoi_chung_chon + cau_hoi_loai_chon
+
+        # Lưu câu hỏi vào session
+        request.session['type1_questions'] = [
+            {
+                'id': q.id,
+                'noi_dung': q.Noi_dung,
+                'A': q.A,
+                'B': q.B,
+                'C': q.C,
+                'D': q.D,
+                'dap_an_dung': q.Corect_ans_single,
+                'dap_an': [('A', q.A), ('B', q.B), ('C', q.C), ('D', q.D)],
+            }
+            for q in cau_hoi_loai1
+        ]
+
+        request.session['type2_questions'] = [
+            {
+                'id': q.id,
+                'noi_dung': q.Noi_dung,
+                'loai': q.Loai,
+                'dap_an': [
+                    {'chu_thich': 'A', 'noi_dung': q.A, 'dap_an_dung': q.Corect_ans_a == 'True'},
+                    {'chu_thich': 'B', 'noi_dung': q.B, 'dap_an_dung': q.Corect_ans_b == 'True'},
+                    {'chu_thich': 'C', 'noi_dung': q.C, 'dap_an_dung': q.Corect_ans_c == 'True'},
+                    {'chu_thich': 'D', 'noi_dung': q.D, 'dap_an_dung': q.Corect_ans_d == 'True'},
+                ],
+            }
+            for q in cau_hoi_loai2
+        ]
+
+        return redirect('de_thi', de_id=de_id)
+
+    elif request.method == 'GET':
+        cau_hoi_loai1 = request.session.get('type1_questions')
+        cau_hoi_loai2 = request.session.get('type2_questions')
+        loai_chon = request.session.get('loai_chon')
+
+        if not cau_hoi_loai1 or not cau_hoi_loai2:
+            return render(request, 'question_list.html', {
+                'de': de_id,
+                'hien_thi_chon_loai': True,
+            })
+        else:
+            return render(request, 'question_list.html', {
+                'type1': cau_hoi_loai1,
+                'type2': cau_hoi_loai2,
+                'de': de_id,
+                'loai_chon': loai_chon,
+                'hien_thi_chon_loai': False,
+            })
+    else:
+        messages.error(request, 'Phương thức yêu cầu không hợp lệ.')
+        return redirect('thi_thu')
+
+@csrf_protect
+def nop_dap_an(request, de_id):
+    if request.method == 'POST':
+        cau_hoi_loai1 = request.session.get('type1_questions', [])
+        cau_hoi_loai2 = request.session.get('type2_questions', [])
+
+        if not cau_hoi_loai1 or not cau_hoi_loai2:
+            messages.error(request, 'Không tìm thấy câu hỏi trong phiên làm bài. Vui lòng bắt đầu lại bài thi.')
+            return redirect('de_thi', de_id=de_id)
+
+        dap_an_nguoi_dung = request.POST.dict()
+        tong_diem = 0
+        du_lieu_danh_gia = []
 
         # Xử lý câu hỏi loại 1
-        for question in type1_questions:
-            question_id = str(question['id'])
-            selected_answer = user_answers.get(question_id)
-            is_correct = selected_answer == question['correct_answer']
-            if is_correct:
-                total_score += 1
-            review_data.append({
-                'type': 'multiple_choice',
-                'id': question['id'],
-                'name': question['name'],
-                'selected_answer': selected_answer,
-                'correct_answer': question['correct_answer'],
-                'is_correct': is_correct,
-                'answers': question['answers'],
+        for q in cau_hoi_loai1:
+            dap_an = dap_an_nguoi_dung.get(str(q['id']))
+            dung = dap_an == q['dap_an_dung']
+            if dung:
+                tong_diem += 1
+            du_lieu_danh_gia.append({
+                'loai': 'chon_dap_an',
+                'id': q['id'],
+                'noi_dung': q['noi_dung'],
+                'dap_an_nguoi_chon': dap_an,
+                'dap_an_dung': q['dap_an_dung'],
+                'dung': dung,
+                'dap_an': q['dap_an'],
             })
 
-        # Xử lý câu hỏi đúng/sai
-        for question in type2_questions:
-            question_id = str(question['id'])
-            answer_states = []
-            correct_count = 0
+        # Xử lý câu hỏi loại 2
+        for q in cau_hoi_loai2:
+            so_dap_an_dung = 0
+            for ans in q['dap_an']:
+                da_chon = dap_an_nguoi_dung.get(f"{q['id']}_{ans['chu_thich']}") == 'True'
+                if da_chon and ans['dap_an_dung']:
+                    so_dap_an_dung += 1
 
-            for answer in question['answers']:
-                selected_answer = user_answers.get(f'{question_id}_{answer["label"]}')
-                is_correct = selected_answer == str(answer['correct'])
-                answer_states.append({
-                    'label': answer['label'],
-                    'text': answer['text'],
-                    'selected_answer': selected_answer,
-                    'correct_answer': str(answer['correct']),
-                    'is_correct': is_correct,
-                })
-                if is_correct:
-                    correct_count += 1
+            diem = {1: 0.1, 2: 0.25, 3: 0.5, 4: 1}.get(so_dap_an_dung, 0)
+            tong_diem += diem
 
-            # Điểm cho câu đúng/sai
-            total_score += correct_count * 0.25
-            review_data.append({
-                'type': 'true_false',
-                'id': question['id'],
-                'name': question['name'],
-                'answers': answer_states,
+            du_lieu_danh_gia.append({
+                'loai': 'dung_sai',
+                'id': q['id'],
+                'noi_dung': q['noi_dung'],
+                'loai_cau_hoi': q['loai'],
+                'so_dap_an_dung': so_dap_an_dung,
+                'diem': diem,
+                'dap_an': [
+                    {
+                        'chu_thich': ans['chu_thich'],
+                        'noi_dung': ans['noi_dung'],
+                        'dap_an_nguoi_chon': 'Đ' if (dap_an_nguoi_dung.get(f"{q['id']}_{ans['chu_thich']}") == 'True') else 'S',
+                        'dap_an_dung': 'Đ' if ans['dap_an_dung'] else 'S',
+                        'dung': (dap_an_nguoi_dung.get(f"{q['id']}_{ans['chu_thich']}") == 'True') == ans['dap_an_dung'],
+                    }
+                    for ans in q['dap_an']
+                ],
             })
 
-        total_score = min(total_score, 10)
+        tong_diem = min(tong_diem, 10)
 
-        return render(request, 'base/submit_answer.html', {
-            'score': total_score,
-            'review_data': review_data,
+        try:
+            del request.session['type1_questions']
+            del request.session['type2_questions']
+            del request.session['loai_chon']
+        except KeyError:
+            pass
+
+        return render(request, 'base/submit_anwser.html', {
+            'diem': tong_diem,
+            'du_lieu_danh_gia': du_lieu_danh_gia,
         })
 
-    # Nếu GET, hiển thị danh sách câu hỏi
-    type1_questions = question_type1()
-    type2_questions = question_type2()
-
-    random.shuffle(type1_questions)
-    random.shuffle(type2_questions)
-
-    type1_questions = type1_questions[:24]
-    type2_questions = type2_questions[:6]  # 6 câu đúng/sai (2 câu mỗi loại)
-
-    return render(request, 'question_list.html', {
-        'type1': type1_questions,
-        'type2': type2_questions,
-        'de': de_id,
-    })
+    else:
+        messages.error(request, 'Phương thức yêu cầu không hợp lệ.')
+        return redirect('thi_thu', de_id=de_id)
 
 
 def upload_file(request):

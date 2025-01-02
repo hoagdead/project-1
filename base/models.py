@@ -79,134 +79,23 @@ class Question(models.Model):
         return self.name[:50] + "..." 
 
 class Question2(models.Model):
-    name = models.TextField(max_length=1000,blank=True)
-    Ans_a = models.TextField(max_length=1000,blank=True)
-    Ans_b = models.TextField(max_length=1000,blank=True)
-    Ans_c = models.TextField(max_length=1000,blank=True)
-    Ans_d = models.TextField(max_length=1000,blank=True)
-    
-    SELECTION_CHOICES = [
-        ("True","đúng"),
-        ("False","Sai")
-    ]
-    
-    Corect_ans_a = models.CharField(max_length=5, choices=SELECTION_CHOICES, default=None)
-    Corect_ans_b = models.CharField(max_length=5, choices=SELECTION_CHOICES, default=None)
-    Corect_ans_c = models.CharField(max_length=5, choices=SELECTION_CHOICES, default=None)
-    Corect_ans_d = models.CharField(max_length=5, choices=SELECTION_CHOICES, default=None)
-
-    type = models.IntegerField(default=2,editable=True)
-    def __str__(self):
-        return self.name[:50] + "..." 
-
-class Workspace(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="workspace")
-    name = models.CharField(max_length=100, default="My Personal Space")
-class Cau_hoi1(models.Model):
-    Noi_dung = models.TextField(max_length=1000, blank=True)
-    A = models.TextField(max_length=1000, blank=True)
-    B = models.TextField(max_length=1000, blank=True)
-    C = models.TextField(max_length=1000, blank=True)
-    D = models.TextField(max_length=1000, blank=True)
-
-    DE_CHOICES = [
-        ("1", "Đề 1"),
-        ("2", "Đề 2"),
-        ("3", "Đề 3"),
-        ("4", "Đề 4"),
-        ("5", "Đề 5"),
-        ("6", "Đề 6"),
-    ]
-
-    CORECT_ANS_CHOICES = [
-        ("A", "A"),
-        ("B", "B"),
-        ("C", "C"),
-        ("D", "D"),
-    ]
-
-    Corect_ans = models.CharField(
-        max_length=1,
-        choices=CORECT_ANS_CHOICES,
-        default='A',
-        verbose_name="Đáp án đúng"
-    )
-    De = models.CharField(
-        max_length=5,
-        choices=DE_CHOICES,
-        null=True,  # Thêm null=True
-        blank=True,  # Thêm blank=True
-        verbose_name="Đề"
-    )
-
-    def __str__(self):
-        return self.Noi_dung[:50] + "..."
-
-class Cau_hoi2(models.Model):
-    Noi_dung = models.TextField(max_length=1000, blank=True)
-    A = models.TextField(max_length=1000, blank=True)
-    B = models.TextField(max_length=1000, blank=True)
-    C = models.TextField(max_length=1000, blank=True)
-    D = models.TextField(max_length=1000, blank=True)
-
-    DE_CHOICES = [
-        ("1", "Đề 1"),
-        ("2", "Đề 2"),
-        ("3", "Đề 3"),
-        ("4", "Đề 4"),
-        ("5", "Đề 5"),
-        ("6", "Đề 6"),
-    ]
-
-    CORRECT_ANS_CHOICES = [
-        ("True", "Đúng"),
-        ("False", "Sai"),
-    ]
-
-    Corect_ans_a = models.CharField(
-        max_length=5,
-        choices=CORRECT_ANS_CHOICES,
-        default='False',
-        verbose_name="Đáp án A đúng?"
-    )
-    Corect_ans_b = models.CharField(
-        max_length=5,
-        choices=CORRECT_ANS_CHOICES,
-        default='False',
-        verbose_name="Đáp án B đúng?"
-    )
-    Corect_ans_c = models.CharField(
-        max_length=5,
-        choices=CORRECT_ANS_CHOICES,
-        default='False',
-        verbose_name="Đáp án C đúng?"
-    )
-    Corect_ans_d = models.CharField(
-        max_length=5,
-        choices=CORRECT_ANS_CHOICES,
-        default='False',
-        verbose_name="Đáp án D đúng?"
-    )
-
-    LOAI_CHOICES = [
-        ("chung", "Chung"),
-        ("ICT", "ICT"),
-        ("CS", "CS"),
-    ]
-
-    Loai = models.CharField(
-        max_length=5,
-        choices=LOAI_CHOICES,
-        default='chung',
-        verbose_name="Loại câu hỏi"
-    )
-    De = models.CharField(
-        max_length=5,
-        choices=DE_CHOICES,
-        null=True,  # Thêm null=True
-        blank=True,  # Thêm blank=True
-        verbose_name="Đề"
-    )
+    Noi_dung = models.TextField(max_length=1000, blank=True, verbose_name="Nội dung câu hỏi")
+    A = models.TextField(max_length=1000, blank=True, verbose_name="Đáp án A")
+    B = models.TextField(max_length=1000, blank=True, verbose_name="Đáp án B")
+    C = models.TextField(max_length=1000, blank=True, verbose_name="Đáp án C")
+    D = models.TextField(max_length=1000, blank=True, verbose_name="Đáp án D")
+    DE_CHOICES = [("1", "Đề 1"), ("2", "Đề 2"), ("3", "Đề 3"), ("4", "Đề 4"), ("5", "Đề 5"), ("6", "Đề 6")]
+    CORRECT_ANS_CHOICES_SINGLE = [("A", "A"), ("B", "B"), ("C", "C"), ("D", "D")]
+    CORRECT_ANS_CHOICES_MULTIPLE = [("True", "Đúng"), ("False", "Sai")]
+    LOAI_CHOICES = [("chung", "Chung"), ("ICT", "ICT"), ("CS", "CS")]
+    Corect_ans_single = models.CharField(max_length=1, choices=CORRECT_ANS_CHOICES_SINGLE, blank=True, null=True, verbose_name="Đáp án đúng (một lựa chọn)")
+    Corect_ans_a = models.CharField(max_length=5, choices=CORRECT_ANS_CHOICES_MULTIPLE, default="False", blank=True, verbose_name="Đáp án A đúng?")
+    Corect_ans_b = models.CharField(max_length=5, choices=CORRECT_ANS_CHOICES_MULTIPLE, default="False", blank=True, verbose_name="Đáp án B đúng?")
+    Corect_ans_c = models.CharField(max_length=5, choices=CORRECT_ANS_CHOICES_MULTIPLE, default="False", blank=True, verbose_name="Đáp án C đúng?")
+    Corect_ans_d = models.CharField(max_length=5, choices=CORRECT_ANS_CHOICES_MULTIPLE, default="False", blank=True, verbose_name="Đáp án D đúng?")
+    Loai = models.CharField(max_length=5, choices=LOAI_CHOICES, default="chung", verbose_name="Loại câu hỏi")
+    De = models.CharField(max_length=5, choices=DE_CHOICES, null=True, blank=True, verbose_name="Đề")
+    type = models.IntegerField(default=2, verbose_name="Loại câu hỏi (dạng số)")
 
     def __str__(self):
         return self.Noi_dung[:50] + "..."

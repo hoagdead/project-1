@@ -37,8 +37,8 @@ urlpatterns = [
 
     # Thi thử
     path('thi_thu/', views.thi_thu, name='thi_thu'),
-    path('thi_thu/de/<int:de_id>/', views.question_and_submit, name='de_thi'),
-    path('thi_thu/de/submit/<int:de_id>/', views.question_and_submit, name='submit_answer'),
+    path('thi_thu/de/<int:de_id>/', views.hien_thi_cau_hoi, name='de_thi'),
+    path('thi_thu/de/submit/<int:de_id>/', views.nop_dap_an, name='submit_answer'),
 
     # Quản lý giao diện
     path('change-mode/', views.change_mode, name="change-mode"),
