@@ -63,7 +63,6 @@ def user_activity_log(request):
     )
 
     # Thống kê số lượt truy cập các trang cụ thể
-    so_luot_dang_ky = UserActivity.objects.filter(path='/register/').count()
     so_luot_forum = UserActivity.objects.filter(path='/forum/').count()
     so_luot_on_tap = UserActivity.objects.filter(path='/0n_tap/').count()
     so_luot_luyen_tap = UserActivity.objects.filter(path='/luyen_tap/').count()
@@ -73,7 +72,6 @@ def user_activity_log(request):
         'total_page_views': total_page_views,            
         'stats_by_path': stats_by_path,                  
         'stats_by_hour': stats_by_hour,                  
-        'so_luot_dang_ky': so_luot_dang_ky,  
         'so_luot_forum': so_luot_forum,                      
         'so_luot_on_tap': so_luot_on_tap,  
         'so_luot_luyen_tap': so_luot_luyen_tap, 
