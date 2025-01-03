@@ -112,15 +112,16 @@ class UserActivity(models.Model):
         return f"{self.user.username} - {self.path} - {self.timestamp}"
     
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(upload_to='images/avatars/', blank=True, null=True)
-    background = models.ImageField(upload_to='images/backgrounds/', blank=True, null=True)
-    bio = models.TextField(blank=True, null=True)
-    preferences = models.JSONField(default=dict, blank=True, null=True)  # Lưu trữ theme, cài đặt cá nhân
-    created_at = models.DateTimeField(auto_now_add=True,null=True)
-
-    def __str__(self):
-        return self.user.username
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True, blank=True)
+    name = models.CharField(max_length=30, null=True)
+    avatar = models.ImageField(blank=True,null=True)
+    background = models.ImageField(blank=True,null=True)
+    bio = models.TextField(max_length=1000, blank=True,null=True)
+    on_tap_progress =  models.IntegerField(blank=True,null=True)
+    thi_thu_progress =  models.IntegerField(blank=True,null=True)
+    highest_score = models.IntegerField(blank=True,null=True)
+    forum_progress =  models.IntegerField(blank=True,null=True)
+    comment_progress =  models.IntegerField(blank=True,null=True)
 class Workspace(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="workspace")
     name = models.CharField(max_length=100, default="My Personal Space")

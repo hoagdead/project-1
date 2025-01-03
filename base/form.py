@@ -8,22 +8,14 @@ class UploadFileForm(forms.Form):
         required=True,
         help_text="Chọn một file Word (.doc, .docx) để tải lên."
     )
-
 class UploadQuestionForm(forms.Form):
     file = forms.FileField(
         label="Chọn file Word",
         required=True,
         help_text="Chọn một file Word (.doc, .docx) để tải lên.",
     )
-    QUESTION_TYPE_CHOICES = [
-        (1, "Chọn 1 đáp án đúng"),
-        (2, "Đúng/Sai"),
-    ]
-    question_type = forms.ChoiceField(
-        choices=QUESTION_TYPE_CHOICES,
-        label="Loại câu hỏi",
-        widget=forms.RadioSelect
-    )
+  
+
 
 class RoomForm(ModelForm):
     class Meta:
@@ -57,4 +49,4 @@ class UserForm(ModelForm):
 class UserProfileForm(ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['avatar','background', 'bio', 'preferences']
+        fields = ['avatar','background', 'bio']
