@@ -40,7 +40,7 @@ from django.db.models.functions import ExtractHour
             hoặc
             return redirect('url của trang muốn chuyển về') sử dụng để chuyển người dùng về một trang khác sẵn có
 '''
-@staff_member_required
+
 def user_activity_log(request):
     # Thống kê tổng số lượt truy cập trang
     total_page_views = UserActivity.objects.count()
