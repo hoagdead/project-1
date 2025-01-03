@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from .models import Room, Topic, Message,Question,Question2,bai_hoc,UserProfile
-from .form import RoomForm,QuestionForm,UploadFileForm,UserForm,UserProfileForm
+from .form import RoomForm,QuestionForm,UserForm,UserProfileForm
 from django.views.decorators.csrf import csrf_protect
 import random
 from docx import Document 
@@ -374,7 +374,7 @@ def nop_dap_an(request, de_id):
 def upload_file(request):
     if request.method == 'POST':
         print('ok')
-        form = UploadFileForm(request.POST, request.FILES)
+        form = UploadQuestionForm(request.POST, request.FILES)
         if form.is_valid():
             uploaded_file = request.FILES['file']
             doc = Document(uploaded_file)
@@ -435,7 +435,7 @@ def upload_file(request):
             return redirect("preview_questions")
 
     else:
-        form = UploadFileForm()
+        form = UploadQuestionForm()
         print('not ok')
 
     return render(request, 'base/upload_file.html', {'form': form})

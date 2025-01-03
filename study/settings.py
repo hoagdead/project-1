@@ -9,6 +9,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-lwvp^gnnf59&c-np5a_a&k64rw6-o!_5!g2b%p)%$c8i!**q2m'
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # Giới hạn 5MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # Giới hạn 5MB
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
