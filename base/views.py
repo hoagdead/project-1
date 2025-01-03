@@ -27,6 +27,8 @@ from django.db.models import Avg, Count
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from .models import UserActivity
+from django.db.models.functions import ExtractHour
+
 '''
     ở đây sẽ dùng để xử lý request của người dùng
     một views mẫu:
@@ -38,10 +40,48 @@ from .models import UserActivity
             hoặc
             return redirect('url của trang muốn chuyển về') sử dụng để chuyển người dùng về một trang khác sẵn có
 '''
-@staff_member_required  # Chỉ admin mới xem được
+@staff_member_required
 def user_activity_log(request):
-    activities = UserActivity.objects.all().order_by('-timestamp')[:100]  # Lấy 100 hoạt động gần nhất
-    return render(request, 'base/user_activity_log.html', {'activities': activities})
+    # Thống kê tổng số lượt truy cập trang
+    total_page_views = UserActivity.objects.count()
+
+    # Thống kê số lượt truy cập theo đường dẫn
+    stats_by_path = (
+        UserActivity.objects
+        .values('path')          
+        .annotate(so_luong=Count('id'))  
+        .order_by('-so_luong')      
+    )
+
+    # Thống kê số lượt truy cập theo giờ
+    stats_by_hour = (
+        UserActivity.objects
+        .annotate(gio=ExtractHour('timestamp'))  
+        .values('gio')
+        .annotate(so_luong=Count('id'))
+        .order_by('gio')  
+    )
+
+    # Thống kê số lượt truy cập các trang cụ thể
+    so_luot_dang_ky = UserActivity.objects.filter(path='/register/').count()
+    so_luot_forum = UserActivity.objects.filter(path='/forum/').count()
+    so_luot_on_tap = UserActivity.objects.filter(path='/0n_tap/').count()
+    so_luot_luyen_tap = UserActivity.objects.filter(path='/luyen_tap/').count()
+    so_luot_thi_thu = UserActivity.objects.filter(path='/thi_thu/').count()
+
+    context = {                   
+        'total_page_views': total_page_views,            
+        'stats_by_path': stats_by_path,                  
+        'stats_by_hour': stats_by_hour,                  
+        'so_luot_dang_ky': so_luot_dang_ky,  
+        'so_luot_forum': so_luot_forum,                      
+        'so_luot_on_tap': so_luot_on_tap,  
+        'so_luot_luyen_tap': so_luot_luyen_tap, 
+        'so_luot_thi_thu': so_luot_thi_thu, 
+    }
+    return render(request, 'base/user_activity_log.html', context)
+
+
 
 def Loginpage(request):
     page = 'login'
@@ -49,7 +89,6 @@ def Loginpage(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        
         if user is not None:
             login(request, user)
             messages.success(request, 'Login successful')
@@ -336,6 +375,7 @@ def nop_dap_an(request, de_id):
         return redirect('thi_thu', de_id=de_id)
 def upload_file(request):
     if request.method == 'POST':
+        print('ok')
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             uploaded_file = request.FILES['file']
@@ -398,6 +438,7 @@ def upload_file(request):
 
     else:
         form = UploadFileForm()
+        print('not ok')
 
     return render(request, 'base/upload_file.html', {'form': form})
 

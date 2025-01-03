@@ -11,50 +11,55 @@
         {% else %}
         <link rel="stylesheet" href="{% static 'styles/light.css' %}">
         {% endif %}
+        <style>
+            .block-wrapper{
+                display: grid;
+                grid-template-columns: 4fr 1fr;
+            }
+
+        </style>
     </head>
     <body>
         {% include 'navbar.html' %}
 
-        <div class="block-wrapper">
-            <div class="user-profile">
-                <div class="profile">
-                    <!-- Hiển thị avatar, fallback nếu avatar không tồn tại -->
-                    {% if user.userprofile.avatar %}
-                        <img src="{{ user.userprofile.avatar.url }}" alt="User Avatar" width="200px" class="avatar">
-                    {% else %}
-                        <img src="{% static 'images/default_avatar.png' %}" alt="Default Avatar" width="200px" class="avatar">
-                    {% endif %}
-                </div>
+        <div class="block-wrapper">       
+            <div>
 
-                <div class="background">
-                    <!-- Hiển thị hình nền, fallback nếu background không tồn tại -->
-                    {% if user.userprofile.background %}
-                        <img src="{{ user.userprofile.background.url }}" alt="User Background" height="350px" class="bgimg">
-                    {% else %}
-                        <img src="{% static 'images/default_background.jpg' %}" alt="Default Background" height="350px" class="bgimg">
-                    {% endif %}
-                </div>
-
-                <div class="user_info">
-                    <div class="uleft">
-                        <h4>{{ user.username }}</h4>
-                        <p>{{ user.email }}</p>
-                        <p>{{ user.userprofile.bio|default_if_none:"No bio available." }}</p>
+    
+                <div class="user-profile">
+                    <div class="profile">
+                        <!-- Hiển thị avatar, fallback nếu avatar không tồn tại -->
+                        {% if user.userprofile.avatar %}
+                            <img src="{{ user.userprofile.avatar }}" alt="User Avatar" width="200px" class="avatar">
+                        {% else %}
+                            <img src="{% static 'images/useravt/avt2.png' %}" alt="Default Avatar" width="200px" class="avatar">
+                        {% endif %}
                     </div>
 
-                    <!-- Hiển thị nút chỉnh sửa nếu là chủ tài khoản -->
-                    {% if request.user == user %}
-                    <p>con cac</p>
-                    {% endif %}
+                    <div class="user_info">
+                        <div class="uleft">
+                            <h4>{{ user.username }}</h4>
+                            <p>{{ user.email }}</p>
+                            <p>{{ user.userprofile.bio|default_if_none:"No bio available." }}</p>
+                        </div>
+
+                        <!-- Hiển thị nút chỉnh sửa nếu là chủ tài khoản -->
+                        {% if request.user == user %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="fcmn">
+                    {% include 'base/feed_composnent.html' %}
+                    <div style="display:none"></div>
                 </div>
             </div>
-
-            <div class="fcmn">
-                {% include 'base/feed_composnent.html' %}
-            </div>
             <div>
-                {% include 'base/notification_bar.html' %}
+                <div>
+                    {% include 'base/notification_bar.html' %}
+                </div>
             </div>
         </div>
+        
     </body>
 </html>

@@ -36,12 +36,12 @@
             <img src="{% static 'images/useravt/profile.jpg' %}" alt="Profile Picture" class="profile-pic" id="dropdown-trigger">
             <div class="username">
             <p><strong>{{ request.user.username }}</strong></p>
-            <p>@{{ request.user.username }}g</p>
+            <p>@{{ request.user.username }}</p>
             </div>
             <div class="dropdown-content" id="dropdown-menu">
                 <a href="{%url 'profile' user.id%}">Trang cá nhân</a>
                 <p>Current Theme: {{ request.session.theme }}</p>
-                <div>
+                <div>a
                     <label class="theme-toggle">
                         <span>Chế độ tối</span>
                         <input type="checkbox" id="theme-toggle" {% if request.session.theme == 'dark' %}checked{% endif %}>
