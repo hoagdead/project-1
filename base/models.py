@@ -109,7 +109,7 @@ class UserActivity(models.Model):
     ip_address = models.GenericIPAddressField(null=True, blank=True)  # Địa chỉ IP
     user_agent = models.TextField(null=True, blank=True)  # Thông tin trình duyệt
     def __str__(self):
-        return f"{self.user.username} - {self.path} - {self.timestamp}"
+        return f"{self.path} - {self.timestamp}"
     
 class UserProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=True, blank=True)

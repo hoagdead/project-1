@@ -63,7 +63,7 @@ def user_activity_log(request):
     )
 
     # Thống kê số lượt truy cập các trang cụ thể
-    so_luot_forum = UserActivity.objects.filter(path='/forum/').count()
+    so_luot_forum = UserActivity.objects.filter(path='/forum').count()
     so_luot_on_tap = UserActivity.objects.filter(path='/0n_tap/').count()
     so_luot_luyen_tap = UserActivity.objects.filter(path='/luyen_tap/').count()
     so_luot_thi_thu = UserActivity.objects.filter(path='/thi_thu/').count()
